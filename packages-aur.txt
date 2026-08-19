@@ -1,0 +1,4 @@
+bibata-cursor-theme
+greetd-dms-greeter-git
+gruvbox-plus-icon-theme
+sioyek-appimage
