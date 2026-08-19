@@ -1,0 +1,140 @@
+# ============================================================
+# VINICIUS — STARSHIP
+# Gruvbox Material Dark Soft
+# Minimalista • Japonês • Terminal
+# ============================================================
+
+add_newline = false
+
+command_timeout = 1000
+
+format = """
+$directory\
+$git_branch\
+$git_status\
+$character
+"""
+
+# ============================================================
+# DIRETÓRIO
+# ============================================================
+
+[directory]
+
+style = "bold #d8a657"
+
+format = "[$path]($style) "
+
+truncation_length = 3
+
+truncate_to_repo = false
+
+home_symbol = "~"
+
+
+# ============================================================
+# GIT — BRANCH
+# ============================================================
+
+[git_branch]
+
+symbol = " "
+
+style = "bold #7daea3"
+
+format = "[$symbol$branch]($style) "
+
+
+# ============================================================
+# GIT — STATUS
+# ============================================================
+
+[git_status]
+
+style = "#ea6962"
+
+format = "[$all_status$ahead_behind]($style) "
+
+conflicted = "!"
+ahead = "⇡${count}"
+behind = "⇣${count}"
+diverged = "⇕${ahead_count}⇣${behind_count}"
+
+up_to_date = ""
+
+untracked = "?"
+modified = "!"
+staged = "+"
+renamed = "»"
+deleted = "✘"
+
+
+# ============================================================
+# PROMPT
+# ============================================================
+
+[character]
+
+success_symbol = "[❯](bold #a9b665)"
+
+error_symbol = "[❯](bold #ea6962)"
+
+vimcmd_symbol = "[❮](bold #7daea3)"
+
+
+# ============================================================
+# COMANDOS
+# ============================================================
+
+[cmd_duration]
+
+min_time = 2000
+
+format = "[$duration](#665c54) "
+
+
+# ============================================================
+# USUÁRIO
+# ============================================================
+
+[username]
+
+show_always = false
+
+
+# ============================================================
+# HOST
+# ============================================================
+
+[hostname]
+
+ssh_only = true
+
+style = "#665c54"
+
+
+# ============================================================
+# PACOTES
+# ============================================================
+
+[package]
+
+disabled = true
+
+
+# ============================================================
+# NODE / PYTHON / RUST ETC.
+# Não poluir o prompt quando não forem relevantes.
+# ============================================================
+
+[nodejs]
+
+format = "[$symbol($version)](#b8bb26) "
+
+[python]
+
+format = "[$symbol$pyenv_prefix($version)](#d3869b) "
+
+[rust]
+
+format = "[$symbol($version)](#d8a657) "

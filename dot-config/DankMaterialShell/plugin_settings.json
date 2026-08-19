@@ -1,0 +1,23 @@
+{
+  "dankPomodoroTimer": {
+    "enabled": true,
+    "workDuration": "50",
+    "shortBreakDuration": "10",
+    "autoStartBreaks": true,
+    "longBreakDuration": "30"
+  },
+  "calculator": {
+    "enabled": false,
+    "trigger": "="
+  },
+  "khalCalendar": {
+    "enabled": true
+  },
+  "qcalCalendar": {
+    "notifyMinutes": 15,
+    "calendarFilter": "pessoal, familia, cfst",
+    "vdirBasePath": "/home/viana/.calendars/",
+    "lookAheadDays": 30,
+    "refreshInterval": 1
+  }
+}

@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+selected=$(
+  fd \
+    --hidden \
+    --follow \
+    --type f \
+    --type d \
+    --exclude .git \
+    --exclude .cache \
+    . "$HOME" |
+    fzf \
+      --height=80% \
+      --layout=reverse \
+      --border \
+      --preview '
+                if [ -d "{}" ]; then
+                    eza --tree --level=2 --icons "{}"
+                elif [ -f "{}" ]; then
+                    bat --color=always --style=numbers "{}"
+                fi
+            '
+)
+
+[ -z "$selected" ] && exit 0
+
+exec nvim -- "$selected"

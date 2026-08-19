@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+DOTS_DIR="${DOTS_DIR:-$HOME/dotfiles}"
+cd "$DOTS_DIR"
+
+if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+  echo "dots: $DOTS_DIR is not a Git repository." >&2
+  exit 1
+fi
+
+# Refuse to stage obvious secret material.
+if git status --porcelain | grep -Ei '(^|/)(token|credentials|secret|passwd|password)([^/]*$|/)' >/dev/null 2>&1; then
+  echo "dots: possible secret detected; refusing to commit." >&2
+  git status --short
+  exit 1
+fi
+
+if [[ -z "$(git status --porcelain)" ]]; then
+  echo "✓ dotfiles already up to date"
+  exit 0
+fi
+
+echo "Dotfiles changes:"
+git status --short
+
+echo
+
+git add -A
+
+# Generate a compact commit message from changed top-level areas.
+areas=$(git diff --cached --name-only | awk -F/ '
+  /^dot-config\/hypr\// {print "hyprland"; next}
+  /^dot-config\/DankMaterialShell\// {print "dms"; next}
+  /^dot-config\/nvim\// {print "neovim"; next}
+  /^dot-config\/kitty\// {print "kitty"; next}
+  /^dot-config\/yazi\// {print "yazi"; next}
+  /^dot-config\/sioyek\// {print "sioyek"; next}
+  /^dot-config\// {print "config"; next}
+  /^dot-local\// {print "scripts"; next}
+  /^dot-zshrc$|^dot-bashrc$|^dot-bash_profile$/ {print "shell"; next}
+  {print "other"}
+' | sort -u | paste -sd, -)
+
+message="dotfiles: update ${areas:-configuration}"
+git commit -m "$message"
+git push
+
+echo
+echo "✓ dotfiles synchronized"

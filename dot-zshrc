@@ -1,0 +1,427 @@
+# ============================================================
+# VINICIUS — ZSH
+# ============================================================
+
+# ------------------------------------------------------------
+# PROFILING
+# ------------------------------------------------------------
+# zmodload zsh/zprof
+# zprof
+
+# ------------------------------------------------------------
+# PATH
+# ------------------------------------------------------------
+
+typeset -U path
+
+path=(
+    "$HOME/.local/bin"
+    "$HOME/go/bin"
+    $path
+)
+
+export PATH
+
+
+# ------------------------------------------------------------
+# EDITORES / TERMINAL
+# ------------------------------------------------------------
+
+export EDITOR='nvim'
+export VISUAL='nvim'
+export SUDO_EDITOR='nvim'
+
+export GIT_EDITOR='nvim'
+export GIT_SEQUENCE_EDITOR='nvim'
+
+export TERMINAL='kitty'
+
+
+# ------------------------------------------------------------
+# WAYLAND
+# ------------------------------------------------------------
+
+export MOZ_ENABLE_WAYLAND=1
+export ELECTRON_OZONE_PLATFORM_HINT='wayland'
+export SDL_VIDEODRIVER='wayland'
+export _JAVA_AWT_WM_NONREPARENTING=1
+
+
+# ------------------------------------------------------------
+# ZSH — COMPORTAMENTO
+# ------------------------------------------------------------
+
+setopt autocd
+setopt auto_pushd
+setopt pushd_ignore_dups
+setopt pushd_silent
+
+setopt no_nomatch
+setopt prompt_subst
+
+setopt ignore_eof
+
+
+# ------------------------------------------------------------
+# HISTÓRICO
+# ------------------------------------------------------------
+
+HISTFILE="$HOME/.zsh_history"
+
+HISTSIZE=100000
+SAVEHIST=50000
+
+setopt share_history
+
+setopt hist_ignore_dups
+setopt hist_ignore_all_dups
+setopt hist_find_no_dups
+setopt hist_save_no_dups
+setopt hist_expire_dups_first
+
+setopt hist_ignore_space
+setopt hist_reduce_blanks
+setopt hist_verify
+setopt hist_fcntl_lock
+
+
+# ------------------------------------------------------------
+# COMPLETION — CACHE PERSISTENTE
+# ------------------------------------------------------------
+
+ZCACHEDIR="$HOME/.cache/zsh"
+ZCOMPDUMP="$ZCACHEDIR/.zcompdump"
+
+if [[ ! -d "$ZCACHEDIR" ]]; then
+    mkdir -p "$ZCACHEDIR"
+fi
+
+autoload -Uz compinit
+
+compinit -d "$ZCOMPDUMP"
+
+if [[ -r "$ZCOMPDUMP" &&
+      ( ! -r "${ZCOMPDUMP}.zwc" ||
+        "$ZCOMPDUMP" -nt "${ZCOMPDUMP}.zwc" ) ]]; then
+    zcompile "$ZCOMPDUMP"
+fi
+
+
+# ------------------------------------------------------------
+# COMPLETION — APARÊNCIA
+# ------------------------------------------------------------
+
+zstyle ':completion:*' menu select
+
+zstyle ':completion:*' matcher-list \
+    'm:{a-zA-Z}={A-Za-z}' \
+    'r:|[._-]=* r:|=*'
+
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+
+zstyle ':completion:*' group-name ''
+
+zstyle ':completion:*' use-cache on
+zstyle ':completion:*' cache-path "$ZCACHEDIR"
+
+
+# ------------------------------------------------------------
+# EDIÇÃO / MOVIMENTO
+# ------------------------------------------------------------
+
+bindkey -e
+
+WORDCHARS=${WORDCHARS//\/}
+
+autoload -Uz up-line-or-beginning-search
+autoload -Uz down-line-or-beginning-search
+
+zle -N up-line-or-beginning-search
+zle -N down-line-or-beginning-search
+
+bindkey '^[[A' up-line-or-beginning-search
+bindkey '^[[B' down-line-or-beginning-search
+
+bindkey '^P' up-line-or-beginning-search
+bindkey '^N' down-line-or-beginning-search
+
+
+# ------------------------------------------------------------
+# LIMPAR TERMINAL
+# ------------------------------------------------------------
+
+zle_clear_screen() {
+    clear
+    printf '\e[3J'
+    zle redisplay
+}
+
+zle -N zle_clear_screen
+
+bindkey '^L' zle_clear_screen
+bindkey '^[l' zle_clear_screen
+
+
+# ------------------------------------------------------------
+# FZF
+# ------------------------------------------------------------
+
+if (( $+commands[fd] )); then
+    export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
+    export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+fi
+
+export FZF_DEFAULT_OPTS='
+--height=70%
+--layout=reverse
+--border=rounded
+--info=inline
+--cycle
+--ansi
+--pointer=▶
+--marker=✓
+--prompt=❯
+--color=bg+:#3c3836,bg:#282828
+--color=spinner:#8ec07c,hl:#83a598
+--color=fg:#ebdbb2,header:#83a598
+--color=info:#b8bb26,pointer:#fe8019
+--color=marker:#fe8019,fg+:#fbf1c7
+--color=prompt:#d79921,hl+:#83a598
+'
+
+if [[ -r /usr/share/fzf/key-bindings.zsh ]]; then
+    source /usr/share/fzf/key-bindings.zsh
+fi
+
+if [[ -r /usr/share/fzf/completion.zsh ]]; then
+    source /usr/share/fzf/completion.zsh
+fi
+
+
+# ------------------------------------------------------------
+# ZSH AUTOSUGGESTIONS
+# ------------------------------------------------------------
+
+export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#665c54'
+
+export ZSH_AUTOSUGGEST_STRATEGY=(
+    history
+    completion
+)
+
+export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=80
+
+if [[ -r /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh ]]; then
+    source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+fi
+
+
+# ------------------------------------------------------------
+# ZSH SYNTAX HIGHLIGHTING
+# ------------------------------------------------------------
+
+export ZSH_HIGHLIGHT_HIGHLIGHTERS=(
+    main
+    brackets
+    pattern
+)
+
+if [[ -r /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]]; then
+    source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+fi
+
+
+# ------------------------------------------------------------
+# STARSHIP
+# ------------------------------------------------------------
+
+if (( $+commands[starship] )); then
+    eval "$(starship init zsh)"
+fi
+
+ZLE_RPROMPT_INDENT=0
+
+
+# ------------------------------------------------------------
+# ZOXIDE
+# ------------------------------------------------------------
+
+if (( $+commands[zoxide] )); then
+    eval "$(zoxide init zsh)"
+fi
+
+
+# ============================================================
+# ALIASES
+# ============================================================
+
+
+# ------------------------------------------------------------
+# EDITORES
+# ------------------------------------------------------------
+
+alias v='nvim'
+alias sv='sudo nvim'
+
+alias restart='systemctl --user restart'
+
+alias cpout='wl-copy'
+alias paste='wl-paste'
+
+
+# ------------------------------------------------------------
+# ARQUIVOS
+# ------------------------------------------------------------
+
+alias ls='eza --icons --group-directories-first'
+alias ll='eza -lah --icons --group-directories-first'
+alias la='eza -a --icons --group-directories-first'
+alias lt='eza --tree --level=2 --icons --group-directories-first'
+
+alias cat='bat --style=plain'
+alias ccat='bat --style=numbers'
+
+alias grep='grep --color=auto'
+alias rg='rg --smart-case'
+
+
+# ------------------------------------------------------------
+# NAVEGAÇÃO
+# ------------------------------------------------------------
+
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias ~='cd ~'
+
+
+# ------------------------------------------------------------
+# PACMAN / YAY
+# ------------------------------------------------------------
+
+alias p='sudo pacman -S'
+alias pu='sudo pacman -Syu'
+alias pr='sudo pacman -Rns'
+alias po='pacman -Qtdq'
+
+alias y='yay -S'
+alias yu='yay -Syu'
+alias yr='yay -Rns'
+
+# ------------------------------------------------------------
+# SISTEMA
+# ------------------------------------------------------------
+
+alias psg='ps aux | grep -i'
+alias k='pkill'
+
+alias ip='ip -c'
+alias ports='ss -tulpen'
+
+alias ff='fastfetch'
+
+alias vs='vdirsyncer sync'
+
+# ------------------------------------------------------------
+# PRODUTIVIDADE
+# ------------------------------------------------------------
+
+alias z='nvim ~/.zshrc'
+alias sz='source ~/.zshrc'
+alias q='exit'
+
+# ============================================================
+# FUNÇÕES
+# ============================================================
+
+# ------------------------------------------------------------
+# Criar diretório e entrar
+# ------------------------------------------------------------
+
+mkcd() {
+    [[ -n "$1" ]] || return 1
+
+    mkdir -p -- "$1" &&
+        cd -- "$1"
+}
+
+
+# ------------------------------------------------------------
+# Extrair arquivos
+# ------------------------------------------------------------
+
+extract() {
+
+    if [[ ! -f "$1" ]]; then
+        print -u2 "Arquivo inválido: $1"
+        return 1
+    fi
+
+    case "$1" in
+
+        *.tar.bz2) tar xjf "$1" ;;
+        *.tar.gz)  tar xzf "$1" ;;
+        *.tar.xz)  tar xJf "$1" ;;
+        *.tar.zst) tar --zstd -xf "$1" ;;
+        *.tar)     tar xf "$1" ;;
+
+        *.bz2)     bunzip2 "$1" ;;
+        *.gz)      gunzip "$1" ;;
+        *.xz)      xz -d "$1" ;;
+        *.zst)     unzstd "$1" ;;
+
+        *.zip)     unzip "$1" ;;
+        *.7z)      7z x "$1" ;;
+        *.rar)     unrar x "$1" ;;
+
+        *)
+            print -u2 "Formato não suportado: $1"
+            return 1
+            ;;
+
+    esac
+}
+
+
+# ------------------------------------------------------------
+# Limpar órfãos do Pacman
+# ------------------------------------------------------------
+
+clean() {
+
+    local -a pkgs
+
+    pkgs=("${(@f)$(pacman -Qtdq 2>/dev/null)}")
+
+    if (( ${#pkgs} )); then
+        sudo pacman -Rns -- "${pkgs[@]}"
+    else
+        print "Nenhum pacote órfão encontrado."
+    fi
+}
+
+
+# ------------------------------------------------------------
+# Navegação Zoxide + FZF
+# ------------------------------------------------------------
+
+j() {
+
+    (( $+commands[zoxide] && $+commands[fzf] )) || return 1
+
+    local dir
+
+    dir=$(zoxide query -l 2>/dev/null | fzf \
+        --height=40% \
+        --layout=reverse \
+        --border=rounded \
+        --preview='eza --icons --tree --level=2 --color=always {}'
+    ) || return 0
+
+    [[ -n "$dir" ]] && cd -- "$dir"
+}
+
+
+# ============================================================
+# END
+# ============================================================

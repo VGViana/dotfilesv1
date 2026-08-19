@@ -1,0 +1,24 @@
+# Secrets / credentials
+**/token.json
+**/credentials.json
+**/*secret*
+**/*token*
+
+# Runtime/state
+**/Cache/
+**/cache/
+**/GPUCache/
+**/Session Storage/
+**/Service Worker/
+*.db
+*.sqlite
+*.sqlite3
+
+# Editors / generated state
+**/.undo/
+**/.swp
+**/.swo
+**/.bak
+
+# Local machine overrides
+machine-local/

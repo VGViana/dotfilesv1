@@ -1,0 +1,81 @@
+[calendars]
+
+[[pessoal]]
+path = ~/.calendars/viniciusgazel@gmail.com
+type = calendar
+color = '#b8bb26'
+priority = 20
+
+[[familia]]
+path = ~/.calendars/family00642281619759822771@group.calendar.google.com
+type = calendar
+color = '#83a598'
+priority = 10
+
+[[cfst]]
+path = ~/.calendars/f0cdd96f307eb7c9994e4a27a148fe478f24a515b01cc09120f0bc9e68800966@group.calendar.google.com
+type = calendar
+color = '#fb4934'
+priority = 10
+
+[[local]]
+path = ~/.calendars/local
+type = calendar
+color = '#928374'
+readonly = False
+
+[locale]
+timeformat = "%H:%M"
+dateformat = "%d/%m/%Y"
+longdateformat = "%A - %d/%m/%Y"
+datetimeformat = "%d/%m/%Y %H:%M"
+longdatetimeformat = "%A - %d/%m/%Y %H:%M"
+local_timezone = America/Sao_Paulo
+default_timezone = America/Sao_Paulo
+weeknumbers = left
+firstweekday = 1
+unicode_symbols = true
+
+[default]
+default_calendar = pessoal
+highlight_event_days = True
+show_all_days = True
+timedelta = 7d
+print_new = event
+
+[highlight_days]
+method = fg
+color = '#fabd2f'
+multiple = '#fe8019'
+
+[view]
+dynamic_days = True
+event_view_always_visible = True
+blank_line_before_day = True
+theme = dark
+frame = color
+agenda_event_format = {calendar-color}{start-end-time-style} {title}
+
+[keybindings]
+up = up, k
+down = down, j
+left = left, h
+right = right, l
+new = n
+delete = d
+view = enter
+quit = q
+
+[palette]
+background = '', '', '', '#ebdbb2', '#282828'
+header = '', '', '', '#a89984', '#282828'
+date = '', '', '', '#d79921', '#282828'
+date header = '', '', '', '#a89984', '#282828'
+today = '', '', '', '#d3869b', '#282828'
+event column = '', '', '', '#98971a', '#282828'
+highlight = '', '', '', '#ebdbb2', '#3c3836'
+edit = '', '', '', '#ebdbb2', '#3c3836'
+footer = '', '', '', '#928374', '#282828'
+
+[sqlite]
+path = ~/.cache/khal/khal.db
