@@ -1,50 +1,62 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-DOTS_DIR="${DOTS_DIR:-$HOME/dotfiles}"
-cd "$DOTS_DIR"
+REPO="$HOME/dotfiles"
 
-if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-  echo "dots: $DOTS_DIR is not a Git repository." >&2
-  exit 1
-fi
-
-# Refuse to stage obvious secret material.
-if git status --porcelain | grep -Ei '(^|/)(token|credentials|secret|passwd|password)([^/]*$|/)' >/dev/null 2>&1; then
-  echo "dots: possible secret detected; refusing to commit." >&2
-  git status --short
-  exit 1
-fi
+cd "$REPO"
 
 if [[ -z "$(git status --porcelain)" ]]; then
-  echo "✓ dotfiles already up to date"
-  exit 0
+    echo "✓ dotfiles: nada para sincronizar."
+    exit 0
 fi
 
-echo "Dotfiles changes:"
-git status --short
+echo "╭──────────────────────────────────────╮"
+echo "│              DOTS SYNC               │"
+echo "╰──────────────────────────────────────╯"
+echo
 
+echo "→ Alterações:"
+git status --short
 echo
 
 git add -A
 
-# Generate a compact commit message from changed top-level areas.
-areas=$(git diff --cached --name-only | awk -F/ '
-  /^dot-config\/hypr\// {print "hyprland"; next}
-  /^dot-config\/DankMaterialShell\// {print "dms"; next}
-  /^dot-config\/nvim\// {print "neovim"; next}
-  /^dot-config\/kitty\// {print "kitty"; next}
-  /^dot-config\/yazi\// {print "yazi"; next}
-  /^dot-config\/sioyek\// {print "sioyek"; next}
-  /^dot-config\// {print "config"; next}
-  /^dot-local\// {print "scripts"; next}
-  /^dot-zshrc$|^dot-bashrc$|^dot-bash_profile$/ {print "shell"; next}
-  {print "other"}
-' | sort -u | paste -sd, -)
+if git diff --cached --quiet; then
+    echo "✓ dotfiles: nada para commitar."
+    exit 0
+fi
 
-message="dotfiles: update ${areas:-configuration}"
-git commit -m "$message"
-git push
+scope="$(
+    git diff --cached --name-only |
+    awk -F/ '
+        $1=="dot-config" && $2=="hypr"              {print "hyprland"; next}
+        $1=="dot-config" && $2=="DankMaterialShell" {print "dms"; next}
+        $1=="dot-config" && $2=="nvim"              {print "neovim"; next}
+        $1=="dot-config" && $2=="kitty"             {print "kitty"; next}
+        $1=="dot-config" && $2=="yazi"              {print "yazi"; next}
+        $1=="dot-config" && $2=="sioyek"            {print "sioyek"; next}
+        $1=="dot-config" && $2=="khal"              {print "khal"; next}
+        $1=="dot-config" && $2=="ncspot"            {print "ncspot"; next}
+        $1=="dot-local"                              {print "scripts"; next}
+        $1=="dot-zshrc"                              {print "shell"; next}
+        $1=="dot-bashrc"                             {print "shell"; next}
+        $1=="dot-bash_profile"                       {print "shell"; next}
+        {print "config"}
+    ' |
+    sort -u |
+    paste -sd', ' -
+)"
+
+[[ -n "$scope" ]] || scope="config"
+
+commit="dotfiles: update ${scope}"
+
+echo "→ Commit: $commit"
+git commit -m "$commit"
 
 echo
-echo "✓ dotfiles synchronized"
+echo "→ Push: VGViana/dotfilesv1"
+git push origin main
+
+echo
+echo "✓ Dotfiles sincronizado."
