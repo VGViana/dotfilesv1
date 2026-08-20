@@ -26,6 +26,7 @@ x-scheme-handler/chrome=zen.desktop
 x-scheme-handler/file=thunar.desktop
 x-scheme-handler/http=firefox.desktop
 x-scheme-handler/https=firefox.desktop
+x-scheme-handler/hydralauncher=hydralauncher.desktop
 
 [Added Associations]
 application/json=nvim.desktop;
