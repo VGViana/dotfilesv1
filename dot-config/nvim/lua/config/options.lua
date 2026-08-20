@@ -96,7 +96,6 @@ opt.hlsearch = true
 opt.completeopt = {
   "menu",
   "menuone",
-  "noselect",
 }
 
 -- ============================================================
