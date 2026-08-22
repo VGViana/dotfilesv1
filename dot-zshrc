@@ -321,6 +321,7 @@ alias ports='ss -tulpen'
 alias ff='fastfetch'
 
 alias vs='vdirsyncer sync'
+alias ds='doom sync'
 
 # ------------------------------------------------------------
 # PRODUTIVIDADE
@@ -425,3 +426,4 @@ j() {
 # ============================================================
 # END
 # ============================================================
+export PATH="$HOME/.config/emacs/bin:$PATH"
