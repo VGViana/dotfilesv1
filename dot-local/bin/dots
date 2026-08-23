@@ -35,6 +35,7 @@ scope="$(
         $1=="dot-config" && $2=="kitty"             {print "kitty"; next}
         $1=="dot-config" && $2=="yazi"              {print "yazi"; next}
         $1=="dot-config" && $2=="sioyek"            {print "sioyek"; next}
+        $1=="dot-config" && $2=="doom"              {print "doom"; next}
         $1=="dot-config" && $2=="khal"              {print "khal"; next}
         $1=="dot-config" && $2=="ncspot"            {print "ncspot"; next}
         $1=="dot-local"                              {print "scripts"; next}
