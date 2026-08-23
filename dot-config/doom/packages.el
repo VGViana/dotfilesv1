@@ -2,3 +2,7 @@
 
 ;; Google Calendar
 (package! org-gcal)
+
+;; Calendário gráfico para Emacs
+(package! calfw)
+(package! calfw-org)

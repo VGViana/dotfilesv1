@@ -17,12 +17,12 @@
 
 (setq doom-font
       (font-spec
-       :family "Iosevka Nerd Font"
+       :family "JetBrainsMono Nerd Font"
        :size 15))
 
 (setq doom-variable-pitch-font
       (font-spec
-       :family "Iosevka Nerd Font Mono"
+       :family "Iosevka Nerd Font"
        :size 15))
 
 (setq display-line-numbers-type 'relative)
@@ -416,6 +416,358 @@
         (interactive)
         (find-file "~/Org/calendar-pessoal.org"))))
 
+;; =============================================================================
+;; CALFW — CALENDÁRIO VISUAL
+;; =============================================================================
+
+(use-package! calfw
+  :after org
+  :commands (calfw-open-calendar-buffer)
+
+  :config
+
+  ;; ---------------------------------------------------------------------------
+  ;; CALENDÁRIO
+  ;; ---------------------------------------------------------------------------
+
+  ;; Segunda-feira como primeiro dia da semana.
+  (setq calendar-week-start-day 1)
+
+  ;; Português.
+  (setq calendar-day-name-array
+        ["Dom" "Seg" "Ter" "Qua" "Qui" "Sex" "Sáb"])
+
+  (setq calendar-month-name-array
+        ["Janeiro"
+         "Fevereiro"
+         "Março"
+         "Abril"
+         "Maio"
+         "Junho"
+         "Julho"
+         "Agosto"
+         "Setembro"
+         "Outubro"
+         "Novembro"
+         "Dezembro"])
+
+  ;; ---------------------------------------------------------------------------
+  ;; FERIADOS BRASILEIROS
+  ;; ---------------------------------------------------------------------------
+
+  ;; O Calfw utiliza `calendar-holidays` do Emacs.
+  ;; Portanto, configuramos aqui a lista brasileira.
+
+  (setq calendar-holidays
+
+        '(
+          ;; ===================================================================
+          ;; FERIADOS NACIONAIS FIXOS
+          ;; ===================================================================
+
+          (holiday-fixed
+           1 1
+           "Confraternização Universal")
+
+          (holiday-fixed
+           4 21
+           "Tiradentes")
+
+          (holiday-fixed
+           5 1
+           "Dia Mundial do Trabalho")
+
+          (holiday-fixed
+           9 7
+           "Independência do Brasil")
+
+          (holiday-fixed
+           10 12
+           "Nossa Senhora Aparecida")
+
+          (holiday-fixed
+           11 2
+           "Finados")
+
+          (holiday-fixed
+           11 15
+           "Proclamação da República")
+
+          (holiday-fixed
+           11 20
+           "Dia Nacional de Zumbi e da Consciência Negra")
+
+          (holiday-fixed
+           12 25
+           "Natal")
+
+
+          ;; ===================================================================
+          ;; DATAS MÓVEIS IMPORTANTES NO CALENDÁRIO BRASILEIRO
+          ;; ===================================================================
+
+          ;; Carnaval
+          ;; Domingo: 49 dias antes da Páscoa
+          ;; Segunda: 48 dias antes da Páscoa
+          ;; Terça: 47 dias antes da Páscoa
+
+          (holiday-easter-etc
+           -49
+           "Domingo de Carnaval")
+
+          (holiday-easter-etc
+           -48
+           "Segunda-feira de Carnaval")
+
+          (holiday-easter-etc
+           -47
+           "Terça-feira de Carnaval")
+
+
+          ;; Sexta-feira Santa
+          ;; 2 dias antes da Páscoa.
+
+          (holiday-easter-etc
+           -2
+           "Sexta-feira Santa")
+
+
+          ;; Corpus Christi
+          ;; 60 dias depois da Páscoa.
+
+          (holiday-easter-etc
+           60
+           "Corpus Christi")))
+
+  ;; Mostrar os feriados no calendário.
+  (setq calendar-mark-holidays-flag t)
+
+  ;; ---------------------------------------------------------------------------
+  ;; GRADE UNICODE
+  ;; ---------------------------------------------------------------------------
+
+  (setq calfw-fchar-junction ?╋
+        calfw-fchar-vertical-line ?┃
+        calfw-fchar-horizontal-line ?━
+        calfw-fchar-left-junction ?┣
+        calfw-fchar-right-junction ?┫
+        calfw-fchar-top-junction ?┯
+        calfw-fchar-top-left-corner ?┏
+        calfw-fchar-top-right-corner ?┓)
+
+  ;; ---------------------------------------------------------------------------
+  ;; QUEBRA DE LINHAS
+  ;; ---------------------------------------------------------------------------
+
+  (setq calfw-render-line-breaker
+        #'calfw-render-line-breaker-wordwrap)
+
+  ;; ---------------------------------------------------------------------------
+  ;; KEYBINDINGS ESTILO ORG
+  ;; ---------------------------------------------------------------------------
+
+  (setq calfw-org-overwrite-default-keybinding t))
+
+
+;; =============================================================================
+;; CALFW — ORG MODE
+;; =============================================================================
+
+(use-package! calfw-org
+  :after (calfw org)
+
+  :commands
+  (calfw-org-open-calendar)
+
+  :config
+
+  ;; Mostrar:
+  ;; - timestamps
+  ;; - SCHEDULED
+  ;; - DEADLINE
+
+  (setq calfw-org-agenda-schedule-args
+        '(:timestamp
+          :scheduled
+          :deadline)))
+
+
+;; =============================================================================
+;; CALFW — GRUVBOX MATERIAL DARK SOFT
+;; =============================================================================
+
+(after! calfw
+
+  (custom-set-faces
+
+   ;; -------------------------------------------------------------------------
+   ;; TÍTULO
+   ;; -------------------------------------------------------------------------
+
+   '(calfw-face-title
+     ((t (:foreground "#d4be98"
+          :weight bold
+          :height 1.5
+          :inherit variable-pitch))))
+
+   ;; -------------------------------------------------------------------------
+   ;; CABEÇALHO
+   ;; -------------------------------------------------------------------------
+
+   '(calfw-face-header
+     ((t (:foreground "#a9b665"
+          :weight bold))))
+
+   ;; -------------------------------------------------------------------------
+   ;; DOMINGO
+   ;; -------------------------------------------------------------------------
+
+   '(calfw-face-sunday
+     ((t (:foreground "#ea6962"
+          :weight bold))))
+
+   ;; -------------------------------------------------------------------------
+   ;; SÁBADO
+   ;; -------------------------------------------------------------------------
+
+   '(calfw-face-saturday
+     ((t (:foreground "#7daea3"
+          :weight bold))))
+
+   ;; -------------------------------------------------------------------------
+   ;; FERIADOS
+   ;; -------------------------------------------------------------------------
+
+   '(calfw-face-holiday
+     ((t (:foreground "#ea6962"
+          :weight bold))))
+
+   ;; -------------------------------------------------------------------------
+   ;; GRADE
+   ;; -------------------------------------------------------------------------
+
+   '(calfw-face-grid
+     ((t (:foreground "#504945"))))
+
+   ;; -------------------------------------------------------------------------
+   ;; EVENTOS
+   ;; -------------------------------------------------------------------------
+
+   '(calfw-face-default-content
+     ((t (:foreground "#d4be98"))))
+
+   ;; -------------------------------------------------------------------------
+   ;; EVENTOS DE PERÍODO
+   ;; -------------------------------------------------------------------------
+
+   '(calfw-face-periods
+     ((t (:foreground "#d8a657"
+          :weight bold))))
+
+   ;; -------------------------------------------------------------------------
+   ;; CABEÇALHO DOS DIAS
+   ;; -------------------------------------------------------------------------
+
+   '(calfw-face-day-title
+     ((t (:foreground "#d4be98"))))
+
+   '(calfw-face-default-day
+     ((t (:foreground "#d4be98"
+          :weight bold))))
+
+   ;; -------------------------------------------------------------------------
+   ;; HOJE
+   ;; -------------------------------------------------------------------------
+
+   '(calfw-face-today-title
+     ((t (:background "#3c3836"
+          :foreground "#a9b665"
+          :weight bold))))
+
+   '(calfw-face-today
+     ((t (:background "#32302f"
+          :weight bold))))
+
+   ;; -------------------------------------------------------------------------
+   ;; SELEÇÃO
+   ;; -------------------------------------------------------------------------
+
+   '(calfw-face-select
+     ((t (:background "#45403d"))))
+
+   ;; -------------------------------------------------------------------------
+   ;; ANOTAÇÕES
+   ;; -------------------------------------------------------------------------
+
+   '(calfw-face-annotation
+     ((t (:foreground "#928374"))))
+
+   ;; -------------------------------------------------------------------------
+   ;; DIAS FORA DO MÊS
+   ;; -------------------------------------------------------------------------
+
+   '(calfw-face-disable
+     ((t (:foreground "#665c54"))))))
+
+
+;; =============================================================================
+;; CALFW — COMANDO PRINCIPAL
+;; =============================================================================
+
+(defun my/calfw-calendar ()
+  "Abrir o calendário visual da rotina baseada na Org Agenda."
+
+  (interactive)
+
+  (require 'calfw)
+  (require 'calfw-org)
+
+  (calfw-open-calendar-buffer
+   :contents-sources
+   (list
+    ;; Usa os arquivos definidos em `org-agenda-files`.
+    (calfw-org-create-source
+     nil
+     "Agenda"
+     "#a9b665"))))
+
+
+;; =============================================================================
+;; CALFW — ATALHO PRINCIPAL
+;; =============================================================================
+
+(map! :leader
+      :prefix ("o" . "organização")
+
+      :desc "Calendário visual"
+      "a" #'my/calfw-calendar)
+
+
+;; =============================================================================
+;; CALFW — EVIL KEYBINDINGS
+;; =============================================================================
+
+(after! calfw
+  (evil-define-key 'normal calfw-calendar-mode-map
+
+    ;; -------------------------------------------------------------------------
+    ;; VISUALIZAÇÕES
+    ;; -------------------------------------------------------------------------
+
+    (kbd "M") #'calfw-change-view-month
+    (kbd "W") #'calfw-change-view-week
+    (kbd "T") #'calfw-change-view-two-weeks
+    (kbd "D") #'calfw-change-view-day
+
+    ;; -------------------------------------------------------------------------
+    ;; OPERAÇÕES
+    ;; -------------------------------------------------------------------------
+
+    ;; Evil normalmente captura `r` como replace.
+    (kbd "r") #'calfw-refresh-calendar-buffer
+
+    ;; Evil normalmente captura `q`.
+    (kbd "q") #'bury-buffer))
 
 ;; ============================================================
 ;; CONFIGURAÇÃO FINAL
