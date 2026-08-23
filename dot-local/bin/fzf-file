@@ -1,27 +1,64 @@
 #!/usr/bin/env bash
 
-selected=$(
+set -u
+
+# ============================================================
+# FZF FILE FINDER
+# ============================================================
+
+selected="$(
   fd \
     --hidden \
-    --follow \
     --type f \
     --type d \
     --exclude .git \
     --exclude .cache \
+    --exclude .local/share/Trash \
+    --exclude node_modules \
+    --exclude .venv \
+    --exclude target \
+    --exclude .npm \
+    --exclude .cargo \
     . "$HOME" |
     fzf \
       --height=80% \
       --layout=reverse \
       --border \
-      --preview '
-                if [ -d "{}" ]; then
-                    eza --tree --level=2 --icons "{}"
-                elif [ -f "{}" ]; then
-                    bat --color=always --style=numbers "{}"
-                fi
-            '
-)
+      --no-scrollbar \
+      --info=inline \
+      --prompt='  󰈞  ' \
+      --pointer='▶'
+)"
 
-[ -z "$selected" ] && exit 0
+# Cancelou
+[[ -z "$selected" ]] && exit 0
 
-exec nvim -- "$selected"
+# ============================================================
+# ABERTURA
+# ============================================================
+
+if [[ -d "$selected" ]]; then
+
+  # Já estamos dentro do Kitty
+  if [[ -n "${KITTY_WINDOW_ID:-}" ]]; then
+    exec yazi "$selected"
+  fi
+
+  # Executado fora de um terminal
+  exec kitty yazi "$selected"
+
+fi
+
+if [[ -f "$selected" ]]; then
+
+  # Já estamos dentro do Kitty
+  if [[ -n "${KITTY_WINDOW_ID:-}" ]]; then
+    exec nvim -- "$selected"
+  fi
+
+  # Executado fora de um terminal
+  exec kitty nvim -- "$selected"
+
+fi
+
+exit 1
