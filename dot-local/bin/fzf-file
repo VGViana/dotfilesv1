@@ -30,33 +30,49 @@ selected="$(
       --pointer='▶'
 )"
 
-# Cancelou
+# ============================================================
+# CANCELAMENTO
+# ============================================================
+
 [[ -z "$selected" ]] && exit 0
 
 # ============================================================
-# ABERTURA
+# DIRETÓRIO → YAZI
 # ============================================================
 
 if [[ -d "$selected" ]]; then
 
-  # Já estamos dentro do Kitty
   if [[ -n "${KITTY_WINDOW_ID:-}" ]]; then
     exec yazi "$selected"
   fi
 
-  # Executado fora de um terminal
   exec kitty yazi "$selected"
 
 fi
 
+# ============================================================
+# PDF → SIOYEK
+# ============================================================
+
+if [[ -f "$selected" && "${selected,,}" == *.pdf ]]; then
+
+  # Abre o Sioyek independentemente do terminal
+  setsid sioyek -- "$selected" >/dev/null 2>&1 </dev/null &
+
+  exit 0
+
+fi
+
+# ============================================================
+# QUALQUER OUTRO ARQUIVO → NVIM
+# ============================================================
+
 if [[ -f "$selected" ]]; then
 
-  # Já estamos dentro do Kitty
   if [[ -n "${KITTY_WINDOW_ID:-}" ]]; then
     exec nvim -- "$selected"
   fi
 
-  # Executado fora de um terminal
   exec kitty nvim -- "$selected"
 
 fi

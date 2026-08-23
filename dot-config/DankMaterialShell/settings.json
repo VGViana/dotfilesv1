@@ -569,10 +569,6 @@
       ],
       "showOnLastDisplay": true,
       "leftWidgets": [
-        {
-          "id": "launcherButton",
-          "enabled": false
-        },
         "workspaceSwitcher",
         "focusedWindow"
       ],
@@ -586,15 +582,15 @@
         "weather"
       ],
       "rightWidgets": [
-        {
-          "id": "dankPomodoroTimer",
-          "enabled": true
-        },
         "systemTray",
-        "clipboard",
         {
           "id": "cpuUsage",
           "enabled": true
+        },
+        {
+          "id": "cpuTemp",
+          "enabled": true,
+          "minimumWidth": false
         },
         "memUsage",
         "controlCenterButton",
@@ -626,10 +622,10 @@
       "widgetOutlineThickness": 1,
       "fontScale": 1,
       "iconScale": 1,
-      "autoHide": false,
+      "autoHide": true,
       "autoHideStrict": false,
-      "autoHideDelay": 250,
-      "showOnWindowsOpen": false,
+      "autoHideDelay": 351,
+      "showOnWindowsOpen": true,
       "openOnOverview": false,
       "visible": true,
       "popupGapsAuto": true,
