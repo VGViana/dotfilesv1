@@ -8,10 +8,10 @@ local opt = vim.opt
 -- APARÊNCIA
 -- ============================================================
 
-opt.termguicolors = true
+opt.termguicolors = false
 
 opt.number = true
-opt.relativenumber = false
+opt.relativenumber = true
 
 opt.cursorline = true
 opt.cursorcolumn = false
