@@ -7,13 +7,13 @@
 (setq user-full-name "Viana"
       user-mail-address "viniciusgazel@gmail.com")
 
-
 ;; ============================================================
 ;; APARÊNCIA
 ;; ============================================================
 
-(setq doom-theme 'doom-gruvbox
-      doom-gruvbox-dark-variant "soft")
+;; ------------------------------------------------------------
+;; FONTE
+;; ------------------------------------------------------------
 
 (setq doom-font
       (font-spec
@@ -27,6 +27,52 @@
 
 (setq display-line-numbers-type 'relative)
 
+
+;; ------------------------------------------------------------
+;; GRUVBOX — TEMA ADAPTATIVO
+;; ------------------------------------------------------------
+
+;; Variantes disponíveis:
+;;
+;;   claro  → doom-gruvbox-light
+;;   escuro → doom-gruvbox
+;;
+;; A variante escura usa "soft", mantendo a estética
+;; Gruvbox Material Dark Soft que você já utiliza.
+
+(setq doom-theme 'doom-gruvbox
+      doom-gruvbox-dark-variant "soft")
+
+
+(defun my/system-dark-mode-p ()
+  "Retorna t quando o sistema está configurado para modo escuro."
+  (let ((scheme
+         (string-trim
+          (shell-command-to-string
+           "gsettings get org.gnome.desktop.interface color-scheme 2>/dev/null"))))
+    (string= scheme "'prefer-dark'")))
+
+
+(defun my/apply-system-theme ()
+  "Aplica o tema Gruvbox de acordo com o modo claro/escuro do sistema."
+  (let ((theme
+         (if (my/system-dark-mode-p)
+             'doom-gruvbox
+           'doom-gruvbox-light)))
+
+    ;; Desativa os temas atualmente carregados.
+    (mapc #'disable-theme custom-enabled-themes)
+
+    ;; Carrega o tema correspondente.
+    (load-theme theme t)
+
+    ;; No modo escuro, mantém a variante Soft.
+    (when (eq theme 'doom-gruvbox)
+      (setq doom-gruvbox-dark-variant "soft"))))
+
+
+;; Aplica o tema quando o Emacs inicia.
+(add-hook 'after-init-hook #'my/apply-system-theme)
 
 ;; ============================================================
 ;; PLSTORE / OAUTH
@@ -107,30 +153,16 @@
   ;; ORG AGENDA
   ;; ----------------------------------------------------------
 
-  ;; Mostrar 7 dias.
   (setq org-agenda-span 7)
 
-  ;; Começar a agenda no dia atual.
-  ;;
-  ;; Exemplo:
-  ;;
-  ;; Domingo 23 → 23 até 29
-  ;; Segunda 24 → 24 até 30
-  ;;
-  ;; Isso permite visualizar imediatamente
-  ;; os eventos futuros da rotina.
   (setq org-agenda-start-on-weekday nil)
 
-  ;; Mostrar dias mesmo quando não possuem eventos.
   (setq org-agenda-show-all-dates t)
 
-  ;; Usar a janela atual.
   (setq org-agenda-window-setup 'current-window)
 
-  ;; Remover tags da visualização.
   (setq org-agenda-remove-tags t)
 
-  ;; Não herdar tags.
   (setq org-agenda-use-tag-inheritance nil)
 
 
@@ -151,13 +183,6 @@
   ;; FORMATO DOS EVENTOS
   ;; ----------------------------------------------------------
 
-  ;; Exemplo:
-  ;;
-  ;; 05:20  📚 Estudo profundo
-  ;; 08:00  🏃 TFM / corrida fácil
-  ;; 13:00  💼 Trabalho
-  ;;
-  ;; Sem "Scheduled:".
   (setq org-agenda-prefix-format
         '((agenda . " %?-5t ")
           (todo . " ")
@@ -231,7 +256,6 @@
 ;; GOOGLE CALENDAR — ORG-GCAL
 ;; ============================================================
 
-;; Carregar credenciais.
 (load "~/.config/org-gcal/credentials.el")
 
 
@@ -248,14 +272,6 @@
   ;; ARQUIVO DO GOOGLE CALENDAR
   ;; ----------------------------------------------------------
 
-  ;; Google Calendar
-  ;;       ↓
-  ;;   org-gcal
-  ;;       ↓
-  ;; calendar-pessoal.org
-  ;;       ↓
-  ;;   Org Agenda
-  ;;
   (setq org-gcal-file-alist
         '(("viniciusgazel@gmail.com"
            . "~/Org/calendar-pessoal.org")))
@@ -265,10 +281,8 @@
   ;; JANELA DE SINCRONIZAÇÃO
   ;; ----------------------------------------------------------
 
-  ;; 30 dias para trás.
   (setq org-gcal-up-days 30)
 
-  ;; 90 dias para frente.
   (setq org-gcal-down-days 90)
 
 
@@ -295,14 +309,11 @@
 
   (interactive)
 
-  ;; Buscar eventos.
   (org-gcal-fetch)
 
-  ;; Atualizar agenda caso esteja aberta.
   (when (derived-mode-p 'org-agenda-mode)
     (org-agenda-redo))
 
-  ;; Caso a agenda esteja em outro buffer.
   (when (get-buffer "*Org Agenda*")
     (with-current-buffer "*Org Agenda*"
       (org-agenda-redo))))
@@ -313,19 +324,6 @@
 ;; ============================================================
 
 (after! org-agenda
-
-  ;; ----------------------------------------------------------
-  ;; AGENDA PRINCIPAL
-  ;;
-  ;; SPC a a
-  ;;
-  ;; Mostra:
-  ;;
-  ;; ROTINA
-  ;; HÁBITOS
-  ;; GOOGLE CALENDAR
-  ;; TAREFAS
-  ;; ----------------------------------------------------------
 
   (setq org-agenda-custom-commands
         '(("a"
@@ -341,7 +339,6 @@
 (map!
 
  :leader
-
 
  ;; ==========================================================
  ;; AGENDA
@@ -416,6 +413,7 @@
         (interactive)
         (find-file "~/Org/calendar-pessoal.org"))))
 
+
 ;; =============================================================================
 ;; CALFW — CALENDÁRIO VISUAL
 ;; =============================================================================
@@ -430,10 +428,8 @@
   ;; CALENDÁRIO
   ;; ---------------------------------------------------------------------------
 
-  ;; Segunda-feira como primeiro dia da semana.
   (setq calendar-week-start-day 1)
 
-  ;; Português.
   (setq calendar-day-name-array
         ["Dom" "Seg" "Ter" "Qua" "Qui" "Sex" "Sáb"])
 
@@ -451,12 +447,10 @@
          "Novembro"
          "Dezembro"])
 
+
   ;; ---------------------------------------------------------------------------
   ;; FERIADOS BRASILEIROS
   ;; ---------------------------------------------------------------------------
-
-  ;; O Calfw utiliza `calendar-holidays` do Emacs.
-  ;; Portanto, configuramos aqui a lista brasileira.
 
   (setq calendar-holidays
 
@@ -503,13 +497,8 @@
 
 
           ;; ===================================================================
-          ;; DATAS MÓVEIS IMPORTANTES NO CALENDÁRIO BRASILEIRO
+          ;; DATAS MÓVEIS
           ;; ===================================================================
-
-          ;; Carnaval
-          ;; Domingo: 49 dias antes da Páscoa
-          ;; Segunda: 48 dias antes da Páscoa
-          ;; Terça: 47 dias antes da Páscoa
 
           (holiday-easter-etc
            -49
@@ -523,24 +512,16 @@
            -47
            "Terça-feira de Carnaval")
 
-
-          ;; Sexta-feira Santa
-          ;; 2 dias antes da Páscoa.
-
           (holiday-easter-etc
            -2
            "Sexta-feira Santa")
-
-
-          ;; Corpus Christi
-          ;; 60 dias depois da Páscoa.
 
           (holiday-easter-etc
            60
            "Corpus Christi")))
 
-  ;; Mostrar os feriados no calendário.
   (setq calendar-mark-holidays-flag t)
+
 
   ;; ---------------------------------------------------------------------------
   ;; GRADE UNICODE
@@ -555,12 +536,14 @@
         calfw-fchar-top-left-corner ?┏
         calfw-fchar-top-right-corner ?┓)
 
+
   ;; ---------------------------------------------------------------------------
   ;; QUEBRA DE LINHAS
   ;; ---------------------------------------------------------------------------
 
   (setq calfw-render-line-breaker
         #'calfw-render-line-breaker-wordwrap)
+
 
   ;; ---------------------------------------------------------------------------
   ;; KEYBINDINGS ESTILO ORG
@@ -581,11 +564,6 @@
 
   :config
 
-  ;; Mostrar:
-  ;; - timestamps
-  ;; - SCHEDULED
-  ;; - DEADLINE
-
   (setq calfw-org-agenda-schedule-args
         '(:timestamp
           :scheduled
@@ -600,73 +578,37 @@
 
   (custom-set-faces
 
-   ;; -------------------------------------------------------------------------
-   ;; TÍTULO
-   ;; -------------------------------------------------------------------------
-
    '(calfw-face-title
      ((t (:foreground "#d4be98"
           :weight bold
           :height 1.5
           :inherit variable-pitch))))
 
-   ;; -------------------------------------------------------------------------
-   ;; CABEÇALHO
-   ;; -------------------------------------------------------------------------
-
    '(calfw-face-header
      ((t (:foreground "#a9b665"
           :weight bold))))
-
-   ;; -------------------------------------------------------------------------
-   ;; DOMINGO
-   ;; -------------------------------------------------------------------------
 
    '(calfw-face-sunday
      ((t (:foreground "#ea6962"
           :weight bold))))
 
-   ;; -------------------------------------------------------------------------
-   ;; SÁBADO
-   ;; -------------------------------------------------------------------------
-
    '(calfw-face-saturday
      ((t (:foreground "#7daea3"
           :weight bold))))
-
-   ;; -------------------------------------------------------------------------
-   ;; FERIADOS
-   ;; -------------------------------------------------------------------------
 
    '(calfw-face-holiday
      ((t (:foreground "#ea6962"
           :weight bold))))
 
-   ;; -------------------------------------------------------------------------
-   ;; GRADE
-   ;; -------------------------------------------------------------------------
-
    '(calfw-face-grid
      ((t (:foreground "#504945"))))
-
-   ;; -------------------------------------------------------------------------
-   ;; EVENTOS
-   ;; -------------------------------------------------------------------------
 
    '(calfw-face-default-content
      ((t (:foreground "#d4be98"))))
 
-   ;; -------------------------------------------------------------------------
-   ;; EVENTOS DE PERÍODO
-   ;; -------------------------------------------------------------------------
-
    '(calfw-face-periods
      ((t (:foreground "#d8a657"
           :weight bold))))
-
-   ;; -------------------------------------------------------------------------
-   ;; CABEÇALHO DOS DIAS
-   ;; -------------------------------------------------------------------------
 
    '(calfw-face-day-title
      ((t (:foreground "#d4be98"))))
@@ -674,10 +616,6 @@
    '(calfw-face-default-day
      ((t (:foreground "#d4be98"
           :weight bold))))
-
-   ;; -------------------------------------------------------------------------
-   ;; HOJE
-   ;; -------------------------------------------------------------------------
 
    '(calfw-face-today-title
      ((t (:background "#3c3836"
@@ -688,23 +626,11 @@
      ((t (:background "#32302f"
           :weight bold))))
 
-   ;; -------------------------------------------------------------------------
-   ;; SELEÇÃO
-   ;; -------------------------------------------------------------------------
-
    '(calfw-face-select
      ((t (:background "#45403d"))))
 
-   ;; -------------------------------------------------------------------------
-   ;; ANOTAÇÕES
-   ;; -------------------------------------------------------------------------
-
    '(calfw-face-annotation
      ((t (:foreground "#928374"))))
-
-   ;; -------------------------------------------------------------------------
-   ;; DIAS FORA DO MÊS
-   ;; -------------------------------------------------------------------------
 
    '(calfw-face-disable
      ((t (:foreground "#665c54"))))))
@@ -725,7 +651,6 @@
   (calfw-open-calendar-buffer
    :contents-sources
    (list
-    ;; Usa os arquivos definidos em `org-agenda-files`.
     (calfw-org-create-source
      nil
      "Agenda"
@@ -750,31 +675,237 @@
 (after! calfw
   (evil-define-key 'normal calfw-calendar-mode-map
 
-    ;; -------------------------------------------------------------------------
-    ;; VISUALIZAÇÕES
-    ;; -------------------------------------------------------------------------
-
     (kbd "M") #'calfw-change-view-month
     (kbd "W") #'calfw-change-view-week
     (kbd "T") #'calfw-change-view-two-weeks
     (kbd "D") #'calfw-change-view-day
 
-    ;; -------------------------------------------------------------------------
-    ;; OPERAÇÕES
-    ;; -------------------------------------------------------------------------
-
-    ;; Evil normalmente captura `r` como replace.
     (kbd "r") #'calfw-refresh-calendar-buffer
 
-    ;; Evil normalmente captura `q`.
     (kbd "q") #'bury-buffer))
+
+
+;; ============================================================
+;; ORG MODE — GRUVBOX MATERIAL DARK SOFT
+;; ============================================================
+
+(after! org
+
+  ;; ----------------------------------------------------------
+  ;; TIPOGRAFIA E ESTRUTURA VISUAL
+  ;; ----------------------------------------------------------
+
+  (setq org-hide-emphasis-markers t
+        org-pretty-entities t
+        org-fontify-whole-heading-line t
+        org-fontify-done-headline t
+        org-cycle-separator-lines 1
+        org-ellipsis " 󰅂")
+
+
+  ;; ----------------------------------------------------------
+  ;; ORG MODERN
+  ;; ----------------------------------------------------------
+
+  (use-package! org-modern
+    :hook (org-mode . org-modern-mode)
+
+    :config
+
+    (setq org-modern-star 'replace
+
+          org-modern-list
+          '((?+ . "•")
+            (?- . "•")
+            (?* . "•"))
+
+          org-modern-checkbox
+          '((?X . "󰄲")
+            (?- . "󰡖")
+            (?\s . "󰄱"))
+
+          org-modern-block-name
+          '((t . t))
+
+          org-modern-keyword
+          '((t . t))
+
+          org-modern-table nil
+
+          org-modern-tag nil
+          org-modern-priority nil
+          org-modern-todo nil
+          org-modern-time nil
+          org-modern-date nil
+
+          org-modern-horizontal-rule
+          "────────────────────────"))
+
+
+  ;; ----------------------------------------------------------
+  ;; FACES — GRUVBOX MATERIAL DARK SOFT
+  ;; ----------------------------------------------------------
+
+  (custom-set-faces!
+
+    ;; --------------------------------------------------------
+    ;; TÍTULO
+    ;; --------------------------------------------------------
+
+    '(org-document-title
+      :foreground "#d4be98"
+      :weight bold
+      :height 1.35)
+
+
+    ;; --------------------------------------------------------
+    ;; HEADINGS
+    ;; --------------------------------------------------------
+
+    '(org-level-1
+      :foreground "#d8a657"
+      :weight bold
+      :height 1.20)
+
+    '(org-level-2
+      :foreground "#a9b665"
+      :weight bold
+      :height 1.12)
+
+    '(org-level-3
+      :foreground "#7daea3"
+      :weight bold
+      :height 1.07)
+
+    '(org-level-4
+      :foreground "#d3869b"
+      :weight bold
+      :height 1.04)
+
+    '(org-level-5
+      :foreground "#89b482"
+      :weight bold)
+
+    '(org-level-6
+      :foreground "#d8a657"
+      :weight bold)
+
+
+    ;; --------------------------------------------------------
+    ;; TODO / DONE
+    ;; --------------------------------------------------------
+
+    '(org-todo
+      :foreground "#e78a4e"
+      :weight bold)
+
+    '(org-done
+      :foreground "#a9b665"
+      :weight bold)
+
+
+    ;; --------------------------------------------------------
+    ;; LINKS
+    ;; --------------------------------------------------------
+
+    '(org-link
+      :foreground "#d8a657"
+      :underline nil)
+
+
+    ;; --------------------------------------------------------
+    ;; TAGS / METADATA
+    ;; --------------------------------------------------------
+
+    '(org-tag
+      :foreground "#928374"
+      :weight normal)
+
+    '(org-meta-line
+      :foreground "#928374")
+
+    '(org-drawer
+      :foreground "#7c6f64")
+
+
+    ;; --------------------------------------------------------
+    ;; DATAS
+    ;; --------------------------------------------------------
+
+    '(org-date
+      :foreground "#7daea3"
+      :underline nil)
+
+    '(org-scheduled
+      :foreground "#a9b665")
+
+    '(org-deadline
+      :foreground "#e78a4e")
+
+
+    ;; --------------------------------------------------------
+    ;; CODE / VERBATIM
+    ;; --------------------------------------------------------
+
+    '(org-code
+      :foreground "#89b482")
+
+    '(org-verbatim
+      :foreground "#d3869b")
+
+
+    ;; --------------------------------------------------------
+    ;; BLOCOS DE CÓDIGO
+    ;; --------------------------------------------------------
+
+    '(org-block
+      :background "#292827"
+      :extend t)
+
+    '(org-block-begin-line
+      :foreground "#665c54"
+      :background "#292827")
+
+    '(org-block-end-line
+      :foreground "#665c54"
+      :background "#292827")
+
+
+    ;; --------------------------------------------------------
+    ;; CHECKBOX
+    ;; --------------------------------------------------------
+
+    '(org-checkbox
+      :foreground "#d8a657"
+      :weight bold)
+
+
+    ;; --------------------------------------------------------
+    ;; PROPRIEDADES
+    ;; --------------------------------------------------------
+
+    '(org-special-keyword
+      :foreground "#7daea3")
+
+    '(org-property-value
+      :foreground "#b8bb26")))
+
+
+;; ============================================================
+;; ORG MODE — LEITURA
+;; ============================================================
+
+(defun my/org-visual-setup ()
+  "Aplicar refinamentos visuais de leitura ao Org."
+  (variable-pitch-mode 1))
+
+(add-hook 'org-mode-hook #'my/org-visual-setup)
+
 
 ;; ============================================================
 ;; CONFIGURAÇÃO FINAL
 ;; ============================================================
 
-;; Agenda sempre utiliza a janela atual.
 (setq org-agenda-window-setup 'current-window)
 
-;; Não pedir confirmação ao sair do Emacs.
 (setq confirm-kill-emacs nil)

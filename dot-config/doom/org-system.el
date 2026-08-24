@@ -150,6 +150,58 @@
   (interactive)
   (org-agenda-list nil nil 7))
 
+;; ============================================================
+;; ORG SYSTEM — REFINOS VISUAIS
+;; ============================================================
+;;
+;; Somente aparência.
+;; As configurações funcionais acima permanecem intactas.
+;;
+
+(after! org
+
+  ;; ----------------------------------------------------------
+  ;; AGENDA
+  ;; ----------------------------------------------------------
+
+  (setq org-agenda-breadcrumbs-separator "  ›  "
+        org-agenda-current-time-string "← agora")
+
+
+  ;; ----------------------------------------------------------
+  ;; FACES DA AGENDA
+  ;; ----------------------------------------------------------
+
+  (custom-set-faces!
+
+    '(org-agenda-structure
+      :foreground "#d4be98"
+      :weight bold)
+
+    '(org-agenda-date
+      :foreground "#a9b665"
+      :weight bold)
+
+    '(org-agenda-date-today
+      :foreground "#d8a657"
+      :weight bold
+      :height 1.08)
+
+    '(org-agenda-date-weekend
+      :foreground "#928374")
+
+    '(org-agenda-dimmed-todo-face
+      :foreground "#665c54")
+
+    '(org-agenda-clocking
+      :background "#3c3836"
+      :foreground "#d4be98"
+      :weight bold)
+
+    '(org-agenda-current-time
+      :foreground "#d8a657"
+      :weight bold)))
+
 
 ;; ============================================================
 ;; FIM
