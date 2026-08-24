@@ -1,148 +1,224 @@
-# =========================================================
-# YAZI CONFIG
-# =========================================================
+#:schema https://yazi-rs.github.io/schemas/yazi.json
+
+# ============================================================
+# VINICIUS — YAZI
+# CachyOS + Hyprland + Kitty + Neovim
+# ============================================================
 
 
-# =========================================================
+# ============================================================
 # MANAGER
-# =========================================================
+# ============================================================
 
 [mgr]
 
-show_hidden = true
-
-# parent / current / preview
+# Parent / current / preview
+#
+# Mais espaço para a seleção atual e para preview.
 ratio = [1, 3, 4]
 
+# Ordenação natural:
+# 1, 2, 3, 10...
 sort_by = "natural"
+
+# Case-insensitive
 sort_sensitive = false
+
+# Mais antigos / normais primeiro
 sort_reverse = false
+
+# Diretórios antes dos arquivos
 sort_dir_first = true
 
+sort_translit = false
+
+# Nenhum "linemode" pesado na lista principal.
 linemode = "none"
 
+# Quero ver dotfiles.
+show_hidden = true
 
-# =========================================================
+# Mostrar destino de symlinks.
+show_symlink = true
+
+# Mantém contexto ao navegar.
+scrolloff = 6
+
+# Mouse continua disponível, mas o workflow principal é teclado.
+mouse_events = ["click", "scroll", "drag"]
+
+
+# ============================================================
 # PREVIEW
-# =========================================================
+# ============================================================
 
 [preview]
 
-max_width = 1200
-max_height = 1200
+# Não quebrar linhas de código.
+wrap = "no"
 
+# Tabs pequenas.
+tab_size = 2
+
+# Seu monitor é 1920x1080; isso é suficiente e evita cache enorme.
+max_width = 1000
+max_height = 800
+
+# Cache temporário padrão do sistema.
 cache_dir = ""
 
+# Kitty é rápido; zero evita atraso artificial.
 image_delay = 0
 
+# Bom equilíbrio entre qualidade e CPU.
+image_filter = "triangle"
 
-# =========================================================
+# Boa qualidade sem exagerar na cache.
+image_quality = 80
+
+
+# ============================================================
 # TASKS
-# =========================================================
+# ============================================================
 
 [tasks]
 
-micro_workers = 5
-macro_workers = 5
+# Seu notebook não precisa de concorrência exagerada.
+#
+# Os defaults atuais já são orientados a PCs, então mantemos
+# números moderados para evitar competição desnecessária
+# com Neovim/Firefox/Sioyek/Obsidian.
+file_workers = 3
+plugin_workers = 5
+fetch_workers = 5
+preload_workers = 2
+process_workers = 5
+
+bizarre_retry = 3
+
+# 512 MiB é mais do que suficiente para uma imagem grande.
+image_alloc = 536870912
+
+image_bound = [10000, 10000]
+
+suppress_preload = false
 
 
-# =========================================================
+# ============================================================
 # OPENERS
-# =========================================================
+# ============================================================
 
 [opener]
 
-# ---------------------------------------------------------
-# NVIM
-# ---------------------------------------------------------
+
+# ------------------------------------------------------------
+# TEXTO / CÓDIGO → NEOVIM
+# ------------------------------------------------------------
 
 edit = [
-    { run = 'nvim %s', block = true }
+    { run = 'nvim %s', block = true, for = "unix", desc = "Neovim" },
 ]
 
 
-# ---------------------------------------------------------
-# PDF — SIOYEK
-# ---------------------------------------------------------
+# ------------------------------------------------------------
+# PDF → SIOYEK
+# ------------------------------------------------------------
 
 pdf = [
-    { run = 'sioyek %s', orphan = true }
+    { run = 'sioyek %s', orphan = true, for = "unix", desc = "Sioyek" },
 ]
 
 
-# ---------------------------------------------------------
-# IMAGES — IMV
-# ---------------------------------------------------------
+# ------------------------------------------------------------
+# IMAGEM → IMV
+# ------------------------------------------------------------
 
 image = [
-    { run = 'imv %s', block = true }
+    { run = 'imv %s1', block = true, for = "unix", desc = "Open image" },
 ]
 
 
-# ---------------------------------------------------------
-# VIDEO — MPV
-# ---------------------------------------------------------
+# ------------------------------------------------------------
+# VÍDEO → MPV
+# ------------------------------------------------------------
 
 video = [
-    { run = 'mpv %s', block = true }
+    { run = 'mpv %s', orphan = true, for = "unix", desc = "mpv" },
 ]
 
 
-# ---------------------------------------------------------
-# AUDIO — MPV
-# ---------------------------------------------------------
+# ------------------------------------------------------------
+# ÁUDIO → MPV
+# ------------------------------------------------------------
 
 audio = [
-    { run = 'mpv %s', block = true }
+    { run = 'mpv %s', orphan = true, for = "unix", desc = "mpv" },
 ]
 
 
-# ---------------------------------------------------------
+# ------------------------------------------------------------
 # LIBREOFFICE WRITER
-# ---------------------------------------------------------
+# ------------------------------------------------------------
 
 writer = [
-    { run = 'libreoffice --writer %s', orphan = true }
+    { run = 'libreoffice --writer %s', orphan = true, for = "unix", desc = "LibreOffice Writer" },
 ]
 
 
-# ---------------------------------------------------------
+# ------------------------------------------------------------
 # LIBREOFFICE CALC
-# ---------------------------------------------------------
+# ------------------------------------------------------------
 
 calc = [
-    { run = 'libreoffice --calc %s', orphan = true }
+    { run = 'libreoffice --calc %s', orphan = true, for = "unix", desc = "LibreOffice Calc" },
 ]
 
 
-# =========================================================
+# ------------------------------------------------------------
+# OPEN WITH SYSTEM
+# ------------------------------------------------------------
+
+system = [
+    { run = 'xdg-open %s1', orphan = true, for = "linux", desc = "Open with system" },
+]
+
+
+# ------------------------------------------------------------
+# SHELL
+# ------------------------------------------------------------
+
+shell = [
+    { run = '$SHELL', block = true, for = "unix", desc = "Shell" },
+]
+
+
+# ============================================================
 # OPEN RULES
-# =========================================================
+# ============================================================
 
 [open]
 
 prepend_rules = [
 
-    # =====================================================
-    # TEXTO / CONFIGURAÇÃO / CÓDIGO → NVIM
-    # =====================================================
+    # --------------------------------------------------------
+    # Text / source / configs → Neovim
+    # --------------------------------------------------------
 
-    { url = "*.{txt,md,conf,config,json,jsonc,toml,yaml,yml,ini,lua,sh,bash,zsh,py,css,scss,js,ts,html,rasi}", use = "edit" },
+    { url = "*.{txt,md,markdown,conf,config,json,jsonc,toml,yaml,yml,ini,lua,sh,bash,zsh,fish,py,rs,c,cpp,h,hpp,css,scss,js,jsx,ts,tsx,html,xml,rasi,service,desktop}", use = "edit" },
 
-    # Fallback para qualquer arquivo MIME de texto
     { mime = "text/*", use = "edit" },
 
 
-    # =====================================================
-    # PDF → SIOYEK
-    # =====================================================
+    # --------------------------------------------------------
+    # PDF → Sioyek
+    # --------------------------------------------------------
 
     { mime = "application/pdf", use = "pdf" },
 
 
-    # =====================================================
-    # WORD / WRITER → LIBREOFFICE WRITER
-    # =====================================================
+    # --------------------------------------------------------
+    # Writer
+    # --------------------------------------------------------
 
     { mime = "application/msword", use = "writer" },
 
@@ -151,9 +227,9 @@ prepend_rules = [
     { mime = "application/vnd.oasis.opendocument.text", use = "writer" },
 
 
-    # =====================================================
-    # EXCEL / CALC → LIBREOFFICE CALC
-    # =====================================================
+    # --------------------------------------------------------
+    # Calc
+    # --------------------------------------------------------
 
     { mime = "application/vnd.ms-excel", use = "calc" },
 
@@ -162,23 +238,139 @@ prepend_rules = [
     { mime = "application/vnd.oasis.opendocument.spreadsheet", use = "calc" },
 
 
-    # =====================================================
-    # IMAGENS → IMV
-    # =====================================================
+    # --------------------------------------------------------
+    # Images → imv
+    # --------------------------------------------------------
 
     { mime = "image/*", use = "image" },
 
 
-    # =====================================================
-    # VÍDEO → MPV
-    # =====================================================
+    # --------------------------------------------------------
+    # Video
+    # --------------------------------------------------------
 
     { mime = "video/*", use = "video" },
 
 
-    # =====================================================
-    # ÁUDIO → MPV
-    # =====================================================
+    # --------------------------------------------------------
+    # Audio
+    # --------------------------------------------------------
 
-    { mime = "audio/*", use = "audio" }
+    { mime = "audio/*", use = "audio" },
+
+
+    # --------------------------------------------------------
+    # Fallback
+    # --------------------------------------------------------
+
+    { url = "*", use = "system" }
 ]
+
+
+# ============================================================
+# INPUT
+# ============================================================
+
+[input]
+
+# Você prefere cursor estável.
+cursor_blink = false
+
+
+# ------------------------------------------------------------
+# cd
+# ------------------------------------------------------------
+
+cd_title = "Change directory:"
+cd_origin = "top-center"
+cd_offset = [0, 2, 50, 3]
+
+
+# ------------------------------------------------------------
+# create
+# ------------------------------------------------------------
+
+create_title = ["Create:", "Create (dir):"]
+create_origin = "top-center"
+create_offset = [0, 2, 50, 3]
+
+
+# ------------------------------------------------------------
+# rename
+# ------------------------------------------------------------
+
+rename_title = "Rename:"
+rename_origin = "hovered"
+rename_offset = [0, 1, 50, 3]
+
+
+# ------------------------------------------------------------
+# filter
+# ------------------------------------------------------------
+
+filter_title = "Filter:"
+filter_origin = "top-center"
+filter_offset = [0, 2, 50, 3]
+
+
+# ------------------------------------------------------------
+# find
+# ------------------------------------------------------------
+
+find_title = ["Find next:", "Find previous:"]
+find_origin = "top-center"
+find_offset = [0, 2, 50, 3]
+
+
+# ------------------------------------------------------------
+# search
+# ------------------------------------------------------------
+
+search_title = "Search via {n}:"
+search_origin = "top-center"
+search_offset = [0, 2, 50, 3]
+
+
+# ------------------------------------------------------------
+# shell
+# ------------------------------------------------------------
+
+shell_title = ["Shell:", "Shell (block):"]
+shell_origin = "top-center"
+shell_offset = [0, 2, 50, 3]
+
+
+# ============================================================
+# CONFIRM
+# ============================================================
+
+[confirm]
+
+trash_title = "Trash {n} selected file{s}?"
+trash_origin = "center"
+trash_offset = [0, 0, 70, 12]
+
+delete_title = "Permanently delete {n} selected file{s}?"
+delete_origin = "center"
+delete_offset = [0, 0, 70, 12]
+
+overwrite_title = "Overwrite file?"
+overwrite_body = "Will overwrite the following file:"
+overwrite_origin = "center"
+overwrite_offset = [0, 0, 50, 15]
+
+quit_title = "Quit?"
+quit_body = "There are unfinished tasks, quit anyway?"
+quit_origin = "center"
+quit_offset = [0, 0, 50, 15]
+
+
+# ============================================================
+# PICK
+# ============================================================
+
+[pick]
+
+open_title = "Open with:"
+open_origin = "hovered"
+open_offset = [0, 1, 50, 7]
