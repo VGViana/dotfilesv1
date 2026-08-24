@@ -1,137 +1,357 @@
-# vim: ft=cfg
-# Basic options
+# ============================================================
+# VINICIUS — NCSPOT
+# ============================================================
+#
+# Filosofia:
+#   - keyboard-first
+#   - Vim-like
+#   - minimalista
+#   - Gruvbox Material Dark Soft
+#   - integração com Kitty
+#
+# ============================================================
+# GERAL
+# ============================================================
+
+# Mantém os atalhos padrão disponíveis.
 default_keybindings = true
+
+# Nerd Font para ícones e indicadores.
 use_nerdfont = true
+
+# Notificações de desktop.
 notify = true
+
+# Reprodução sem gap entre faixas.
 gapless = true
-flip_status_indicators=true
+
+# 320 kbps — máxima qualidade disponível no streaming.
+bitrate = 320
+
+# Normalização de volume.
+volnorm = true
+
+# Shuffle começa desligado.
 shuffle = false
-repeat = 'off'
-volnorm=true
-bitrate=320
+
+# Repetição começa desligada.
+repeat = "off"
+
+# Estado inicial da reprodução.
+playback_state = "Paused"
+
+# Tela inicial.
+initial_screen = "library"
+
+# Biblioteca enxuta.
+library_tabs = [
+    "tracks",
+    "albums",
+    "artists",
+    "playlists"
+]
+
+# Esconde username do Spotify na interface.
+hide_display_names = true
+
+# ============================================================
+# CACHE DE ÁUDIO
+# ============================================================
+
+# Mantém músicas em cache para reduzir downloads repetidos.
+audio_cache = true
+
+# Cache de 512 MiB.
+#
+# É suficientemente grande para seu uso sem transformar
+# o cache em armazenamento permanente.
+audio_cache_size = 512
+
+
+# ============================================================
+# STATUS
+# ============================================================
+
+# Informações úteis sem poluir a interface.
+statusbar_format = "%artists - %title"
+
+[track_format]
+
+# Artista + música à esquerda.
+left = "%artists - %title"
+
+# Álbum no centro.
+center = "%album"
+
+# Estado de salvamento + duração à direita.
+right = "%saved %duration"
+
+
+# ============================================================
+# NOTIFICAÇÕES
+# ============================================================
+
+[notification_format]
+
+title = "%title"
+body = "%artists - %album"
+
+
+# ============================================================
+# TECLADO
+# ============================================================
 
 [keybindings]
-## unbinded: nN, c, eE, xX
-######################################
-# Song controls
-######################################
 
-##################
-# Fast forward / rewind
-##################
+# ============================================================
+# REPRODUÇÃO
+# ============================================================
+
+# Play / pause
+"p" = "playpause"
+"Enter" = "play"
+
+# Stop
+"s" = "stop"
+
+# Faixa anterior / próxima
+"Shift+h" = "previous"
+"Shift+l" = "next"
+
+# ============================================================
+# SEEK
+# ============================================================
+
+# Pequenos saltos
 "b" = "seek -1000"
 "f" = "seek +1000"
+
+# Grandes saltos
 "Shift+b" = "seek -10000"
 "Shift+f" = "seek +10000"
 
-##################
-# Play / pause
-##################
-"p" = "playpause"
-"Enter" = "play"
-"s" = "stop"
 
-##################
-# Track manipulation
-##################
-"Shift+h" = "previous"
-"Shift+l" = "next"
+# ============================================================
+# REPEAT / SHUFFLE
+# ============================================================
+
 "r" = "repeat"
 "z" = "shuffle"
-"Shift+d" = "delete"
-"Shift+s" = "save"
-# Open context menu
-"Shift+o" = "open current"
-"o" = "open selected"
-"Shift+a" = "goto artist"
-"a" = "goto album"
 
-##################
-# Queue
-##################
-# Add to queue
+
+# ============================================================
+# BIBLIOTECA / FAIXAS
+# ============================================================
+
+# Salvar / remover dos favoritos
+"Shift+s" = "save"
+
+# Abrir seleção
+"o" = "open selected"
+
+# Abrir faixa atual
+"Shift+o" = "open current"
+
+# Artista
+"a" = "goto artist"
+
+# Álbum
+"Shift+a" = "goto album"
+
+# Excluir da fila
+"Shift+d" = "delete"
+
+
+# ============================================================
+# FILA
+# ============================================================
+
+# Adicionar à fila
 "Space" = "queue"
+
+# Salvar fila
 "Ctrl+s" = "save queue"
-# Move selected song up/down in the queue
+
+# Mover faixa para baixo
 "Shift+j" = "shift down 1"
+
+# Mover faixa para cima
 "Shift+k" = "shift up 1"
+
+# Limpar fila
 "Shift+c" = "clear"
-# Open the context menu for a Spotify link in the clipboard
+
+# Inserir link Spotify da clipboard
 "Ctrl+v" = "insert"
 
-######################################
-# Sound
-######################################
+
+# ============================================================
+# VOLUME
+# ============================================================
+
+# Ajuste fino
 "=" = "volup 1"
 "-" = "voldown 1"
+
+# Ajuste rápido
 "[" = "volup 5"
 "]" = "voldown 5"
 
 
-######################################
-# Movements
-######################################
+# ============================================================
+# TELAS
+# ============================================================
+
+# F1–F3
 "F1" = "focus queue"
 "F2" = "focus library"
 "F3" = "focus search"
+
+# Números
 "1" = "focus queue"
 "2" = "focus library"
 "3" = "focus search"
+
+# Atalho alternativo
 "Ctrl+q" = "focus queue"
-# Navigation
-"Down" = "move down 1"
-"Shift+g" = "move bottom"
-"g" = "move top"
-"Left" = "move left 1"
-"Right" = "move right 1"
-"Ctrl+d" = "move down 5"
-"Ctrl+u" = "move up 5"
-"Up" = "move up 1"
-"h" = "move left 1"
+
+
+# ============================================================
+# NAVEGAÇÃO — VIM
+# ============================================================
+
 "j" = "move down 1"
 "k" = "move up 1"
+"h" = "move left 1"
+"l" = "move right 1"
+
+# Setas continuam funcionando.
+"Up" = "move up 1"
+"Down" = "move down 1"
+"Left" = "move left 1"
+"Right" = "move right 1"
+
+# Scroll rápido
+"Ctrl+d" = "move down 5"
+"Ctrl+u" = "move up 5"
+
+# Top / bottom
+"g" = "move top"
+"Shift+g" = "move bottom"
+
+# Ir para música atualmente tocando
+"." = "move playing"
+
+# Navegação vertical alternativa
 "Ctrl+e" = "move down 1"
 "Ctrl+y" = "move up 1"
-"l" = "move right 1"
-"." = "move playing"
+
+# Voltar
 "q" = "back"
 
-######################################
-# Sorting
-######################################
+
+# ============================================================
+# ORDENAÇÃO
+# ============================================================
+
+# Mais recentes primeiro
 "t" = "sort added d"
+
+# Ordem alfabética
 "Shift+t" = "sort title a"
 
-######################################
-# Sharing
-######################################
-"Shift+y" = "share selected"
+
+# ============================================================
+# COMPARTILHAMENTO
+# ============================================================
+
+# Compartilhar música atual
 "y" = "share current"
 
-######################################
-# Other
-######################################
-"Shift+q" = "quit"
-"Shift+z" = "quit"
+# Compartilhar música selecionada
+"Shift+y" = "share selected"
+
+
+# ============================================================
+# OUTROS
+# ============================================================
+
+# Ajuda
 "?" = "help"
+
+# Atualizar biblioteca
 "Shift+u" = "update"
 
+# Sair
+"Shift+q" = "quit"
+"Shift+z" = "quit"
+
+
+# ============================================================
+# TEMA — GRUVBOX MATERIAL DARK SOFT
+# ============================================================
 
 [theme]
-background = "default"
-primary = "#EBDBB2"
-secondary = "#D5C4A1"
-title = "#D65D0E"
-playing = "#83a597"
-playing_selected = "#458588"
-playing_bg = "#1D2021"
-highlight = "#D79921"
-highlight_bg = "#1D2021"
-error = "#FBF1C7"
-error_bg = "#CC241D"
+
+# ------------------------------------------------------------
+# Fundo
+# ------------------------------------------------------------
+
+background = "#282828"
+
+# ------------------------------------------------------------
+# Texto
+# ------------------------------------------------------------
+
+primary = "#ebdbb2"
+secondary = "#d5c4a1"
+
+# ------------------------------------------------------------
+# Títulos
+# ------------------------------------------------------------
+
+title = "#d79921"
+
+# ------------------------------------------------------------
+# Reprodução
+# ------------------------------------------------------------
+
+playing = "#b8bb26"
+playing_selected = "#b8bb26"
+
+playing_bg = "#32302f"
+
+# ------------------------------------------------------------
+# Seleção
+# ------------------------------------------------------------
+
+highlight = "#d79921"
+highlight_bg = "#3c3836"
+
+# ------------------------------------------------------------
+# Erros
+# ------------------------------------------------------------
+
+error = "#fbf1c7"
+error_bg = "#cc241d"
+
+# ------------------------------------------------------------
+# Statusbar
+# ------------------------------------------------------------
+
 statusbar = "#282828"
-statusbar_progress = "#689D6A"
-statusbar_bg = "#98971A"
-cmdline = "#1D2021"
-cmdline_bg = "#FE8019"
+statusbar_progress = "#b8bb26"
+statusbar_bg = "#3c3836"
+
+# ------------------------------------------------------------
+# Command line
+# ------------------------------------------------------------
+
+cmdline = "#282828"
+cmdline_bg = "#d79921"
+
+# ------------------------------------------------------------
+# Busca
+# ------------------------------------------------------------
+
 search_match = "#fabd2f"

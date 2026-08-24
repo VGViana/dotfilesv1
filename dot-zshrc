@@ -1,33 +1,43 @@
 # ============================================================
 # VINICIUS — ZSH
+# CachyOS + Hyprland + Kitty + Neovim + Yazi + FZF
 # ============================================================
 
-# ------------------------------------------------------------
-# PROFILING
-# ------------------------------------------------------------
-# zmodload zsh/zprof
-# zprof
 
-# ------------------------------------------------------------
+# ============================================================
+# PROFILING
+# ============================================================
+#
+# Para diagnosticar startup:
+#
+#   zmodload zsh/zprof
+#   zprof
+#
+# Não deixe habilitado normalmente.
+#
+
+# zmodload zsh/zprof
+
+
+# ============================================================
 # PATH
-# ------------------------------------------------------------
+# ============================================================
 
 typeset -U path
 
 path=(
     "$HOME/.local/bin"
     "$HOME/go/bin"
+    "$HOME/.config/emacs/bin"
     $path
 )
 
 export PATH
 
 
-export PATH="$HOME/.config/emacs/bin:$PATH"
-
-# ------------------------------------------------------------
+# ============================================================
 # EDITORES / TERMINAL
-# ------------------------------------------------------------
+# ============================================================
 
 export EDITOR='nvim'
 export VISUAL='nvim'
@@ -39,9 +49,9 @@ export GIT_SEQUENCE_EDITOR='nvim'
 export TERMINAL='kitty'
 
 
-# ------------------------------------------------------------
+# ============================================================
 # WAYLAND
-# ------------------------------------------------------------
+# ============================================================
 
 export MOZ_ENABLE_WAYLAND=1
 export ELECTRON_OZONE_PLATFORM_HINT='wayland'
@@ -49,59 +59,91 @@ export SDL_VIDEODRIVER='wayland'
 export _JAVA_AWT_WM_NONREPARENTING=1
 
 
-# ------------------------------------------------------------
+# ============================================================
 # ZSH — COMPORTAMENTO
-# ------------------------------------------------------------
+# ============================================================
 
+# cd sem precisar escrever "cd"
 setopt autocd
+
+# Histórico de diretórios
 setopt auto_pushd
 setopt pushd_ignore_dups
 setopt pushd_silent
 
+# Não gerar erro quando glob não encontrar nada
 setopt no_nomatch
+
+# Permitir substituições no prompt
 setopt prompt_subst
 
+# Comentários interativos
+setopt interactive_comments
+
+# Ctrl+D não encerra o shell acidentalmente
 setopt ignore_eof
 
 
-# ------------------------------------------------------------
+# ============================================================
 # HISTÓRICO
-# ------------------------------------------------------------
+# ============================================================
 
 HISTFILE="$HOME/.zsh_history"
 
+# Quantidade em memória
 HISTSIZE=100000
+
+# Quantidade salva no arquivo
 SAVEHIST=50000
 
+# Compartilhar histórico entre shells
 setopt share_history
 
+# Salvar comandos imediatamente
+setopt inc_append_history
+
+# Não salvar duplicados consecutivos
 setopt hist_ignore_dups
+
+# Remover duplicados antigos
 setopt hist_ignore_all_dups
+
+# Busca no histórico sem duplicação
 setopt hist_find_no_dups
+
+# Não salvar duplicados no arquivo
 setopt hist_save_no_dups
+
+# Expirar primeiro os duplicados
 setopt hist_expire_dups_first
 
+# Comandos precedidos por espaço não entram no histórico
 setopt hist_ignore_space
+
+# Reduzir espaços redundantes
 setopt hist_reduce_blanks
+
+# Mostrar comando expandido antes de executar
 setopt hist_verify
+
+# Lock seguro do arquivo de histórico
 setopt hist_fcntl_lock
 
 
-# ------------------------------------------------------------
-# COMPLETION — CACHE PERSISTENTE
-# ------------------------------------------------------------
+# ============================================================
+# COMPLETION — CACHE
+# ============================================================
 
 ZCACHEDIR="$HOME/.cache/zsh"
 ZCOMPDUMP="$ZCACHEDIR/.zcompdump"
 
-if [[ ! -d "$ZCACHEDIR" ]]; then
-    mkdir -p "$ZCACHEDIR"
-fi
+mkdir -p "$ZCACHEDIR"
 
 autoload -Uz compinit
 
 compinit -d "$ZCOMPDUMP"
 
+# Compilar o dump para acelerar carregamento
 if [[ -r "$ZCOMPDUMP" &&
       ( ! -r "${ZCOMPDUMP}.zwc" ||
         "$ZCOMPDUMP" -nt "${ZCOMPDUMP}.zwc" ) ]]; then
@@ -109,34 +151,102 @@ if [[ -r "$ZCOMPDUMP" &&
 fi
 
 
-# ------------------------------------------------------------
+# ============================================================
+# COMPLETION — MÓDULO AVANÇADO
+# ============================================================
+
+# Menu de completion melhorado:
+# - seleção
+# - scrolling
+# - highlighting
+#
+# A documentação descreve essas extensões em zsh/complist.
+#
+
+zmodload -i zsh/complist
+
+
+# ============================================================
 # COMPLETION — APARÊNCIA
-# ------------------------------------------------------------
+# ============================================================
 
 zstyle ':completion:*' menu select
-
-zstyle ':completion:*' matcher-list \
-    'm:{a-zA-Z}={A-Za-z}' \
-    'r:|[._-]=* r:|=*'
-
-zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 
 zstyle ':completion:*' group-name ''
 
 zstyle ':completion:*' use-cache on
 zstyle ':completion:*' cache-path "$ZCACHEDIR"
 
+# Case insensitive
+# Também trata . _ -
+zstyle ':completion:*' matcher-list \
+    'm:{a-zA-Z}={A-Za-z}' \
+    'r:|[._-]=* r:|=*'
 
-# ------------------------------------------------------------
-# EDIÇÃO / MOVIMENTO
-# ------------------------------------------------------------
+# Cores usando LS_COLORS
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+
+# Melhor comportamento com paths
+zstyle ':completion:*' squeeze-slashes true
+
+# Atualizar command hash quando necessário
+zstyle ':completion:*' rehash true
+
+# Diretórios primeiro
+zstyle ':completion:*' list-dirs-first true
+
+# Prompt ao navegar por uma lista grande
+zstyle ':completion:*' select-prompt '%SScrolling active: %p%s'
+
+
+# ============================================================
+# COMPLETION — MENU SELECTION
+# ============================================================
+
+# Navegação explícita no menu de completion.
+#
+# TAB / setas continuam funcionando normalmente.
+#
+
+bindkey -M menuselect '^[[A' up-line-or-history
+bindkey -M menuselect '^[[B' down-line-or-history
+bindkey -M menuselect '^[[C' forward-char
+bindkey -M menuselect '^[[D' backward-char
+
+bindkey -M menuselect '^P' up-line-or-history
+bindkey -M menuselect '^N' down-line-or-history
+
+
+# ============================================================
+# ZLE — MODO EMACS
+# ============================================================
 
 bindkey -e
 
+
+# ============================================================
+# ZLE — PALAVRAS
+# ============================================================
+
+# "/" não pertence à definição de palavra.
+#
+# Isso torna:
+#
+#   /home/vinicius/Documentos/arquivo.pdf
+#
+# muito mais agradável de editar com Alt+Backspace.
+#
+
 WORDCHARS=${WORDCHARS//\/}
 
-autoload -Uz up-line-or-beginning-search
-autoload -Uz down-line-or-beginning-search
+
+# ============================================================
+# ZLE — HISTÓRICO POR PREFIXO
+# ============================================================
+
+autoload -Uz \
+    up-line-or-beginning-search \
+    down-line-or-beginning-search
 
 zle -N up-line-or-beginning-search
 zle -N down-line-or-beginning-search
@@ -148,9 +258,36 @@ bindkey '^P' up-line-or-beginning-search
 bindkey '^N' down-line-or-beginning-search
 
 
-# ------------------------------------------------------------
-# LIMPAR TERMINAL
-# ------------------------------------------------------------
+# ============================================================
+# ZLE — EDITAR COMANDO NO NEOVIM
+# ============================================================
+
+autoload -Uz edit-command-line
+
+zle -N edit-command-line
+
+# Alt+E
+#
+# Abre o comando atual no editor definido por $VISUAL.
+#
+bindkey '^[e' edit-command-line
+
+
+# ============================================================
+# ZLE — HISTÓRICO INTERATIVO
+# ============================================================
+
+autoload -Uz history-incremental-pattern-search-backward
+
+zle -N history-incremental-pattern-search-backward
+
+# Fallback caso FZF não esteja disponível.
+bindkey '^R' history-incremental-pattern-search-backward
+
+
+# ============================================================
+# ZLE — LIMPAR TERMINAL
+# ============================================================
 
 zle_clear_screen() {
     clear
@@ -164,9 +301,72 @@ bindkey '^L' zle_clear_screen
 bindkey '^[l' zle_clear_screen
 
 
-# ------------------------------------------------------------
+# ============================================================
+# ZLE — OUTROS WIDGETS ÚTEIS
+# ============================================================
+
+# Expandir caminho absoluto sob o cursor
+autoload -Uz expand-absolute-path
+zle -N expand-absolute-path
+
+bindkey '^[/' expand-absolute-path
+
+
+# Copiar palavra anterior
+bindkey '^[.' copy-prev-shell-word
+
+
+# Inserir última palavra do comando anterior
+bindkey '^[_' insert-last-word
+
+
+# Undo / redo
+bindkey '^_' undo
+bindkey '^[u' undo
+bindkey '^[U' redo
+
+
+# ============================================================
+# ZLE — BRACKETED PASTE
+# ============================================================
+#
+# O terminal informa ao Zsh quando algo foi colado.
+#
+# Isso evita que conteúdo colado seja interpretado como
+# uma sequência de comandos individuais da mesma maneira
+# que uma digitação normal.
+#
+
+autoload -Uz bracketed-paste-magic
+
+if (( $+functions[bracketed-paste-magic] )); then
+    zle -N bracketed-paste bracketed-paste-magic
+    bindkey '^[[200~' bracketed-paste
+fi
+
+
+# ============================================================
+# RUN-HELP
+# ============================================================
+#
+# ESC+h
+#
+# Consulta documentação do comando atual.
+#
+# O Zsh fornece run-help como uma ferramenta específica
+# para esse tipo de consulta.
+#
+
+autoload -Uz run-help
+
+unalias run-help 2>/dev/null
+
+alias run-help=run-help
+
+
+# ============================================================
 # FZF
-# ------------------------------------------------------------
+# ============================================================
 
 if (( $+commands[fd] )); then
     export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
@@ -191,6 +391,11 @@ export FZF_DEFAULT_OPTS='
 --color=prompt:#d79921,hl+:#83a598
 '
 
+
+# ============================================================
+# FZF — INTEGRAÇÃO ZSH
+# ============================================================
+
 if [[ -r /usr/share/fzf/key-bindings.zsh ]]; then
     source /usr/share/fzf/key-bindings.zsh
 fi
@@ -200,9 +405,24 @@ if [[ -r /usr/share/fzf/completion.zsh ]]; then
 fi
 
 
-# ------------------------------------------------------------
+# ============================================================
+# FZF — HISTÓRICO
+# ============================================================
+#
+# Se o pacote fornecer fzf-history-widget, Ctrl+R vira
+# uma busca visual no histórico.
+#
+# Caso contrário, mantém o histórico incremental do Zsh.
+#
+
+if (( $+widgets[fzf-history-widget] )); then
+    bindkey '^R' fzf-history-widget
+fi
+
+
+# ============================================================
 # ZSH AUTOSUGGESTIONS
-# ------------------------------------------------------------
+# ============================================================
 
 export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#665c54'
 
@@ -218,9 +438,9 @@ if [[ -r /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh ]]; 
 fi
 
 
-# ------------------------------------------------------------
+# ============================================================
 # ZSH SYNTAX HIGHLIGHTING
-# ------------------------------------------------------------
+# ============================================================
 
 export ZSH_HIGHLIGHT_HIGHLIGHTERS=(
     main
@@ -233,9 +453,9 @@ if [[ -r /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.
 fi
 
 
-# ------------------------------------------------------------
+# ============================================================
 # STARSHIP
-# ------------------------------------------------------------
+# ============================================================
 
 if (( $+commands[starship] )); then
     eval "$(starship init zsh)"
@@ -244,9 +464,9 @@ fi
 ZLE_RPROMPT_INDENT=0
 
 
-# ------------------------------------------------------------
+# ============================================================
 # ZOXIDE
-# ------------------------------------------------------------
+# ============================================================
 
 if (( $+commands[zoxide] )); then
     eval "$(zoxide init zsh)"
@@ -254,26 +474,31 @@ fi
 
 
 # ============================================================
-# ALIASES
+# ALIASES — EDITORES
 # ============================================================
-
-
-# ------------------------------------------------------------
-# EDITORES
-# ------------------------------------------------------------
 
 alias v='nvim'
 alias sv='sudo nvim'
 
+
+# ============================================================
+# ALIASES — SISTEMA
+# ============================================================
+
 alias restart='systemctl --user restart'
+
+
+# ============================================================
+# ALIASES — CLIPBOARD
+# ============================================================
 
 alias cpout='wl-copy'
 alias paste='wl-paste'
 
 
-# ------------------------------------------------------------
-# ARQUIVOS
-# ------------------------------------------------------------
+# ============================================================
+# ALIASES — ARQUIVOS
+# ============================================================
 
 alias ls='eza --icons --group-directories-first'
 alias ll='eza -lah --icons --group-directories-first'
@@ -287,9 +512,9 @@ alias grep='grep --color=auto'
 alias rg='rg --smart-case'
 
 
-# ------------------------------------------------------------
-# NAVEGAÇÃO
-# ------------------------------------------------------------
+# ============================================================
+# ALIASES — NAVEGAÇÃO
+# ============================================================
 
 alias ..='cd ..'
 alias ...='cd ../..'
@@ -297,22 +522,28 @@ alias ....='cd ../../..'
 alias ~='cd ~'
 
 
-# ------------------------------------------------------------
-# PACMAN / YAY
-# ------------------------------------------------------------
+# ============================================================
+# ALIASES — PACMAN
+# ============================================================
 
 alias p='sudo pacman -S'
 alias pu='sudo pacman -Syu'
 alias pr='sudo pacman -Rns'
 alias po='pacman -Qtdq'
 
+
+# ============================================================
+# ALIASES — YAY
+# ============================================================
+
 alias y='yay -S'
 alias yu='yay -Syu'
 alias yr='yay -Rns'
 
-# ------------------------------------------------------------
-# SISTEMA
-# ------------------------------------------------------------
+
+# ============================================================
+# ALIASES — SISTEMA
+# ============================================================
 
 alias psg='ps aux | grep -i'
 alias k='pkill'
@@ -325,21 +556,19 @@ alias ff='fastfetch'
 alias vs='vdirsyncer sync'
 alias ds='doom sync'
 
-# ------------------------------------------------------------
-# PRODUTIVIDADE
-# ------------------------------------------------------------
+
+# ============================================================
+# ALIASES — PRODUTIVIDADE
+# ============================================================
 
 alias z='nvim ~/.zshrc'
 alias sz='source ~/.zshrc'
 alias q='exit'
 
-# ============================================================
-# FUNÇÕES
-# ============================================================
 
-# ------------------------------------------------------------
-# Criar diretório e entrar
-# ------------------------------------------------------------
+# ============================================================
+# FUNÇÃO — CRIAR DIRETÓRIO E ENTRAR
+# ============================================================
 
 mkcd() {
     [[ -n "$1" ]] || return 1
@@ -349,9 +578,9 @@ mkcd() {
 }
 
 
-# ------------------------------------------------------------
-# Extrair arquivos
-# ------------------------------------------------------------
+# ============================================================
+# FUNÇÃO — EXTRAIR ARQUIVOS
+# ============================================================
 
 extract() {
 
@@ -386,9 +615,9 @@ extract() {
 }
 
 
-# ------------------------------------------------------------
-# Limpar órfãos do Pacman
-# ------------------------------------------------------------
+# ============================================================
+# FUNÇÃO — LIMPAR ÓRFÃOS
+# ============================================================
 
 clean() {
 
@@ -404,9 +633,9 @@ clean() {
 }
 
 
-# ------------------------------------------------------------
-# Navegação Zoxide + FZF
-# ------------------------------------------------------------
+# ============================================================
+# FUNÇÃO — ZOXIDE + FZF
+# ============================================================
 
 j() {
 
@@ -414,18 +643,121 @@ j() {
 
     local dir
 
-    dir=$(zoxide query -l 2>/dev/null | fzf \
-        --height=40% \
-        --layout=reverse \
-        --border=rounded \
-        --preview='eza --icons --tree --level=2 --color=always {}'
+    dir=$(
+        zoxide query -l 2>/dev/null |
+        fzf \
+            --height=40% \
+            --layout=reverse \
+            --border=rounded \
+            --preview='eza --icons --tree --level=2 --color=always {}'
     ) || return 0
 
     [[ -n "$dir" ]] && cd -- "$dir"
 }
 
 
-fastfetch
+# ============================================================
+# FUNÇÃO — ENTRAR EM DIRETÓRIO E ABRIR YAZI
+# ============================================================
+
+yazi-here() {
+
+    if (( $+commands[yazi] )); then
+        yazi
+    else
+        print -u2 "yazi não encontrado."
+        return 127
+    fi
+}
+
+
+# ============================================================
+# FUNÇÃO — EDITAR ZSHRC
+# ============================================================
+
+zsh-edit() {
+    nvim "$HOME/.zshrc"
+}
+
+
+# ============================================================
+# FUNÇÃO — RECARREGAR ZSH
+# ============================================================
+
+zsh-reload() {
+    source "$HOME/.zshrc"
+}
+
+
+# ============================================================
+# FUNÇÃO — VER PATH
+# ============================================================
+
+path-show() {
+    print -l -- $path
+}
+
+
+# ============================================================
+# FUNÇÃO — PORTAS EM ESCUTA
+# ============================================================
+
+ports-listen() {
+    ss -tulpen
+}
+
+
+# ============================================================
+# FUNÇÃO — QUAL COMANDO ESTÁ SENDO EXECUTADO
+# ============================================================
+
+where() {
+    (( $# )) || return 1
+
+    for cmd in "$@"; do
+        print -n "$cmd: "
+
+        if (( $+commands[$cmd] )); then
+            print -r -- "$commands[$cmd]"
+        elif (( $+builtins[$cmd] )); then
+            print -r -- "zsh builtin"
+        elif (( $+functions[$cmd] )); then
+            print -r -- "zsh function"
+        else
+            print -r -- "not found"
+        fi
+    done
+}
+
+
+# ============================================================
+# DIRETÓRIOS NOMEADOS
+# ============================================================
+#
+# Permite:
+#
+#   cd ~estudos
+#   cd ~config
+#
+# Ajuste os caminhos se desejar.
+#
+
+hash -d estudos="$HOME/Estudos"
+hash -d config="$HOME/.config"
+
+
+# ============================================================
+# FASTFETCH
+# ============================================================
+#
+# Executa apenas no shell interativo inicial.
+#
+
+if [[ $SHLVL -eq 1 && $+commands[fastfetch] ]]; then
+    fastfetch
+fi
+
+
 # ============================================================
 # END
 # ============================================================
