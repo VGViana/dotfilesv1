@@ -162,7 +162,7 @@
   "showWorkspaceName": false,
   "showWorkspacePadding": false,
   "workspaceScrolling": false,
-  "showWorkspaceApps": false,
+  "showWorkspaceApps": true,
   "workspaceDragReorder": true,
   "maxWorkspaceIcons": 3,
   "workspaceAppIconSizeOffset": 0,
@@ -199,14 +199,14 @@
   "workspaceUnfocusedMonitorBorderCustomColor": "#6750A4",
   "workspaceUnfocusedMonitorBorderThickness": 2,
   "workspaceNameIcons": {},
-  "waveProgressEnabled": true,
+  "waveProgressEnabled": false,
   "scrollTitleEnabled": true,
   "mediaAdaptiveWidthEnabled": true,
-  "audioVisualizerEnabled": true,
+  "audioVisualizerEnabled": false,
   "mediaUseAlbumArtAccent": true,
   "audioScrollMode": "volume",
   "audioWheelScrollAmount": 5,
-  "audioDeviceScrollVolumeEnabled": false,
+  "audioDeviceScrollVolumeEnabled": true,
   "mediaExcludePlayers": [],
   "clockCompactMode": false,
   "focusedWindowCompactMode": false,
@@ -288,19 +288,19 @@
     },
     {
       "id": "media",
-      "enabled": true
+      "enabled": false
     },
     {
       "id": "wallpaper",
-      "enabled": true
+      "enabled": false
     },
     {
       "id": "weather",
-      "enabled": true
+      "enabled": false
     },
     {
       "id": "settings",
-      "enabled": true
+      "enabled": false
     }
   ],
   "networkPreference": "wifi",
@@ -460,7 +460,7 @@
   "dockShowTrash": false,
   "dockTrashFileManager": "default",
   "dockTrashCustomCommand": "",
-  "notificationOverlayEnabled": false,
+  "notificationOverlayEnabled": true,
   "notificationPopupShadowEnabled": true,
   "notificationPopupPrivacyMode": false,
   "notificationForegroundLayers": true,
@@ -599,32 +599,32 @@
         "battery",
         "notificationButton"
       ],
-      "spacing": 4,
-      "innerPadding": 4,
-      "barInsetPadding": -1,
+      "spacing": 0,
+      "innerPadding": 0,
+      "barInsetPadding": 4,
       "bottomGap": 0,
       "transparency": 1,
       "widgetTransparency": 1,
-      "squareCorners": false,
-      "noBackground": true,
+      "squareCorners": true,
+      "noBackground": false,
       "maximizeWidgetIcons": false,
       "maximizeWidgetText": false,
       "removeWidgetPadding": false,
       "widgetPadding": 8,
-      "gothCornersEnabled": true,
+      "gothCornersEnabled": false,
       "gothCornerRadiusOverride": false,
       "gothCornerRadiusValue": 12,
       "borderEnabled": false,
-      "borderColor": "surfaceText",
+      "borderColor": "primary",
       "borderOpacity": 1,
       "borderThickness": 1,
       "widgetOutlineEnabled": false,
-      "widgetOutlineColor": "primary",
+      "widgetOutlineColor": "surfaceText",
       "widgetOutlineOpacity": 1,
       "widgetOutlineThickness": 1,
-      "fontScale": 1,
+      "fontScale": 1.3,
       "iconScale": 1,
-      "autoHide": true,
+      "autoHide": false,
       "autoHideStrict": false,
       "autoHideDelay": 351,
       "showOnWindowsOpen": true,
@@ -753,7 +753,7 @@
   "frameLauncherEdgeHover": false,
   "frameMode": "connected",
   "barInsetPaddingShared": -1,
-  "barInsetPaddingSyncAll": false,
+  "barInsetPaddingSyncAll": true,
   "frameBarInsetPadding": -1,
   "configVersion": 13
 }

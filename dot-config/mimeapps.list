@@ -14,6 +14,13 @@ application/x-gzpdf=sioyek.desktop
 application/x-zerosize=nvim.desktop
 application/xhtml+xml=firefox.desktop
 application/zip=userapp-7zip-1H9CU3.desktop
+image/avif=imv.desktop
+image/bmp=imv.desktop
+image/gif=imv.desktop
+image/jpeg=imv.desktop
+image/png=imv.desktop
+image/svg+xml=imv.desktop
+image/webp=imv.desktop
 inode/directory=thunar.desktop
 text/html=firefox.desktop
 text/markdown=nvim.desktop
@@ -27,6 +34,7 @@ x-scheme-handler/file=thunar.desktop
 x-scheme-handler/http=firefox.desktop
 x-scheme-handler/https=firefox.desktop
 x-scheme-handler/hydralauncher=hydralauncher.desktop
+x-scheme-handler/mailto=firefox.desktop
 
 [Added Associations]
 application/json=nvim.desktop;
@@ -44,6 +52,13 @@ application/x-gzpdf=sioyek.desktop;
 application/x-zerosize=nvim.desktop;
 application/xhtml+xml=firefox.desktop;zen.desktop;
 application/zip=userapp-7zip-1H9CU3.desktop;
+image/avif=imv.desktop;
+image/bmp=imv.desktop;
+image/gif=imv.desktop;
+image/jpeg=imv.desktop;
+image/png=imv.desktop;
+image/svg+xml=imv.desktop;
+image/webp=imv.desktop;
 inode/directory=thunar.desktop;
 text/html=firefox.desktop;zen.desktop;
 text/markdown=nvim.desktop;
@@ -56,6 +71,7 @@ x-scheme-handler/chrome=zen.desktop;
 x-scheme-handler/file=thunar.desktop;
 x-scheme-handler/http=zen.desktop;firefox.desktop;
 x-scheme-handler/https=zen.desktop;firefox.desktop;
+x-scheme-handler/mailto=firefox.desktop;
 
 [Removed Associations]
 
