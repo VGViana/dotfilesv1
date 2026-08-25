@@ -18,12 +18,12 @@
 (setq doom-font
       (font-spec
        :family "JetBrainsMono Nerd Font"
-       :size 15))
+       :size 20))
 
 (setq doom-variable-pitch-font
       (font-spec
        :family "Iosevka Nerd Font"
-       :size 15))
+       :size 20 ))
 
 (setq display-line-numbers-type 'relative)
 

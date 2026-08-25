@@ -22,7 +22,7 @@
   "niriLayoutRadiusOverride": -1,
   "niriLayoutBorderSize": -1,
   "hyprlandLayoutGapsOverride": -1,
-  "hyprlandLayoutGapsOutOverride": 10,
+  "hyprlandLayoutGapsOutOverride": 0,
   "hyprlandLayoutRadiusOverride": -1,
   "hyprlandLayoutBorderSize": -1,
   "hyprlandResizeOnBorder": false,
