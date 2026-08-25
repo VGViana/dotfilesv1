@@ -239,14 +239,16 @@
   "greeterAutoLogin": false,
   "greeterEnableFprint": false,
   "greeterEnableU2f": false,
-  "greeterWallpaperPath": "",
+  "greeterWallpaperPath": "/home/viana/Imagens/Wallpapers/estrada.png",
   "greeterLockDateFormat": "",
-  "greeterFontFamily": "JetBrainsMono NF",
-  "greeterWallpaperFillMode": "",
+  "greeterFontFamily": "Iosevka NF",
+  "greeterWallpaperFillMode": "Fit",
   "greeterPamExternallyManaged": false,
   "greeterSyncPending": true,
   "greeterSyncBaseline": {
-    "greeterFontFamily": ""
+    "greeterFontFamily": "",
+    "greeterWallpaperPath": "",
+    "greeterWallpaperFillMode": ""
   },
   "mediaSize": 1,
   "appLauncherViewMode": "list",
@@ -308,7 +310,7 @@
   "lastAppliedIconTheme": "Gruvbox-Plus-Dark",
   "cursorSettings": {
     "theme": "Bibata-Modern-Classic",
-    "size": 24,
+    "size": 28,
     "niri": {
       "hideWhenTyping": false,
       "hideAfterInactiveMs": 0
@@ -329,12 +331,12 @@
   "launcherLogoBrightness": 0.5,
   "launcherLogoContrast": 1,
   "launcherLogoSizeOffset": 0,
-  "fontFamily": "JetBrainsMono NF",
-  "monoFontFamily": "JetBrainsMono Nerd Font Mono",
+  "fontFamily": "Iosevka NF",
+  "monoFontFamily": "Iosevka NFM",
   "fontWeight": 400,
   "fontScale": 1,
-  "textRenderType": 0,
-  "textRenderQuality": 2,
+  "textRenderType": 1,
+  "textRenderQuality": 0,
   "notepadUseMonospace": true,
   "notepadFontFamily": "",
   "notepadFontSize": 14,
