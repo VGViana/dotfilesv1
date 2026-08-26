@@ -72,6 +72,6 @@ x-scheme-handler/file=thunar.desktop;
 x-scheme-handler/http=zen.desktop;firefox.desktop;
 x-scheme-handler/https=zen.desktop;firefox.desktop;
 x-scheme-handler/mailto=firefox.desktop;
+text/org=emacsclient.desktop;
 
 [Removed Associations]
-

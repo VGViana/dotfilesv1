@@ -1,8 +1,8 @@
 {
   "dankPomodoroTimer": {
     "enabled": true,
-    "workDuration": "50",
-    "shortBreakDuration": "10",
+    "workDuration": "90",
+    "shortBreakDuration": "15",
     "autoStartBreaks": true,
     "longBreakDuration": "30"
   },
@@ -19,5 +19,12 @@
     "vdirBasePath": "/home/viana/.calendars/",
     "lookAheadDays": 30,
     "refreshInterval": 1
+  },
+  "timeManager": {
+    "enabled": false,
+    "pomodoroWorkMinutes": 50,
+    "pomodoroShortBreakMinutes": 10,
+    "pomodoroLongBreakMinutes": 20,
+    "defaultTimerMinutes": 90
   }
 }
