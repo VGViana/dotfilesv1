@@ -4,7 +4,7 @@ hl.config({
 	general = {
 		gaps_in = 4,
 		gaps_out = 4,
-		border_size = 2,
+		border_size = 0,
 		resize_on_border = false,
 	},
 	decoration = {
@@ -12,4 +12,7 @@ hl.config({
 	},
 })
 
--- bar-xray off
+hl.layer_rule({
+	match = { namespace = "^dms:bar$" },
+	xray = true,
+})
