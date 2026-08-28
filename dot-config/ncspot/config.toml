@@ -341,7 +341,7 @@ error_bg = "#cc241d"
 
 statusbar = "#282828"
 statusbar_progress = "#b8bb26"
-statusbar_bg = "#3c3836"
+statusbar_bg = "#ebdbb2"
 
 # ------------------------------------------------------------
 # Command line
