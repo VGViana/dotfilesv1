@@ -556,6 +556,12 @@ alias ff='fastfetch'
 alias vs='vdirsyncer sync'
 alias ds='doom sync'
 
+# ============================================================
+# KITTY — TEMA
+# ============================================================
+
+alias light='kitty @ set-colors --all ~/.config/kitty/gruvbox-light.conf'
+alias dark='kitty @ set-colors --all ~/.config/kitty/gruvbox-dark.conf'
 
 # ============================================================
 # ALIASES — PRODUTIVIDADE
