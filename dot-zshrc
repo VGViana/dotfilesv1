@@ -557,11 +557,31 @@ alias vs='vdirsyncer sync'
 alias ds='doom sync'
 
 # ============================================================
-# KITTY — TEMA
+# THEME TOGGLE — Alt+S
 # ============================================================
 
-alias light='kitty @ set-colors --all ~/.config/kitty/gruvbox-light.conf'
-alias dark='kitty @ set-colors --all ~/.config/kitty/gruvbox-dark.conf'
+toggle-theme() {
+    if [[ -f ~/.config/theme/current ]]; then
+        local current
+        current=$(<~/.config/theme/current)
+
+        if [[ "$current" == "dark" ]]; then
+            light
+        else
+            dark
+        fi
+    else
+        dark
+    fi
+}
+
+toggle-theme-widget() {
+    toggle-theme
+    zle reset-prompt
+}
+
+zle -N toggle-theme-widget
+bindkey '^[s' toggle-theme-widget
 
 # ============================================================
 # ALIASES — PRODUTIVIDADE
@@ -763,6 +783,52 @@ if [[ $SHLVL -eq 1 && $+commands[fastfetch] ]]; then
     fastfetch
 fi
 
+# ============================================================
+# SISTEMA DE TEMAS — GRUVBOX MATERIAL
+# ============================================================
+
+theme_light() {
+    mkdir -p ~/.config/theme
+
+    # Estado global
+    echo "light" > ~/.config/theme/current
+
+    # Kitty — tema persistente
+    cp ~/.config/kitty/gruvbox-light.conf \
+       ~/.config/kitty/current-theme.conf
+
+    # Kitty — aplicar imediatamente
+    kitty @ set-colors --all ~/.config/kitty/gruvbox-light.conf 2>/dev/null
+
+    # btop
+    cp ~/.config/btop/themes/gruvbox-material-light.theme \
+       ~/.config/btop/themes/current.theme
+
+    echo "Tema LIGHT ativado."
+}
+
+theme_dark() {
+    mkdir -p ~/.config/theme
+
+    # Estado global
+    echo "dark" > ~/.config/theme/current
+
+    # Kitty — tema persistente
+    cp ~/.config/kitty/gruvbox-dark.conf \
+       ~/.config/kitty/current-theme.conf
+
+    # Kitty — aplicar imediatamente
+    kitty @ set-colors --all ~/.config/kitty/gruvbox-dark.conf 2>/dev/null
+
+    # btop
+    cp ~/.config/btop/themes/gruvbox-material-dark.theme \
+       ~/.config/btop/themes/current.theme
+
+    echo "Tema DARK ativado."
+}
+
+alias light='theme_light'
+alias dark='theme_dark'
 
 # ============================================================
 # END

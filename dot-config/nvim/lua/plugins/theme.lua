@@ -6,140 +6,207 @@ return {
     priority = 1000,
 
     config = function()
-      -- ============================================================
-      -- CONFIGURAÇÃO
-      -- ============================================================
+      -- ==========================================================
+      -- ESTADO GLOBAL DO TEMA
+      -- ==========================================================
+
+      local theme_file = vim.fn.expand("~/.config/theme/current")
+
+      local theme = "dark"
+
+      local file = io.open(theme_file, "r")
+
+      if file then
+        local value = file:read("*a")
+        file:close()
+
+        value = vim.trim(value)
+
+        if value == "light" then
+          theme = "light"
+        elseif value == "dark" then
+          theme = "dark"
+        end
+      end
+
+      -- ==========================================================
+      -- GRUVBOX MATERIAL
+      -- ==========================================================
 
       vim.g.gruvbox_material_background = "soft"
-
-      -- ORIGINAL = maior contraste
-      -- MATERIAL = mais suave
-      vim.g.gruvbox_material_foreground = "soft"
       vim.g.gruvbox_material_foreground = "material"
 
+      vim.g.gruvbox_material_enable_italic = 1
       vim.g.gruvbox_material_better_performance = 1
 
-      -- Interface mais definida
+      vim.g.gruvbox_material_transparent_background = 0
       vim.g.gruvbox_material_ui_contrast = "high"
+      vim.g.gruvbox_material_float_style = "dim"
 
-      -- Comentários sem itálico
-      vim.g.gruvbox_material_disable_italic_comment = 0
+      -- ==========================================================
+      -- TEMA CLARO / ESCURO
+      -- ==========================================================
 
-      -- Funções em negrito
-      vim.g.gruvbox_material_enable_bold = 1
-
-      -- Não precisamos de itálico para leitura
-      vim.g.gruvbox_material_enable_italic = 1
-
-      -- Floats mais destacados
-      vim.g.gruvbox_material_float_style = "bright"
-
-      -- Diagnósticos visíveis
-      vim.g.gruvbox_material_diagnostic_text_highlight = "colored"
-
-      -- Seleção
-      vim.g.gruvbox_material_visual = "grey background"
-
-      -- ============================================================
-      -- TEMA
-      -- ============================================================
-
-      local function get_theme()
-        local hour = tonumber(os.date("%H"))
-
-        if hour >= 8 and hour < 17 then
-          return "light"
-        end
-
-        return "dark"
+      if theme == "light" then
+        vim.o.background = "light"
+      else
+        vim.o.background = "dark"
       end
 
-      local function apply_theme()
-        vim.o.background = get_theme()
+      vim.cmd.colorscheme("gruvbox-material")
 
-        vim.cmd.colorscheme("gruvbox-material")
+      -- ==========================================================
+      -- CORES PERSONALIZADAS
+      -- ==========================================================
 
-        -- ==========================================================
-        -- EDITOR
-        -- ==========================================================
+      local colors
 
-        vim.opt.number = true
-        vim.opt.relativenumber = false
+      if theme == "light" then
+        colors = {
+          bg = "#f2e5bc",
+          bg1 = "#ebdbb2",
+          bg2 = "#d5c4a1",
+          bg3 = "#bdae93",
 
-        vim.opt.cursorline = true
+          fg = "#3c3836",
+          fg1 = "#282828",
+          fg2 = "#665c54",
+          muted = "#928374",
 
-        vim.opt.signcolumn = "yes"
+          yellow = "#b57614",
+          orange = "#af3a03",
+          green = "#79740e",
+          blue = "#076678",
+          red = "#9d0006",
+          purple = "#8f3f71",
+        }
+      else
+        colors = {
+          bg = "#282828",
+          bg1 = "#32302f",
+          bg2 = "#3c3836",
+          bg3 = "#504945",
 
-        vim.opt.wrap = false
+          fg = "#d4be98",
+          fg1 = "#ebdbb2",
+          fg2 = "#a89984",
+          muted = "#665c54",
 
-        vim.opt.scrolloff = 8
-        vim.opt.sidescrolloff = 8
-
-        vim.opt.termguicolors = true
-
-        -- ==========================================================
-        -- COMENTÁRIOS
-        -- ==========================================================
-
-        vim.api.nvim_set_hl(0, "Comment", {
-          italic = false,
-        })
-
-        -- ==========================================================
-        -- NÚMERO DA LINHA
-        -- ==========================================================
-
-        if vim.o.background == "light" then
-          vim.api.nvim_set_hl(0, "LineNr", {
-            fg = "#928374",
-          })
-
-          vim.api.nvim_set_hl(0, "CursorLineNr", {
-            fg = "#9d6500",
-            bold = true,
-          })
-
-          vim.api.nvim_set_hl(0, "CursorLine", {
-            bg = "#ead9ad",
-          })
-        else
-          vim.api.nvim_set_hl(0, "LineNr", {
-            fg = "#665c54",
-          })
-
-          vim.api.nvim_set_hl(0, "CursorLineNr", {
-            fg = "#d8a657",
-            bold = true,
-          })
-
-          vim.api.nvim_set_hl(0, "CursorLine", {
-            bg = "#32302f",
-          })
-        end
+          yellow = "#d8a657",
+          orange = "#e78a4e",
+          green = "#a9b665",
+          blue = "#7daea3",
+          red = "#ea6962",
+          purple = "#d3869b",
+        }
       end
 
-      -- Aplicar
-      apply_theme()
+      -- ==========================================================
+      -- INTERFACE
+      -- ==========================================================
 
-      -- ============================================================
-      -- TROCA AUTOMÁTICA
-      -- ============================================================
+      local groups = {
 
-      local last_theme = get_theme()
+        Normal = {
+          bg = colors.bg,
+          fg = colors.fg,
+        },
 
-      vim.fn.timer_start(60000, function()
-        local current_theme = get_theme()
+        NormalFloat = {
+          bg = colors.bg1,
+          fg = colors.fg,
+        },
 
-        if current_theme ~= last_theme then
-          last_theme = current_theme
+        FloatBorder = {
+          bg = colors.bg1,
+          fg = colors.muted,
+        },
 
-          vim.schedule(function()
-            apply_theme()
-          end)
-        end
-      end, {
-        ["repeat"] = -1,
-      })
+        CursorLine = {
+          bg = colors.bg1,
+        },
+
+        CursorLineNr = {
+          fg = colors.yellow,
+          bold = true,
+        },
+
+        LineNr = {
+          fg = colors.muted,
+        },
+
+        SignColumn = {
+          bg = colors.bg,
+        },
+
+        Visual = {
+          bg = colors.bg3,
+        },
+
+        Search = {
+          bg = colors.yellow,
+          fg = colors.bg,
+        },
+
+        IncSearch = {
+          bg = colors.orange,
+          fg = colors.bg,
+        },
+
+        Pmenu = {
+          bg = colors.bg1,
+          fg = colors.fg,
+        },
+
+        PmenuSel = {
+          bg = colors.bg3,
+          fg = colors.fg1,
+        },
+
+        StatusLine = {
+          bg = colors.bg,
+          fg = colors.fg2,
+        },
+
+        StatusLineNC = {
+          bg = colors.bg,
+          fg = colors.muted,
+        },
+
+        WinSeparator = {
+          fg = colors.bg2,
+          bg = colors.bg,
+        },
+
+        VertSplit = {
+          fg = colors.bg2,
+          bg = colors.bg,
+        },
+
+        DiagnosticError = {
+          fg = colors.red,
+        },
+
+        DiagnosticWarn = {
+          fg = colors.yellow,
+        },
+
+        DiagnosticInfo = {
+          fg = colors.blue,
+        },
+
+        DiagnosticHint = {
+          fg = colors.green,
+        },
+      }
+
+      -- ==========================================================
+      -- APLICAR CORES
+      -- ==========================================================
+
+      for name, opts in pairs(groups) do
+        vim.api.nvim_set_hl(0, name, opts)
+      end
     end,
   },
 }
