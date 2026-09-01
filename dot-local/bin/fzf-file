@@ -4,7 +4,16 @@ set -u
 
 # ============================================================
 # FZF FILE FINDER
+# Fedora + Arch
 # ============================================================
+
+# Dependências obrigatórias
+for cmd in fd fzf; do
+  if ! command -v "$cmd" >/dev/null 2>&1; then
+    printf '❌ Comando não encontrado: %s\n' "$cmd" >&2
+    exit 127
+  fi
+done
 
 selected="$(
   fd \
@@ -42,11 +51,21 @@ selected="$(
 
 if [[ -d "$selected" ]]; then
 
-  if [[ -n "${KITTY_WINDOW_ID:-}" ]]; then
-    exec yazi "$selected"
+  if ! command -v yazi >/dev/null 2>&1; then
+    printf '❌ Yazi não encontrado.\n' >&2
+    exit 127
   fi
 
-  exec kitty yazi "$selected"
+  if [[ -n "${KITTY_WINDOW_ID:-}" ]]; then
+    exec yazi -- "$selected"
+  fi
+
+  if command -v kitty >/dev/null 2>&1; then
+    exec kitty yazi -- "$selected"
+  fi
+
+  printf '❌ Kitty não encontrado.\n' >&2
+  exit 127
 
 fi
 
@@ -56,8 +75,13 @@ fi
 
 if [[ -f "$selected" && "${selected,,}" == *.pdf ]]; then
 
-  # Abre o Sioyek independentemente do terminal
-  setsid sioyek -- "$selected" >/dev/null 2>&1 </dev/null &
+  if ! command -v sioyek >/dev/null 2>&1; then
+    printf '❌ Sioyek não encontrado.\n' >&2
+    exit 127
+  fi
+
+  setsid sioyek -- "$selected" \
+    >/dev/null 2>&1 </dev/null &
 
   exit 0
 
@@ -69,11 +93,21 @@ fi
 
 if [[ -f "$selected" ]]; then
 
+  if ! command -v nvim >/dev/null 2>&1; then
+    printf '❌ Neovim não encontrado.\n' >&2
+    exit 127
+  fi
+
   if [[ -n "${KITTY_WINDOW_ID:-}" ]]; then
     exec nvim -- "$selected"
   fi
 
-  exec kitty nvim -- "$selected"
+  if command -v kitty >/dev/null 2>&1; then
+    exec kitty nvim -- "$selected"
+  fi
+
+  printf '❌ Kitty não encontrado.\n' >&2
+  exit 127
 
 fi
 
