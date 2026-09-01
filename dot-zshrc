@@ -1,6 +1,6 @@
 # ============================================================
 # VINICIUS — ZSH
-# CachyOS + Hyprland + Kitty + Neovim + Yazi + FZF
+# Fedora / Arch + Hyprland + Kitty + Neovim + Yazi + FZF
 # ============================================================
 
 
@@ -29,6 +29,7 @@ path=(
     "$HOME/.local/bin"
     "$HOME/go/bin"
     "$HOME/.config/emacs/bin"
+    "$HOME/.local/lib/npm/bin"
     $path
 )
 
@@ -155,14 +156,6 @@ fi
 # COMPLETION — MÓDULO AVANÇADO
 # ============================================================
 
-# Menu de completion melhorado:
-# - seleção
-# - scrolling
-# - highlighting
-#
-# A documentação descreve essas extensões em zsh/complist.
-#
-
 zmodload -i zsh/complist
 
 
@@ -203,11 +196,6 @@ zstyle ':completion:*' select-prompt '%SScrolling active: %p%s'
 # COMPLETION — MENU SELECTION
 # ============================================================
 
-# Navegação explícita no menu de completion.
-#
-# TAB / setas continuam funcionando normalmente.
-#
-
 bindkey -M menuselect '^[[A' up-line-or-history
 bindkey -M menuselect '^[[B' down-line-or-history
 bindkey -M menuselect '^[[C' forward-char
@@ -227,15 +215,6 @@ bindkey -e
 # ============================================================
 # ZLE — PALAVRAS
 # ============================================================
-
-# "/" não pertence à definição de palavra.
-#
-# Isso torna:
-#
-#   /home/vinicius/Documentos/arquivo.pdf
-#
-# muito mais agradável de editar com Alt+Backspace.
-#
 
 WORDCHARS=${WORDCHARS//\/}
 
@@ -266,10 +245,6 @@ autoload -Uz edit-command-line
 
 zle -N edit-command-line
 
-# Alt+E
-#
-# Abre o comando atual no editor definido por $VISUAL.
-#
 bindkey '^[e' edit-command-line
 
 
@@ -305,22 +280,15 @@ bindkey '^[l' zle_clear_screen
 # ZLE — OUTROS WIDGETS ÚTEIS
 # ============================================================
 
-# Expandir caminho absoluto sob o cursor
 autoload -Uz expand-absolute-path
 zle -N expand-absolute-path
 
 bindkey '^[/' expand-absolute-path
 
-
-# Copiar palavra anterior
 bindkey '^[.' copy-prev-shell-word
 
-
-# Inserir última palavra do comando anterior
 bindkey '^[_' insert-last-word
 
-
-# Undo / redo
 bindkey '^_' undo
 bindkey '^[u' undo
 bindkey '^[U' redo
@@ -329,13 +297,6 @@ bindkey '^[U' redo
 # ============================================================
 # ZLE — BRACKETED PASTE
 # ============================================================
-#
-# O terminal informa ao Zsh quando algo foi colado.
-#
-# Isso evita que conteúdo colado seja interpretado como
-# uma sequência de comandos individuais da mesma maneira
-# que uma digitação normal.
-#
 
 autoload -Uz bracketed-paste-magic
 
@@ -348,14 +309,6 @@ fi
 # ============================================================
 # RUN-HELP
 # ============================================================
-#
-# ESC+h
-#
-# Consulta documentação do comando atual.
-#
-# O Zsh fornece run-help como uma ferramenta específica
-# para esse tipo de consulta.
-#
 
 autoload -Uz run-help
 
@@ -394,26 +347,33 @@ export FZF_DEFAULT_OPTS='
 
 # ============================================================
 # FZF — INTEGRAÇÃO ZSH
+# Compatível com layouts Fedora / Arch
 # ============================================================
 
-if [[ -r /usr/share/fzf/key-bindings.zsh ]]; then
-    source /usr/share/fzf/key-bindings.zsh
-fi
+for fzf_bindings in \
+    /usr/share/fzf/key-bindings.zsh \
+    /usr/share/fzf/shell/key-bindings.zsh
+do
+    if [[ -r "$fzf_bindings" ]]; then
+        source "$fzf_bindings"
+        break
+    fi
+done
 
-if [[ -r /usr/share/fzf/completion.zsh ]]; then
-    source /usr/share/fzf/completion.zsh
-fi
+for fzf_completion in \
+    /usr/share/fzf/completion.zsh \
+    /usr/share/fzf/shell/completion.zsh
+do
+    if [[ -r "$fzf_completion" ]]; then
+        source "$fzf_completion"
+        break
+    fi
+done
 
 
 # ============================================================
 # FZF — HISTÓRICO
 # ============================================================
-#
-# Se o pacote fornecer fzf-history-widget, Ctrl+R vira
-# uma busca visual no histórico.
-#
-# Caso contrário, mantém o histórico incremental do Zsh.
-#
 
 if (( $+widgets[fzf-history-widget] )); then
     bindkey '^R' fzf-history-widget
@@ -422,6 +382,7 @@ fi
 
 # ============================================================
 # ZSH AUTOSUGGESTIONS
+# Compatível com layouts Fedora / Arch
 # ============================================================
 
 export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#665c54'
@@ -433,13 +394,20 @@ export ZSH_AUTOSUGGEST_STRATEGY=(
 
 export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=80
 
-if [[ -r /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh ]]; then
-    source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-fi
+for zsh_autosuggestions in \
+    /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh \
+    /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+do
+    if [[ -r "$zsh_autosuggestions" ]]; then
+        source "$zsh_autosuggestions"
+        break
+    fi
+done
 
 
 # ============================================================
 # ZSH SYNTAX HIGHLIGHTING
+# Compatível com layouts Fedora / Arch
 # ============================================================
 
 export ZSH_HIGHLIGHT_HIGHLIGHTERS=(
@@ -448,9 +416,15 @@ export ZSH_HIGHLIGHT_HIGHLIGHTERS=(
     pattern
 )
 
-if [[ -r /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]]; then
-    source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-fi
+for zsh_syntax in \
+    /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh \
+    /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+do
+    if [[ -r "$zsh_syntax" ]]; then
+        source "$zsh_syntax"
+        break
+    fi
+done
 
 
 # ============================================================
@@ -523,22 +497,52 @@ alias ~='cd ~'
 
 
 # ============================================================
-# ALIASES — PACMAN
+# GERENCIADOR DE PACOTES
+# Fedora + Arch
 # ============================================================
 
-alias p='sudo pacman -S'
-alias pu='sudo pacman -Syu'
-alias pr='sudo pacman -Rns'
-alias po='pacman -Qtdq'
+if (( $+commands[dnf5] )); then
+
+    alias p='sudo dnf5 install'
+    alias pu='sudo dnf5 upgrade --refresh'
+    alias pr='sudo dnf5 remove'
+    alias po='sudo dnf5 autoremove'
+
+elif (( $+commands[dnf] )); then
+
+    alias p='sudo dnf install'
+    alias pu='sudo dnf upgrade --refresh'
+    alias pr='sudo dnf remove'
+    alias po='sudo dnf autoremove'
+
+elif (( $+commands[pacman] )); then
+
+    alias p='sudo pacman -S'
+    alias pu='sudo pacman -Syu'
+    alias pr='sudo pacman -Rns'
+    alias po='pacman -Qtdq'
+
+fi
 
 
 # ============================================================
-# ALIASES — YAY
+# AUR
+# Arch somente — yay / paru
 # ============================================================
 
-alias y='yay -S'
-alias yu='yay -Syu'
-alias yr='yay -Rns'
+if (( $+commands[yay] )); then
+
+    alias y='yay -S'
+    alias yu='yay -Syu'
+    alias yr='yay -Rns'
+
+elif (( $+commands[paru] )); then
+
+    alias y='paru -S'
+    alias yu='paru -Syu'
+    alias yr='paru -Rns'
+
+fi
 
 
 # ============================================================
@@ -556,12 +560,15 @@ alias ff='fastfetch'
 alias vs='vdirsyncer sync'
 alias ds='doom sync'
 
+
 # ============================================================
 # THEME TOGGLE — Alt+S
 # ============================================================
 
 toggle-theme() {
+
     if [[ -f ~/.config/theme/current ]]; then
+
         local current
         current=$(<~/.config/theme/current)
 
@@ -570,8 +577,11 @@ toggle-theme() {
         else
             dark
         fi
+
     else
+
         dark
+
     fi
 }
 
@@ -589,47 +599,68 @@ bindkey '^[s' toggle-theme-widget
 # ============================================================
 
 theme_light() {
+
     mkdir -p ~/.config/theme
 
     # Estado global
     echo "light" > ~/.config/theme/current
 
     # Kitty — tema persistente
-    cp ~/.config/kitty/gruvbox-light.conf \
-       ~/.config/kitty/current-theme.conf
+    if [[ -f ~/.config/kitty/gruvbox-light.conf ]]; then
+        cp ~/.config/kitty/gruvbox-light.conf \
+           ~/.config/kitty/current-theme.conf
+    fi
 
     # Kitty — aplicar imediatamente
-    kitty @ set-colors --all ~/.config/kitty/gruvbox-light.conf 2>/dev/null
+    if (( $+commands[kitty] )); then
+        kitty @ set-colors \
+            --all ~/.config/kitty/gruvbox-light.conf \
+            2>/dev/null || true
+    fi
 
     # btop
-    cp ~/.config/btop/themes/gruvbox-material-light.theme \
-       ~/.config/btop/themes/current.theme
+    if [[ -f ~/.config/btop/themes/gruvbox-material-light.theme ]]; then
+        cp ~/.config/btop/themes/gruvbox-material-light.theme \
+           ~/.config/btop/themes/current.theme
+    fi
 
     echo "Tema LIGHT ativado."
 }
 
+
 theme_dark() {
+
     mkdir -p ~/.config/theme
 
     # Estado global
     echo "dark" > ~/.config/theme/current
 
     # Kitty — tema persistente
-    cp ~/.config/kitty/gruvbox-dark.conf \
-       ~/.config/kitty/current-theme.conf
+    if [[ -f ~/.config/kitty/gruvbox-dark.conf ]]; then
+        cp ~/.config/kitty/gruvbox-dark.conf \
+           ~/.config/kitty/current-theme.conf
+    fi
 
     # Kitty — aplicar imediatamente
-    kitty @ set-colors --all ~/.config/kitty/gruvbox-dark.conf 2>/dev/null
+    if (( $+commands[kitty] )); then
+        kitty @ set-colors \
+            --all ~/.config/kitty/gruvbox-dark.conf \
+            2>/dev/null || true
+    fi
 
     # btop
-    cp ~/.config/btop/themes/gruvbox-material-dark.theme \
-       ~/.config/btop/themes/current.theme
+    if [[ -f ~/.config/btop/themes/gruvbox-material-dark.theme ]]; then
+        cp ~/.config/btop/themes/gruvbox-material-dark.theme \
+           ~/.config/btop/themes/current.theme
+    fi
 
     echo "Tema DARK ativado."
 }
 
+
 alias light='theme_light'
 alias dark='theme_dark'
+
 
 # ============================================================
 # ALIASES — PRODUTIVIDADE
@@ -645,6 +676,7 @@ alias q='exit'
 # ============================================================
 
 mkcd() {
+
     [[ -n "$1" ]] || return 1
 
     mkdir -p -- "$1" &&
@@ -690,19 +722,41 @@ extract() {
 
 
 # ============================================================
-# FUNÇÃO — LIMPAR ÓRFÃOS
+# FUNÇÃO — LIMPAR PACOTES NÃO UTILIZADOS
+# Fedora + Arch
 # ============================================================
 
 clean() {
 
-    local -a pkgs
+    if (( $+commands[dnf5] )); then
 
-    pkgs=("${(@f)$(pacman -Qtdq 2>/dev/null)}")
+        sudo dnf5 autoremove
 
-    if (( ${#pkgs} )); then
-        sudo pacman -Rns -- "${pkgs[@]}"
+    elif (( $+commands[dnf] )); then
+
+        sudo dnf autoremove
+
+    elif (( $+commands[pacman] )); then
+
+        local -a pkgs
+
+        pkgs=("${(@f)$(pacman -Qtdq 2>/dev/null)}")
+
+        if (( ${#pkgs} )); then
+
+            sudo pacman -Rns -- "${pkgs[@]}"
+
+        else
+
+            print "Nenhum pacote órfão encontrado."
+
+        fi
+
     else
-        print "Nenhum pacote órfão encontrado."
+
+        print -u2 "Nenhum gerenciador de pacotes suportado encontrado."
+        return 1
+
     fi
 }
 
@@ -737,10 +791,14 @@ j() {
 yazi-here() {
 
     if (( $+commands[yazi] )); then
+
         yazi
+
     else
+
         print -u2 "yazi não encontrado."
         return 127
+
     fi
 }
 
@@ -786,20 +844,31 @@ ports-listen() {
 # ============================================================
 
 where() {
+
     (( $# )) || return 1
 
     for cmd in "$@"; do
+
         print -n "$cmd: "
 
         if (( $+commands[$cmd] )); then
+
             print -r -- "$commands[$cmd]"
+
         elif (( $+builtins[$cmd] )); then
+
             print -r -- "zsh builtin"
+
         elif (( $+functions[$cmd] )); then
+
             print -r -- "zsh function"
+
         else
+
             print -r -- "not found"
+
         fi
+
     done
 }
 
@@ -807,21 +876,11 @@ where() {
 # ============================================================
 # DIRETÓRIOS NOMEADOS
 # ============================================================
-#
-# Permite:
-#
-#   cd ~estudos
-#   cd ~config
-#
-# Ajuste os caminhos se desejar.
-#
 
 hash -d estudos="$HOME/Estudos"
 hash -d config="$HOME/.config"
 
 
-
 # ============================================================
 # END
 # ============================================================
-export PATH="$HOME/.local/lib/npm/bin:$PATH"
