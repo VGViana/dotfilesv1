@@ -3,37 +3,101 @@
 set -euo pipefail
 
 echo "╭──────────────────────────────────────╮"
-echo "│        Atualização do CachyOS        │"
+echo "│       Atualização do sistema         │"
+echo "│          Fedora / Arch               │"
 echo "╰──────────────────────────────────────╯"
 echo
 
+# ------------------------------------------------------------
 # Verifica conexão
-if ! ping -c 1 -W 2 archlinux.org >/dev/null 2>&1; then
-    echo "❌ Sem conexão com a internet."
-    exit 1
+# ------------------------------------------------------------
+
+if ! ping -c 1 -W 2 fedoraproject.org >/dev/null 2>&1; then
+  echo "❌ Sem conexão com a internet."
+  exit 1
 fi
 
-echo "→ Atualizando sistema..."
+echo "→ Detectando sistema..."
 echo
 
-sudo pacman -Syu
+# ------------------------------------------------------------
+# Fedora
+# ------------------------------------------------------------
 
-echo
-echo "→ Limpando cache antigo de pacotes..."
-sudo paccache -rk2
+if command -v dnf5 >/dev/null 2>&1; then
 
-echo
-echo "→ Verificando pacotes órfãos..."
+  echo "→ Fedora detectado (dnf5)."
+  echo
 
-orphans=$(pacman -Qtdq 2>/dev/null || true)
+  echo "→ Atualizando sistema..."
+  sudo dnf5 upgrade --refresh
 
-if [[ -n "$orphans" ]]; then
+  echo
+  echo "→ Limpando cache de pacotes..."
+  sudo dnf5 clean packages
+
+  echo
+  echo "→ Removendo dependências não utilizadas..."
+  sudo dnf5 autoremove
+
+# ------------------------------------------------------------
+# Fedora com DNF tradicional
+# ------------------------------------------------------------
+
+elif command -v dnf >/dev/null 2>&1; then
+
+  echo "→ Fedora detectado (dnf)."
+  echo
+
+  echo "→ Atualizando sistema..."
+  sudo dnf upgrade --refresh
+
+  echo
+  echo "→ Limpando cache de pacotes..."
+  sudo dnf clean packages
+
+  echo
+  echo "→ Removendo dependências não utilizadas..."
+  sudo dnf autoremove
+
+# ------------------------------------------------------------
+# Arch / CachyOS
+# ------------------------------------------------------------
+
+elif command -v pacman >/dev/null 2>&1; then
+
+  echo "→ Arch/CachyOS detectado."
+  echo
+
+  echo "→ Atualizando sistema..."
+  sudo pacman -Syu
+
+  if command -v paccache >/dev/null 2>&1; then
+    echo
+    echo "→ Limpando cache antigo de pacotes..."
+    sudo paccache -rk2
+  fi
+
+  echo
+  echo "→ Verificando pacotes órfãos..."
+
+  orphans="$(pacman -Qtdq 2>/dev/null || true)"
+
+  if [[ -n "$orphans" ]]; then
     echo "Pacotes órfãos encontrados:"
     echo "$orphans"
     echo
-    sudo pacman -Rns $orphans
-else
+
+    sudo pacman -Rns -- $orphans
+  else
     echo "✓ Nenhum pacote órfão."
+  fi
+
+else
+
+  echo "❌ Gerenciador de pacotes não reconhecido."
+  exit 1
+
 fi
 
 echo
