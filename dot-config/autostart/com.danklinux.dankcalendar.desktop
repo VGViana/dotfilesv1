@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Dank Calendar
+Comment=Dank Calendar background service
+Exec=/usr/bin/dcal run -d --hidden
+Icon=com.danklinux.dankcalendar
+Terminal=false
+X-GNOME-Autostart-enabled=true
