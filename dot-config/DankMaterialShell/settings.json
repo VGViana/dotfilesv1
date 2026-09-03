@@ -305,9 +305,9 @@
   "iconThemeDark": "Gruvbox-Plus-Dark",
   "iconThemeLight": "Gruvbox-Plus-Light",
   "iconThemePerMode": true,
-  "lastAppliedIconTheme": "Gruvbox-Plus-Dark",
+  "lastAppliedIconTheme": "Gruvbox-Plus-Light",
   "cursorSettings": {
-    "theme": "System Default",
+    "theme": "Simp1e-Gruvbox-Dark",
     "size": 30,
     "niri": {
       "hideWhenTyping": false,
@@ -329,7 +329,7 @@
   "launcherLogoBrightness": 0.5,
   "launcherLogoContrast": 1,
   "launcherLogoSizeOffset": 0,
-  "fontFamily": "Serif",
+  "fontFamily": "Source Serif 4",
   "monoFontFamily": "Iosevka NFM",
   "fontWeight": 400,
   "fontScale": 1,
@@ -552,7 +552,7 @@
   "hyprlandOutputSettings": {},
   "displayProfiles": {},
   "activeDisplayProfile": {
-    "hyprland": "auto_eed335ba"
+    "hyprland": "auto_5af6115"
   },
   "displayProfileAutoSelect": true,
   "displayShowDisconnected": false,

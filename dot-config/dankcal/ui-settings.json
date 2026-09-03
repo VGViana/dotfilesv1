@@ -15,7 +15,7 @@
     ],
     "firstDayOfWeek": -1,
     "language": "",
-    "lastView": "month",
+    "lastView": "agenda",
     "monthEventTitleLines": 1,
     "monthShowAllEvents": false,
     "notificationSounds": true,
