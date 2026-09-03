@@ -1,9 +1,15 @@
 {
   "currentThemeName": "custom",
   "currentThemeCategory": "registry",
-  "customThemeFile": "/home/viana/.config/DankMaterialShell/themes/gruvboxMaterial/theme.json",
+  "customThemeFile": "/home/viana/.config/DankMaterialShell/themes/gruvboxMulti/theme.json",
   "registryThemeVariants": {
-    "gruvboxMaterial": "soft"
+    "gruvboxMaterial": "soft",
+    "gruvboxMulti": {
+      "light": {
+        "flavor": "classic-soft-light",
+        "accent": "blue"
+      }
+    }
   },
   "matugenScheme": "scheme-tonal-spot",
   "matugenContrast": 0,
