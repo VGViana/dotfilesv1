@@ -1,148 +1,155 @@
-# dotfilesv1
+# Fedora Dotfiles
 
-Repositório privado que guarda a configuração reproduzível do meu ambiente Linux.
+Configuração completa e reproduzível do meu ambiente **Fedora + Hyprland + DankMaterialShell**.
 
-**GitHub:** https://github.com/VGViana/dotfilesv1
+Este repositório existe para uma finalidade simples:
 
-O objetivo deste repositório é permitir que, se o computador quebrar ou o sistema for formatado, eu consiga reconstruir meu ambiente CachyOS + DMS + Hyprland com o mínimo de trabalho manual possível.
+> **Se eu precisar reinstalar o Fedora ou trocar de computador, quero conseguir reconstruir meu ambiente com o mínimo possível de configuração manual.**
+
+A branch `fedora` é a fonte oficial das configurações do ambiente Fedora.
 
 ---
 
-## 1. Visão geral
+## ✨ O que este repositório faz
 
-A estrutura funciona assim:
+Este repositório centraliza:
+
+* configurações do **Hyprland**
+* **DankMaterialShell (DMS)**
+* **Kitty**
+* **Zsh**
+* **Neovim**
+* **Yazi**
+* **Sioyek**
+* **GTK / Qt**
+* **PipeWire / WirePlumber**
+* configurações de Wayland
+* scripts pessoais
+* configurações do terminal
+* atalhos
+* temas
+* fontes
+* ferramentas de produtividade
+* lista de pacotes necessários
+* restauração automática do ambiente
+
+A ideia é transformar:
 
 ```text
-GitHub
-  │
-  │ git clone / git pull
-  ▼
-~/dotfiles
-  │
-  │ GNU Stow
-  ▼
-$HOME
-  │
-  ├── ~/.config/...
-  ├── ~/.local/...
-  ├── ~/.zshrc
-  ├── ~/.bashrc
-  └── ...
+Fedora recém-instalado
+        ↓
+internet
+        ↓
+Git + SSH
+        ↓
+bootstrap.sh
+        ↓
+pacotes
+        ↓
+configurações
+        ↓
+GNU Stow
+        ↓
+ambiente restaurado
 ```
 
-Os arquivos dentro de `~/dotfiles` são a fonte da verdade.
+---
 
-Quando uma configuração é gerenciada pelo Stow, não devo editar diretamente o arquivo em `~/.config` ou `~/.local`. Devo editar a cópia dentro de `~/dotfiles` e depois sincronizar.
+# 🖥️ Ambiente
+
+A configuração foi construída para um desktop Wayland utilizando:
+
+| Componente    | Software               |
+| ------------- | ---------------------- |
+| Sistema       | Fedora Linux           |
+| Compositor    | Hyprland               |
+| Desktop shell | DankMaterialShell      |
+| Terminal      | Kitty                  |
+| Shell         | Zsh                    |
+| Editor        | Neovim                 |
+| File manager  | Yazi                   |
+| PDF           | Sioyek                 |
+| Áudio         | PipeWire + WirePlumber |
+| Dotfiles      | GNU Stow               |
+| Versionamento | Git                    |
+| GitHub        | GitHub CLI             |
+| Fontes        | JetBrains Mono / Noto  |
+
+O ambiente utiliza uma estética inspirada em **Gruvbox Material**, priorizando uma interface minimalista, confortável e funcional.
 
 ---
 
-# 2. Ambiente de referência
+# 📁 Estrutura
 
-Este repositório foi criado para o meu ambiente atual:
-
-- **Distribuição:** CachyOS
-- **Compositor:** Hyprland
-- **Shell/Desktop shell:** DankMaterialShell (DMS)
-- **Terminal:** Kitty
-- **Shell:** Zsh
-- **Editor:** Neovim
-- **Gerenciador de arquivos:** Yazi
-- **PDF:** Sioyek
-- **Música:** ncspot
-- **Calendário:** khal
-- **Gerenciamento de dotfiles:** GNU Stow
-- **Versionamento:** Git
-- **GitHub CLI:** `gh`
-
-A configuração visual segue principalmente a estética **Gruvbox Material Dark Soft**, com foco em uma interface minimalista e confortável para estudos.
-
----
-
-# 3. Estrutura do repositório
-
-A estrutura principal é:
+A estrutura principal do repositório é:
 
 ```text
-dotfiles/
+dotfilesv1/
+│
 ├── README.md
 ├── bootstrap.sh
-├── packages-pacman.txt
-├── packages-aur.txt
+├── init-github.sh
+├── packages-fedora.txt
 │
-├── dot-bash_profile
-├── dot-bashrc
-├── dot-zshrc
+├── dot-.Xresources
+├── dot-.bash_profile
+├── dot-.bashrc
+├── dot-.gtkrc-2.0
+├── dot-.zshrc
 │
 ├── dot-config/
 │   ├── DankMaterialShell/
-│   ├── Thunar/
+│   ├── btop/
+│   ├── dankcal/
+│   ├── dgop/
 │   ├── environment.d/
 │   ├── gtk-3.0/
 │   ├── gtk-4.0/
 │   ├── hypr/
-│   ├── khal/
 │   ├── kitty/
-│   ├── ncspot/
 │   ├── nvim/
 │   ├── qt5ct/
 │   ├── qt6ct/
 │   ├── sioyek/
-│   ├── systemd/
-│   ├── user-dirs.dirs
-│   ├── wireplumber/
-│   ├── xarchiver/
-│   ├── xdg-terminals.list
-│   ├── xfce4/
-│   └── yazi/
+│   ├── xsettingsd/
+│   ├── yazi/
+│   └── ...
 │
 └── dot-local/
     └── bin/
         ├── dots
-        ├── fzf-file
-        └── update-system
-```
-
-Os arquivos que começam com `dot-` representam arquivos ocultos no `$HOME`.
-
-Por exemplo:
-
-```text
-dot-zshrc
-```
-
-vira:
-
-```text
-~/.zshrc
+        └── ...
 ```
 
 ---
 
-# 4. O papel do GNU Stow
+# 🧠 Como os dotfiles funcionam
 
-O Stow cria links simbólicos entre o repositório e o `$HOME`.
+Os arquivos dentro de:
 
-Exemplo:
+```text
+~/dotfiles
+```
+
+são a **fonte da verdade**.
+
+As configurações são vinculadas ao `$HOME` utilizando **GNU Stow**.
+
+Por exemplo:
 
 ```text
 ~/dotfiles/dot-config/kitty/kitty.conf
-                │
-                │ stow
-                ▼
+                    │
+                    │ GNU Stow
+                    ▼
 ~/.config/kitty/kitty.conf
 ```
 
-O segundo arquivo não é uma cópia independente.
+O arquivo em `~/.config` é um link para o arquivo dentro do repositório.
 
-Ele aponta para o repositório:
+Isso significa que:
 
-```text
-~/.config/kitty/kitty.conf
-        ↓
-~/dotfiles/dot-config/kitty/kitty.conf
-```
-
-Isso é importante porque qualquer alteração feita no arquivo do repositório passa a ser a configuração usada pelo sistema.
+> **As configurações importantes devem ser alteradas dentro de `~/dotfiles`, e não diretamente no arquivo vinculado.**
 
 Para confirmar:
 
@@ -150,176 +157,174 @@ Para confirmar:
 readlink -f ~/.config/kitty/kitty.conf
 ```
 
----
+O resultado deverá apontar para algo semelhante a:
 
-# 5. Instalação em um PC novo
-
-Esta é a seção mais importante deste README.
-
-Se o computador quebrar, for formatado ou for necessário reconstruir o ambiente, seguir a ordem abaixo.
-
----
-
-## 5.1. Instalar o CachyOS
-
-Instalar o CachyOS normalmente.
-
-Depois de entrar no sistema:
-
-```bash
-sudo pacman -Syu
+```text
+/home/SEU_USUARIO/dotfiles/dot-config/kitty/kitty.conf
 ```
 
-Reiniciar se o sistema solicitar.
+---
+
+# 🚀 Instalação em um PC novo
+
+## ⚠️ Antes de começar
+
+Este README assume que:
+
+1. o Fedora já foi instalado;
+2. você está logado no usuário que utilizará o ambiente;
+3. a máquina possui conexão com a internet;
+4. você possui acesso ao repositório no GitHub.
+
+Não é necessário copiar manualmente cada configuração.
+
+O `bootstrap.sh` foi criado justamente para automatizar isso.
 
 ---
 
-## 5.2. Conectar à internet
+# 1. Instale o Fedora
 
-Antes de continuar, garantir que a máquina esteja conectada à internet.
+Instale o Fedora normalmente.
 
-Tudo a partir daqui depende do acesso ao GitHub e aos repositórios de pacotes.
+Depois de entrar no sistema, abra um terminal.
 
----
-
-## 5.3. Instalar Git
+Atualize o sistema:
 
 ```bash
-sudo pacman -S --needed git
+sudo dnf5 upgrade --refresh
 ```
 
-Verificar:
+Se o seu Fedora não possuir `dnf5`, o bootstrap utiliza `dnf` automaticamente.
+
+---
+
+# 2. Configure a internet
+
+Certifique-se de que a máquina está conectada à internet.
+
+Você pode testar com:
+
+```bash
+ping -c 3 github.com
+```
+
+Se funcionar, continue.
+
+---
+
+# 3. Configure o acesso ao GitHub
+
+O repositório utiliza Git e SSH.
+
+O bootstrap instala os componentes necessários, mas o acesso ao GitHub precisa estar funcionando.
+
+Verifique se o Git está disponível:
 
 ```bash
 git --version
 ```
 
----
-
-## 5.4. Instalar GitHub CLI
+Verifique o SSH:
 
 ```bash
-sudo pacman -S --needed github-cli
-```
-
-Verificar:
-
-```bash
-gh --version
+ssh -V
 ```
 
 ---
 
-## 5.5. Autenticar no GitHub
+# 4. Configure sua chave SSH
+
+Se você ainda não possui uma chave SSH:
 
 ```bash
-gh auth login
+ssh-keygen -t ed25519 -C "seu-email"
 ```
 
-Escolher:
+Pressione `Enter` para aceitar o caminho padrão.
+
+Depois inicie o agente:
+
+```bash
+eval "$(ssh-agent -s)"
+```
+
+Adicione a chave:
+
+```bash
+ssh-add ~/.ssh/id_ed25519
+```
+
+Mostre a chave pública:
+
+```bash
+cat ~/.ssh/id_ed25519.pub
+```
+
+Copie o conteúdo inteiro.
+
+No GitHub:
 
 ```text
-GitHub.com
-HTTPS
-Login with a web browser
+Settings
+→ SSH and GPG keys
+→ New SSH key
 ```
 
-Depois verificar:
+Cole a chave pública.
+
+Teste:
 
 ```bash
-gh auth status
+ssh -T git@github.com
 ```
 
-A conta precisa ter acesso ao repositório privado:
-
-```text
-VGViana/dotfilesv1
-```
+Se aparecer uma mensagem indicando que a autenticação foi realizada com sucesso, continue.
 
 ---
 
-# 6. Clonar os dotfiles
+# 5. Clone o repositório
 
-Clonar o repositório:
+Clone especificamente a branch Fedora:
 
 ```bash
-git clone https://github.com/VGViana/dotfilesv1.git ~/dotfiles
+git clone \
+  --branch fedora \
+  --single-branch \
+  git@github.com:VGViana/dotfilesv1.git \
+  ~/dotfiles
 ```
 
-Entrar no diretório:
+Entre no diretório:
 
 ```bash
 cd ~/dotfiles
 ```
 
-Confirmar:
+Confirme:
+
+```bash
+git branch --show-current
+```
+
+O resultado esperado é:
+
+```text
+fedora
+```
+
+Confira o remote:
 
 ```bash
 git remote -v
 ```
 
-Deve aparecer:
-
-```text
-origin  https://github.com/VGViana/dotfilesv1.git
-```
-
 ---
 
-# 7. Instalar os pacotes oficiais
+# 6. Execute o bootstrap
 
-O arquivo:
+Agora vem a parte principal.
 
-```text
-packages-pacman.txt
-```
-
-contém os pacotes oficiais instalados na máquina de referência.
-
-Instalar:
-
-```bash
-sudo pacman -S --needed - < packages-pacman.txt
-```
-
-O `--needed` evita reinstalar pacotes que já estiverem instalados.
-
----
-
-# 8. Instalar os pacotes AUR
-
-O arquivo:
-
-```text
-packages-aur.txt
-```
-
-contém os pacotes que não pertencem aos repositórios oficiais.
-
-Neste ambiente, a lista inclui atualmente pacotes como:
-
-```text
-bibata-cursor-theme
-greetd-dms-greeter-git
-gruvbox-plus-icon-theme
-sioyek-appimage
-```
-
-O `yay` é necessário para instalar essa lista.
-
-Se `yay` já estiver disponível:
-
-```bash
-yay -S --needed - < packages-aur.txt
-```
-
-Se `yay` não estiver instalado, instalar/configurar um AUR helper primeiro e então executar o comando acima.
-
----
-
-# 9. Restaurar as configurações
-
-Depois que as dependências principais estiverem instaladas:
+Execute:
 
 ```bash
 cd ~/dotfiles
@@ -333,26 +338,113 @@ chmod +x bootstrap.sh
 ./bootstrap.sh
 ```
 
-O bootstrap foi feito para automatizar a restauração e reduzir o número de etapas manuais.
+---
+
+# 🤖 O que o `bootstrap.sh` faz?
+
+O script automatiza a restauração do ambiente.
+
+Ele:
+
+1. verifica se o sistema é Fedora;
+2. verifica o `sudo`;
+3. escolhe `dnf5` ou `dnf`;
+4. atualiza os metadados do sistema;
+5. instala dependências básicas;
+6. instala Git e ferramentas necessárias;
+7. configura o repositório do DankMaterialShell;
+8. clona ou atualiza os dotfiles;
+9. instala os pacotes registrados em `packages-fedora.txt`;
+10. instala o DankMaterialShell;
+11. instala componentes opcionais do DMS;
+12. cria backup das configurações existentes;
+13. restaura `~/.config`;
+14. restaura `~/.local`;
+15. restaura arquivos do `$HOME`;
+16. executa GNU Stow;
+17. corrige permissões dos scripts;
+18. recarrega serviços do usuário;
+19. configura PipeWire/WirePlumber;
+20. configura Zsh como shell padrão;
+21. verifica arquivos importantes;
+22. informa se a restauração foi concluída.
+
+O script atualmente utiliza a branch:
+
+```text
+fedora
+```
+
+e o diretório padrão:
+
+```text
+~/dotfiles
+```
 
 ---
 
-# 10. O que o bootstrap faz
+# 📦 Pacotes
 
-O `bootstrap.sh` é o principal script de restauração.
+Os pacotes do ambiente Fedora ficam em:
 
-Ele foi criado para:
+```text
+packages-fedora.txt
+```
 
-1. verificar o ambiente;
-2. identificar a distribuição;
-3. verificar dependências;
-4. preparar diretórios;
-5. criar backups de configurações existentes;
-6. restaurar os dotfiles;
-7. configurar os links simbólicos;
-8. verificar arquivos importantes;
-9. mostrar possíveis erros;
-10. finalizar informando o estado da restauração.
+A lista inclui ferramentas de:
+
+* sistema
+* terminal
+* Wayland
+* Hyprland
+* áudio
+* Bluetooth
+* rede
+* hardware
+* GTK
+* Qt
+* desenvolvimento
+* GitHub
+* produtividade
+* fontes
+
+Exemplos:
+
+```text
+hyprland
+kitty
+zsh
+neovim
+yazi
+fzf
+ripgrep
+bat
+eza
+zoxide
+starship
+btop
+pipewire
+wireplumber
+bluez
+NetworkManager
+jetbrains-mono-fonts
+gh
+```
+
+A lista completa está no próprio arquivo.
+
+---
+
+# 🔄 Restaurar novamente
+
+Se alguma configuração quebrar, você pode executar novamente:
+
+```bash
+cd ~/dotfiles
+./bootstrap.sh
+```
+
+O script cria backups das configurações existentes antes de substituí-las.
 
 Os backups ficam em:
 
@@ -360,328 +452,289 @@ Os backups ficam em:
 ~/.dotfiles-backup/
 ```
 
-Cada execução pode criar uma pasta própria com data e hora.
-
-Exemplo:
+Por exemplo:
 
 ```text
-~/.dotfiles-backup/20260819-150000/
+~/.dotfiles-backup/20260903-120000/
 ```
 
 ---
 
-# 11. Não apagar configurações antigas antes do bootstrap
+# ⚠️ Não apague `~/.config` manualmente
 
-O bootstrap foi pensado para preservar configurações existentes através de backup.
+Não faça:
 
-Por isso, em uma instalação nova, não é necessário sair apagando manualmente:
-
-```text
-~/.config
-~/.local
-~/.zshrc
+```bash
+rm -rf ~/.config
 ```
 
-Antes de fazer qualquer limpeza manual, deixar o bootstrap trabalhar.
+nem:
+
+```bash
+rm -rf ~/.local
+```
+
+antes de tentar o bootstrap.
+
+O objetivo do `bootstrap.sh` é justamente preservar configurações existentes através de backup.
 
 ---
 
-# 12. Verificar os links depois da restauração
+# 🔗 GNU Stow
 
-Depois do bootstrap, verificar os principais arquivos:
+Depois da restauração, o GNU Stow cria os links necessários.
+
+Você pode testar sem modificar nada:
+
+```bash
+cd ~/dotfiles
+
+stow \
+  --restow \
+  --dotfiles \
+  --no-folding \
+  --simulate \
+  .
+```
+
+O modo:
+
+```text
+--simulate
+```
+
+significa que nada será alterado.
+
+---
+
+# 🔍 Verificando os links
+
+Depois do bootstrap, você pode verificar arquivos importantes:
 
 ```bash
 readlink -f ~/.zshrc
 readlink -f ~/.config/hypr/hyprland.lua
-readlink -f ~/.config/hypr/dms/binds-user.lua
-readlink -f ~/.config/nvim/init.lua
 readlink -f ~/.config/kitty/kitty.conf
-readlink -f ~/.config/DankMaterialShell/settings.json
-readlink -f ~/.config/gtk-3.0/dank-colors.css
-readlink -f ~/.config/sioyek/prefs_user.config
+readlink -f ~/.config/nvim/init.lua
 readlink -f ~/.config/yazi/yazi.toml
-readlink -f ~/.config/starship.toml
-readlink -f ~/.local/bin/dots
+readlink -f ~/.config/sioyek/prefs_user.config
+readlink -f ~/.config/DankMaterialShell/settings.json
 ```
 
-O resultado esperado é que os arquivos apontem para:
+Eles devem apontar para:
 
 ```text
-/home/viana/dotfiles/...
-```
-
-ou, em outra máquina, para:
-
-```text
-/home/USUARIO/dotfiles/...
+~/dotfiles/...
 ```
 
 ---
 
-# 13. Verificar o Stow
+# 🧪 Verificação do bootstrap
 
-Para testar sem alterar nada:
-
-```bash
-cd ~/dotfiles
-stow --dotfiles --no-folding --restow --simulate .
-```
-
-O resultado esperado inclui:
-
-```text
-WARNING: in simulation mode so not modifying filesystem.
-```
-
-Isso é normal.
-
-O modo `--simulate` significa que o Stow apenas está testando o que faria.
-
----
-
-# 14. Verificar o bootstrap
-
-Executar:
+Antes de considerar o repositório saudável:
 
 ```bash
 cd ~/dotfiles
+```
 
+Verifique a sintaxe:
+
+```bash
 bash -n bootstrap.sh
+```
+
+Verifique problemas comuns no shell:
+
+```bash
 shellcheck bootstrap.sh
+```
+
+Verifique problemas de whitespace no Git:
+
+```bash
 git diff --check
 ```
 
-Os três comandos devem terminar sem erros.
-
 ---
 
-# 15. Reiniciar
+# 🔄 Depois da instalação
 
-Depois da restauração:
+Quando tudo estiver restaurado:
 
 ```bash
 systemctl reboot
 ```
 
-Após reiniciar, conferir:
+Depois do login, verifique:
 
-- DMS;
-- Hyprland;
-- Kitty;
-- Zsh;
-- Neovim;
-- Yazi;
-- Sioyek;
-- GTK;
-- tema;
-- fontes;
-- áudio;
-- WirePlumber;
-- atalhos;
-- scripts;
-- aplicativos de estudo.
+* Hyprland
+* DankMaterialShell
+* Kitty
+* Zsh
+* Neovim
+* Yazi
+* Sioyek
+* GTK
+* Qt
+* áudio
+* Bluetooth
+* atalhos
+* scripts
+* temas
+* fontes
 
----
-
-# 16. O comando de emergência
-
-Depois de instalar o CachyOS, configurar a internet, instalar `git`, `github-cli`, autenticar no GitHub e ter um AUR helper disponível, o fluxo principal é:
-
-```bash
-git clone https://github.com/VGViana/dotfilesv1.git ~/dotfiles && \
-cd ~/dotfiles && \
-sudo pacman -S --needed - < packages-pacman.txt && \
-yay -S --needed - < packages-aur.txt && \
-./bootstrap.sh
-```
-
-Esse é o comando que representa a restauração automática.
-
-Se algum pacote ou etapa exigir intervenção, resolver o erro e executar novamente a etapa correspondente.
+Se tudo estiver funcionando, a máquina está essencialmente restaurada.
 
 ---
 
-# 17. Depois da restauração
+# 🛠️ Fluxo normal de trabalho
 
-A máquina nova deve ser considerada restaurada somente depois de:
-
-```bash
-git status
-```
-
-mostrar:
+Depois que o ambiente estiver configurado, o fluxo é:
 
 ```text
-nothing to commit, working tree clean
-```
-
-e os principais links apontarem para `~/dotfiles`.
-
-Também verificar:
-
-```bash
-cd ~/dotfiles
-bash -n bootstrap.sh
-shellcheck bootstrap.sh
-git diff --check
-```
-
----
-
-# 18. Como trabalhar normalmente
-
-Depois que o sistema estiver funcionando, a regra é simples:
-
-```text
-editar
-  ↓
+alterar configuração
+        ↓
 ~/dotfiles
-  ↓
+        ↓
 testar
-  ↓
+        ↓
 dots
-  ↓
-Git
-  ↓
+        ↓
+git commit
+        ↓
 GitHub
 ```
 
----
+A regra principal é:
 
-# 19. Nunca editar diretamente o arquivo gerenciado
-
-Por exemplo, se quiser alterar o Kitty, não editar:
-
-```text
-~/.config/kitty/kitty.conf
-```
-
-Editar:
-
-```text
-~/dotfiles/dot-config/kitty/kitty.conf
-```
-
-Se quiser alterar o Neovim:
-
-```text
-~/dotfiles/dot-config/nvim/
-```
-
-Se quiser alterar o Hyprland:
-
-```text
-~/dotfiles/dot-config/hypr/
-```
-
-Se quiser alterar o DMS:
-
-```text
-~/dotfiles/dot-config/DankMaterialShell/
-```
+> **Edite a configuração e depois sincronize o repositório.**
 
 ---
 
-# 20. Comando `dots`
+# ⚡ Comando `dots`
 
-O script:
-
-```text
-~/.local/bin/dots
-```
-
-é o comando utilizado para sincronizar alterações.
-
-Uso:
+O comando:
 
 ```bash
 dots
 ```
 
-O fluxo esperado é:
+é responsável por sincronizar as configurações atuais do sistema com o repositório.
 
-```text
-verificar alterações
-       ↓
-mostrar alterações
-       ↓
-criar commit
-       ↓
-push
-       ↓
-GitHub atualizado
-```
+Ele:
 
-Assim, depois de uma alteração importante:
+1. verifica se você está no repositório correto;
+2. verifica se está na branch `fedora`;
+3. copia configurações do `$HOME`;
+4. copia configurações de `~/.config`;
+5. copia scripts de `~/.local/bin`;
+6. remove arquivos gerados automaticamente;
+7. remove estados pessoais/sensíveis conhecidos;
+8. atualiza o `.gitignore`;
+9. mostra as alterações;
+10. cria o commit;
+11. envia a branch `fedora` para o GitHub.
+
+Uso normal:
 
 ```bash
 dots
 ```
 
-é suficiente para salvar a alteração no repositório.
+---
+
+# 🧪 Testar antes de enviar
+
+Se você quiser apenas verificar o que seria sincronizado:
+
+```bash
+dots --dry-run
+```
+
+Esse modo **não cria commit e não faz push**.
+
+É a opção recomendada antes de uma sincronização importante.
 
 ---
 
-# 21. Atualização manual
+# 📤 Sincronização manual
 
-Se for necessário fazer o processo manualmente:
+Se por algum motivo o `dots` não puder ser utilizado:
 
 ```bash
 cd ~/dotfiles
+```
+
+Verifique:
+
+```bash
 git status
 ```
 
-Ver alterações:
+Veja as alterações:
 
 ```bash
 git diff
 ```
 
-Adicionar:
+Adicione:
 
 ```bash
 git add .
 ```
 
-Criar commit:
+Faça o commit:
 
 ```bash
-git commit -m "chore: update dotfiles"
+git commit -m "chore: update Fedora dotfiles"
 ```
 
-Enviar:
+Envie:
 
 ```bash
-git push
+git push origin fedora
 ```
 
 ---
 
-# 22. Atualizar os pacotes registrados
+# 📥 Atualizar os dotfiles
 
-Se instalar ou remover pacotes do sistema, atualizar as listas.
-
-Pacotes oficiais:
+Se o GitHub tiver uma versão mais recente:
 
 ```bash
 cd ~/dotfiles
-pacman -Qqen | sort -u > packages-pacman.txt
+git pull --ff-only origin fedora
 ```
 
-Pacotes estrangeiros/AUR:
+Se for necessário restaurar as configurações após a atualização:
 
 ```bash
-pacman -Qqem | sort -u > packages-aur.txt
+./bootstrap.sh
 ```
 
-Conferir:
+---
+
+# 📦 Atualizando a lista de pacotes
+
+Sempre que instalar ou remover pacotes importantes do sistema, a lista deve ser atualizada.
+
+Para gerar novamente:
 
 ```bash
-wc -l packages-pacman.txt
-wc -l packages-aur.txt
+rpm -qa --qf '%{NAME}\n' | sort -u > packages-fedora.txt
 ```
 
-Depois sincronizar:
+⚠️ Antes de substituir a lista oficial, revise o resultado.
+
+Nem todo pacote instalado pelo Fedora necessariamente deve ser tratado como uma dependência direta dos dotfiles.
+
+Depois:
+
+```bash
+git diff -- packages-fedora.txt
+```
+
+E, se estiver correto:
 
 ```bash
 dots
@@ -689,339 +742,379 @@ dots
 
 ---
 
-# 23. Por que existem dois arquivos de pacotes?
+# 🧹 Arquivos que não devem ser versionados
 
-`packages-pacman.txt`:
+O script `dots` remove automaticamente diversos tipos de estado pessoal ou gerado antes da sincronização.
 
-```text
-pacman -Qqen
-```
-
-representa pacotes pertencentes aos repositórios oficiais.
-
-`packages-aur.txt`:
+Entre eles:
 
 ```text
-pacman -Qqem
+*.bak
+*.backup*
+*.old
+*.db
+*.db-shm
+*.db-wal
+cookie
+privateKey.pem
+certificate.pem
+session/
+akonadi/
+dconf/
+pulse/
+.cache/
+.firstlaunch
 ```
 
-representa pacotes instalados que não pertencem aos repositórios oficiais.
-
-Isso permite separar:
-
-```text
-pacman
-```
-
-de:
-
-```text
-yay/AUR
-```
-
-durante a restauração.
+Também são removidos dados pessoais específicos de aplicativos quando encontrados.
 
 ---
 
-# 24. Segurança
+# 🔐 Segurança
 
-O repositório é privado.
+Mesmo sendo um repositório de configurações, **nunca coloque secrets aqui**.
 
-Mesmo assim, nunca colocar nele:
+Nunca versionar:
 
-- senhas;
-- tokens;
-- API keys;
-- chaves privadas;
-- certificados privados;
-- cookies;
-- credenciais;
-- arquivos `.pem` privados;
-- arquivos `.key` privados;
-- arquivos contendo senhas.
+```text
+senhas
+tokens
+API keys
+SSH private keys
+certificados privados
+cookies
+credenciais
+arquivos .pem privados
+arquivos .key privados
+bancos de dados contendo informações pessoais
+```
 
-Antes de sincronizar:
+Antes de executar:
+
+```bash
+dots
+```
+
+é recomendado verificar:
 
 ```bash
 git status
-git diff
-```
-
-Para procurar nomes suspeitos:
-
-```bash
-find . \
-  -type f \
-  -not -path './.git/*' \
-  \( \
-    -iname '*token*' \
-    -o -iname '*secret*' \
-    -o -iname '*credential*' \
-    -o -iname '*.key' \
-    -o -iname '*.pem' \
-    -o -iname '*password*' \
-    -o -iname '*passwd*' \
-  \) \
-  -print
-```
-
-Se aparecer um arquivo sensível, não fazer push até analisar.
-
----
-
-# 25. O que não está necessariamente neste repositório
-
-Este repositório contém configurações e listas de pacotes, mas não significa que todos os dados pessoais do computador estejam versionados.
-
-Por exemplo, dados pessoais, documentos, biblioteca de estudos, banco de dados de aplicativos e outros arquivos de usuário podem estar fora do Git.
-
-Portanto:
-
-> **dotfiles não substituem backup pessoal.**
-
-É necessário manter backups separados para:
-
-- documentos;
-- estudos;
-- arquivos pessoais;
-- bancos de dados importantes;
-- arquivos de configuração que deliberadamente não devem ir para o Git;
-- credenciais;
-- arquivos armazenados exclusivamente na máquina.
-
----
-
-# 26. O que fazer se um arquivo não puder ser restaurado
-
-Primeiro verificar:
-
-```bash
-cd ~/dotfiles
-git status
-```
-
-Depois:
-
-```bash
-ls
 ```
 
 e:
 
 ```bash
-find dot-config dot-local -maxdepth 3 -type f | sort
+git diff
 ```
 
-Verificar se o arquivo existe no repositório.
+Se algo suspeito aparecer, **não faça push**.
 
-Se existir, verificar o link:
+---
+
+# 🆘 Troubleshooting
+
+## `bootstrap.sh` não executa
+
+Execute:
+
+```bash
+chmod +x bootstrap.sh
+```
+
+Depois:
+
+```bash
+./bootstrap.sh
+```
+
+---
+
+## O sistema não é reconhecido como Fedora
+
+O bootstrap verifica:
+
+```text
+/etc/os-release
+```
+
+Ele só continua quando:
+
+```text
+ID=fedora
+```
+
+Isso é proposital.
+
+Este bootstrap **não é um instalador genérico para outras distribuições**.
+
+---
+
+## O GitHub rejeita o clone
+
+Teste:
+
+```bash
+ssh -T git@github.com
+```
+
+Se não funcionar, configure sua chave SSH e adicione a chave pública à sua conta do GitHub.
+
+---
+
+## O arquivo existe no repositório, mas não aparece no sistema
+
+Verifique:
 
 ```bash
 readlink -f /caminho/do/arquivo
 ```
 
-Se não existir, verificar o histórico:
-
-```bash
-git log --all -- caminho/do/arquivo
-```
-
-Para restaurar uma versão anterior:
-
-```bash
-git log --all --oneline -- caminho/do/arquivo
-```
-
----
-
-# 27. Se o repositório estiver correto, mas o link estiver quebrado
-
-Verificar:
-
-```bash
-ls -l /caminho/do/arquivo
-```
-
-Depois executar novamente:
+Depois:
 
 ```bash
 cd ~/dotfiles
-./bootstrap.sh
 ```
 
-E testar o Stow:
+Teste o Stow:
 
 ```bash
-stow --dotfiles --no-folding --restow --simulate .
+stow \
+  --restow \
+  --dotfiles \
+  --no-folding \
+  --simulate \
+  .
+```
+
+Se estiver correto, execute novamente:
+
+```bash
+./bootstrap.sh
 ```
 
 ---
 
-# 28. Se houver conflito com um arquivo existente
+## Existe conflito com uma configuração existente
 
-Não apagar imediatamente.
+Não apague imediatamente.
 
-Primeiro criar backup:
+Faça backup manual:
 
 ```bash
 mkdir -p ~/.dotfiles-backup/manual
 ```
 
-Mover o arquivo conflitante:
+Depois mova o arquivo:
 
 ```bash
-mv ~/.config/EXEMPLO ~/.dotfiles-backup/manual/
+mv ~/.config/ARQUIVO ~/.dotfiles-backup/manual/
 ```
 
-Depois executar novamente o bootstrap.
-
-O procedimento exato depende do arquivo que estiver causando o conflito.
-
----
-
-# 29. Atualizar o repositório de outra máquina
-
-Se o repositório já estiver clonado:
+Execute novamente:
 
 ```bash
 cd ~/dotfiles
-git pull --ff-only
-```
-
-Depois, se forem alterações de configuração:
-
-```bash
-stow --dotfiles --no-folding --restow .
-```
-
-Ou executar novamente:
-
-```bash
 ./bootstrap.sh
 ```
 
 ---
 
-# 30. Regra para novas configurações
+## O `dots` não funciona
 
-Quando eu adicionar uma nova configuração ao sistema:
+Verifique:
 
-1. instalar o programa;
-2. configurar normalmente;
-3. descobrir onde a configuração foi salva;
-4. mover/copiar a configuração para `~/dotfiles`;
-5. organizar a estrutura para o Stow;
-6. criar o link simbólico;
-7. testar;
-8. atualizar o repositório;
-9. atualizar o README se a restauração exigir uma nova etapa.
-
-A pergunta principal deve ser:
-
-> "Se eu formatar amanhã, o bootstrap consegue recriar isso?"
-
-Se a resposta for não, a configuração ainda não está completamente documentada/reproduzida.
-
----
-
-# 31. Checklist de restauração
-
-## Sistema
-
-- [ ] CachyOS instalado
-- [ ] Internet funcionando
-- [ ] Sistema atualizado
-- [ ] DMS/Hyprland instalado
-
-## GitHub
-
-- [ ] Git instalado
-- [ ] GitHub CLI instalado
-- [ ] `gh auth status` funcionando
-- [ ] acesso a `VGViana/dotfilesv1`
-
-## Repositório
-
-- [ ] `~/dotfiles` clonado
-- [ ] `git remote -v` correto
-- [ ] `packages-pacman.txt` presente
-- [ ] `packages-aur.txt` presente
-- [ ] `bootstrap.sh` presente
-
-## Pacotes
-
-- [ ] pacotes oficiais instalados
-- [ ] AUR helper instalado
-- [ ] pacotes AUR instalados
-
-## Dotfiles
-
-- [ ] bootstrap executado
-- [ ] Stow sem erros
-- [ ] links simbólicos corretos
-- [ ] Zsh funcionando
-- [ ] Kitty funcionando
-- [ ] Hyprland funcionando
-- [ ] DMS funcionando
-- [ ] Neovim funcionando
-- [ ] Yazi funcionando
-- [ ] Sioyek funcionando
-
-## Validação
-
-- [ ] `bash -n bootstrap.sh`
-- [ ] `shellcheck bootstrap.sh`
-- [ ] `git diff --check`
-- [ ] `git status`
-- [ ] reinicialização realizada
-- [ ] ambiente visual conferido
-
----
-
-# 32. Estado de referência deste repositório
-
-A validação realizada na máquina de referência apresentou:
-
-```text
-Git                         OK
-Bootstrap                   OK
-Shell syntax                OK
-ShellCheck                  OK
-git diff --check            OK
-Stow dry-run                OK
-Symlinks principais         OK
-Segredos por nome           nenhum encontrado
-GitHub                      OK
-Repositório                 privado
-Branch                      main
-Working tree                limpa
+```bash
+command -v dots
 ```
 
-O repositório contém atualmente as listas de pacotes:
+Se não aparecer:
 
-```text
-Pacotes oficiais: 198
-Pacotes AUR/foreign: 4
+```bash
+ls -l ~/.local/bin/dots
 ```
 
-Esses números podem mudar no futuro. As listas dentro do próprio repositório são sempre a referência atual.
+E:
+
+```bash
+echo "$PATH"
+```
+
+O diretório:
+
+```text
+~/.local/bin
+```
+
+precisa estar no `PATH`.
 
 ---
 
-# 33. Comandos essenciais para lembrar
+# 🧯 Recuperação de emergência
 
-### Ver estado
+Em uma máquina Fedora nova, depois de configurar o acesso SSH ao GitHub, o fluxo principal é:
+
+```bash
+git clone \
+  --branch fedora \
+  --single-branch \
+  git@github.com:VGViana/dotfilesv1.git \
+  ~/dotfiles && \
+cd ~/dotfiles && \
+./bootstrap.sh
+```
+
+Esse é o **comando de restauração principal**.
+
+Se algo falhar:
+
+1. leia a mensagem de erro;
+2. corrija o problema indicado;
+3. execute novamente o comando correspondente;
+4. não apague configurações aleatoriamente.
+
+---
+
+# 🧭 Filosofia do repositório
+
+Este repositório segue algumas regras simples:
+
+### 1. O Git é a fonte da verdade
+
+```text
+GitHub
+  ↓
+~/dotfiles
+  ↓
+$HOME
+```
+
+### 2. Configuração deve ser reproduzível
+
+Se uma configuração for importante para o funcionamento do ambiente, ela deve estar versionada.
+
+### 3. Estado pessoal não pertence aos dotfiles
+
+Configurações pessoais, bancos de dados, caches e credenciais devem permanecer fora do Git.
+
+### 4. Automatize o que puder
+
+O objetivo não é memorizar dezenas de comandos.
+
+O objetivo é:
+
+```text
+instalar Fedora
+      ↓
+configurar acesso ao GitHub
+      ↓
+executar bootstrap
+      ↓
+reiniciar
+      ↓
+trabalhar
+```
+
+### 5. Backup continua sendo necessário
+
+Dotfiles **não são backup de dados pessoais**.
+
+Este repositório não substitui backups de:
+
+* documentos;
+* fotos;
+* arquivos pessoais;
+* biblioteca de estudos;
+* bancos de dados importantes;
+* arquivos que não estão versionados;
+* credenciais;
+* dados armazenados exclusivamente na máquina.
+
+---
+
+# 📋 Checklist — PC novo
+
+Use esta sequência:
+
+```text
+[ ] Instalar Fedora
+[ ] Conectar à internet
+[ ] Atualizar Fedora
+[ ] Configurar chave SSH
+[ ] Testar acesso ao GitHub
+[ ] Clonar branch fedora
+[ ] Executar bootstrap.sh
+[ ] Conferir mensagens do bootstrap
+[ ] Reiniciar
+[ ] Testar Hyprland
+[ ] Testar DMS
+[ ] Testar Kitty
+[ ] Testar Zsh
+[ ] Testar Neovim
+[ ] Testar Yazi
+[ ] Testar Sioyek
+[ ] Testar áudio
+[ ] Testar atalhos
+[ ] Testar scripts
+[ ] Conferir links do Stow
+[ ] Conferir git status
+```
+
+---
+
+# ✅ Quando considerar a restauração concluída?
+
+A restauração pode ser considerada concluída quando:
 
 ```bash
 cd ~/dotfiles
+```
+
+e:
+
+```bash
 git status
 ```
 
-### Atualizar do GitHub
+não apresentar alterações inesperadas.
+
+Além disso:
 
 ```bash
+readlink -f ~/.zshrc
+```
+
+e os principais arquivos de configuração devem apontar para:
+
+```text
+~/dotfiles/...
+```
+
+Por fim:
+
+```bash
+bash -n bootstrap.sh
+shellcheck bootstrap.sh
+git diff --check
+```
+
+devem terminar sem erros relevantes.
+
+---
+
+# 📌 Resumo rápido
+
+### Instalar do zero
+
+```bash
+git clone \
+  --branch fedora \
+  --single-branch \
+  git@github.com:VGViana/dotfilesv1.git \
+  ~/dotfiles
+
 cd ~/dotfiles
-git pull --ff-only
+
+./bootstrap.sh
 ```
 
 ### Sincronizar alterações
@@ -1030,90 +1123,65 @@ git pull --ff-only
 dots
 ```
 
-### Atualizar lista de pacotes
+### Testar sem enviar
 
 ```bash
-cd ~/dotfiles
-pacman -Qqen | sort -u > packages-pacman.txt
-pacman -Qqem | sort -u > packages-aur.txt
-dots
+dots --dry-run
 ```
 
-### Testar bootstrap
+### Atualizar do GitHub
 
 ```bash
 cd ~/dotfiles
+git pull --ff-only origin fedora
+```
+
+### Testar o bootstrap
+
+```bash
 bash -n bootstrap.sh
 shellcheck bootstrap.sh
 git diff --check
 ```
 
-### Restaurar
+---
 
-```bash
-cd ~/dotfiles
-./bootstrap.sh
-```
+# 📜 Licença / Uso
+
+Este repositório é, прежде de tudo, uma configuração pessoal.
+
+Os arquivos podem conter decisões específicas do meu hardware, preferências pessoais e escolhas feitas para o meu ambiente.
+
+Se você utilizar este repositório como base para outro computador:
+
+> **Revise as configurações antes de assumir que tudo é adequado para seu hardware.**
+
+Especialmente:
+
+* Hyprland;
+* monitores;
+* atalhos;
+* áudio;
+* energia;
+* scripts;
+* dispositivos;
+* caminhos de arquivos;
+* configurações específicas do Fedora.
 
 ---
 
-# 34. Restauração resumida
-
-Em uma máquina nova:
+## 🐧 Fedora + Hyprland
 
 ```text
-1. Instalar CachyOS
-2. Conectar à internet
-3. Atualizar o sistema
-4. Instalar DMS/Hyprland
-5. Instalar Git
-6. Instalar GitHub CLI
-7. Fazer gh auth login
-8. Clonar ~/dotfiles
-9. Instalar packages-pacman.txt
-10. Instalar yay/AUR
-11. Instalar packages-aur.txt
-12. Executar ./bootstrap.sh
-13. Verificar links
-14. Executar os testes
-15. Reiniciar
-16. Conferir o ambiente
+╭────────────────────────────────────────────╮
+│                                            │
+│          FEDORA DOTFILES                   │
+│                                            │
+│          Hyprland + DMS                    │
+│                                            │
+│       Reproducible Linux Setup             │
+│                                            │
+╰────────────────────────────────────────────╯
 ```
 
----
-
-# 35. Objetivo final
-
-O objetivo deste projeto é simples:
-
-```text
-PC novo
-   │
-   ▼
-CachyOS
-   │
-   ▼
-GitHub
-   │
-   ▼
-~/dotfiles
-   │
-   ├── pacotes
-   ├── configurações
-   ├── scripts
-   ├── Hyprland
-   ├── DMS
-   ├── Kitty
-   ├── Neovim
-   └── demais dotfiles
-   │
-   ▼
-bootstrap.sh
-   │
-   ▼
-ambiente restaurado
-```
-
-O repositório deve permitir que o "eu do futuro" não precise lembrar manualmente como este computador foi configurado.
-
-**Se precisar formatar, não improvisar: seguir este README.**
+**Objetivo:** instalar uma vez, configurar corretamente e conseguir reconstruir tudo novamente quando necessário.
