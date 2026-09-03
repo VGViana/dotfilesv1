@@ -2,7 +2,7 @@
     "allDayReminderDaysBefore": 0,
     "allDayReminderTime": "09:00",
     "allDayReminders": false,
-    "closeBehavior": "quit",
+    "closeBehavior": "minimize",
     "colorSource": "auto",
     "coreHoursEnabled": false,
     "coreHoursEnd": 17,
