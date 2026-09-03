@@ -1,2 +1,2 @@
 #!/bin/sh
-exec kitty -e yazi
+exec kitty -e flatpak run io.github.sxyazi.yazi
