@@ -1,0 +1,136 @@
+# ============================================================
+# FEDORA — DOTFILESV1
+# Pacotes RPM necessários ao ambiente
+# ============================================================
+
+# Sistema / terminal
+git
+git-lfs
+openssh-clients
+curl
+wget
+rsync
+stow
+zsh
+bash-completion
+util-linux
+procps-ng
+which
+file
+tree
+unzip
+zip
+7zip
+tar
+gzip
+bzip2
+xz
+less
+man-db
+man-pages
+
+# CLI / produtividade
+fzf
+ripgrep
+fd-find
+bat
+eza
+zoxide
+starship
+fastfetch
+btop
+lazygit
+neovim
+yazi
+wl-clipboard
+
+# Wayland / Hyprland
+hyprland
+hypridle
+hyprlock
+hyprshot
+xdg-desktop-portal-hyprland
+xdg-desktop-portal
+grim
+slurp
+swappy
+
+# Terminal
+kitty
+
+# Áudio / vídeo
+pipewire
+pipewire-alsa
+pipewire-pulseaudio
+wireplumber
+pavucontrol
+ffmpeg
+ffmpegthumbnailer
+
+# Bluetooth / rede
+bluez
+bluez-tools
+NetworkManager
+NetworkManager-wifi
+NetworkManager-openvpn
+network-manager-applet
+
+# Hardware / energia
+brightnessctl
+power-profiles-daemon
+upower
+lm_sensors
+pciutils
+usbutils
+smartmontools
+acpi
+
+# GTK / Qt
+gtk3
+gtk4
+libadwaita
+qt5ct
+qt6ct
+qt6-qttools
+
+# File manager / desktop utilities
+thunar
+thunar-archive-plugin
+file-roller
+gvfs
+gvfs-mtp
+gvfs-smb
+xdg-user-dirs
+xdg-utils
+
+# Fontes
+jetbrains-mono-fonts
+google-noto-sans-fonts
+google-noto-serif-fonts
+google-noto-emoji-fonts
+
+# Desenvolvimento
+gcc
+gcc-c++
+make
+cmake
+ninja-build
+pkgconf-pkg-config
+python3
+python3-pip
+nodejs
+npm
+
+# GitHub
+gh
+
+# Segurança / integração desktop
+polkit
+polkit-gnome
+accountsservice
+
+# Outros utilitários usados pelo ambiente
+jq
+yq
+imagemagick
+poppler-utils

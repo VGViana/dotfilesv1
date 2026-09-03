@@ -1,19 +1,15 @@
 #!/usr/bin/env bash
-
 set -Eeuo pipefail
 
 # ============================================================
-# DOTFILESV1 — BOOTSTRAP
-# Restauração completa do ambiente CachyOS + DMS + Hyprland
+# DOTFILESV1 — FEDORA BOOTSTRAP
+# Fedora + Hyprland + DankMaterialShell
 # ============================================================
 
-REPO_URL="https://github.com/VGViana/dotfilesv1.git"
-DOTFILES_DIR="$HOME/dotfiles"
+REPO_URL="git@github.com:VGViana/dotfilesv1.git"
+BRANCH="fedora"
+DOTFILES_DIR="${DOTFILES_DIR:-$HOME/dotfiles}"
 BACKUP_ROOT="$HOME/.dotfiles-backup/$(date +%Y%m%d-%H%M%S)"
-
-# ------------------------------------------------------------
-# CORES
-# ------------------------------------------------------------
 
 if [[ -t 1 ]]; then
     GREEN='\033[1;32m'
@@ -46,165 +42,197 @@ die() {
     exit 1
 }
 
-# ------------------------------------------------------------
-# ERROS
-# ------------------------------------------------------------
-
 trap 'echo; die "Bootstrap interrompido na linha $LINENO."' ERR
 
-# ------------------------------------------------------------
-# DETECTAR DISTRO
-# ------------------------------------------------------------
+# ============================================================
+# SISTEMA
+# ============================================================
 
-if [[ ! -f /etc/os-release ]]; then
-    die "Não foi possível identificar o sistema operacional."
-fi
+[[ -r /etc/os-release ]] || die "Não foi possível identificar o sistema."
 
-# shellcheck disable=SC1091
 source /etc/os-release
 
-if [[ "${ID:-}" != "cachyos" && "${ID_LIKE:-}" != *arch* ]]; then
-    warn "Este bootstrap foi desenvolvido para CachyOS/Arch."
-    warn "Sistema detectado: ${PRETTY_NAME:-desconhecido}"
-    echo
-    read -rp "Continuar mesmo assim? [s/N] " answer
+[[ "${ID:-}" == "fedora" ]] || \
+    die "Este bootstrap é exclusivo para Fedora. Sistema: ${PRETTY_NAME:-desconhecido}"
 
-    [[ "$answer" =~ ^[sS]$ ]] || exit 0
-fi
-
-# ------------------------------------------------------------
-# SUDO
-# ------------------------------------------------------------
-
-if ! command -v sudo >/dev/null 2>&1; then
-    die "sudo não está instalado. Instale-o antes de continuar."
-fi
+command -v sudo >/dev/null 2>&1 || \
+    die "sudo não está instalado."
 
 sudo -v
 
-# ------------------------------------------------------------
-# DEPENDÊNCIAS BÁSICAS
-# ------------------------------------------------------------
+if command -v dnf5 >/dev/null 2>&1; then
+    DNF=(sudo dnf5)
+else
+    DNF=(sudo dnf)
+fi
+
+# ============================================================
+# BASE
+# ============================================================
+
+info "Atualizando metadados do Fedora..."
+
+"${DNF[@]}" upgrade --refresh -y
 
 info "Instalando dependências básicas..."
 
-sudo pacman -Sy --needed --noconfirm \
+"${DNF[@]}" install -y \
     git \
-    base-devel \
-    stow \
+    git-lfs \
+    openssh-clients \
     curl \
-    wget
+    wget \
+    rsync \
+    stow \
+    zsh \
+    ca-certificates \
+    findutils \
+    util-linux \
+    sudo
 
-success "Dependências básicas prontas."
+git lfs install --skip-repo >/dev/null 2>&1 || true
 
-# ------------------------------------------------------------
-# CLONAR / ATUALIZAR DOTFILES
-# ------------------------------------------------------------
+# ============================================================
+# DANKMATERIALSHELL
+# ============================================================
+
+info "Configurando DankMaterialShell..."
+
+if ! "${DNF[@]}" repolist 2>/dev/null | grep -qi avengemedia; then
+    sudo dnf copr enable -y avengemedia/dms || \
+        warn "Não foi possível habilitar COPR avengemedia/dms."
+fi
+
+# ============================================================
+# REPOSITÓRIO
+# ============================================================
 
 if [[ -d "$DOTFILES_DIR/.git" ]]; then
-    info "Repositório já existe. Atualizando..."
+
+    info "Atualizando dotfiles..."
 
     git -C "$DOTFILES_DIR" fetch origin
-    git -C "$DOTFILES_DIR" reset --hard origin/main
+
+    git -C "$DOTFILES_DIR" switch "$BRANCH" 2>/dev/null || \
+        git -C "$DOTFILES_DIR" switch -c "$BRANCH" --track "origin/$BRANCH"
+
+    git -C "$DOTFILES_DIR" reset --hard "origin/$BRANCH"
 
 else
-    info "Clonando dotfilesv1..."
 
-    git clone "$REPO_URL" "$DOTFILES_DIR"
+    info "Clonando dotfiles..."
+
+    git clone \
+        --branch "$BRANCH" \
+        --single-branch \
+        "$REPO_URL" \
+        "$DOTFILES_DIR"
+
 fi
 
 cd "$DOTFILES_DIR"
 
-success "dotfilesv1 disponível em $DOTFILES_DIR."
+success "Repositório Fedora pronto."
 
-# ------------------------------------------------------------
-# VALIDAR MANIFESTS
-# ------------------------------------------------------------
+# ============================================================
+# PACOTES
+# ============================================================
 
-[[ -f packages-pacman.txt ]] ||
-    die "packages-pacman.txt não encontrado."
+[[ -f packages-fedora.txt ]] || \
+    die "packages-fedora.txt não encontrado."
 
-[[ -f packages-aur.txt ]] ||
-    die "packages-aur.txt não encontrado."
+info "Instalando pacotes Fedora..."
 
-# ------------------------------------------------------------
-# PACMAN
-# ------------------------------------------------------------
-
-info "Atualizando bancos de pacotes..."
-
-sudo pacman -Sy --needed --noconfirm
-
-info "Instalando pacotes oficiais..."
-
-mapfile -t PACMAN_PACKAGES < <(
-    sed '/^[[:space:]]*#/d;/^[[:space:]]*$/d' packages-pacman.txt
+mapfile -t PACKAGES < <(
+    sed \
+        -e '/^[[:space:]]*#/d' \
+        -e '/^[[:space:]]*$/d' \
+        packages-fedora.txt
 )
 
-if (( ${#PACMAN_PACKAGES[@]} > 0 )); then
-    sudo pacman -S --needed --noconfirm "${PACMAN_PACKAGES[@]}"
+FAILED_PACKAGES=()
+
+for package in "${PACKAGES[@]}"; do
+
+    if rpm -q "$package" >/dev/null 2>&1; then
+        continue
+    fi
+
+    if ! "${DNF[@]}" install -y "$package"; then
+        FAILED_PACKAGES+=("$package")
+        warn "Pacote não disponível: $package"
+    fi
+
+done
+
+if (( ${#FAILED_PACKAGES[@]} > 0 )); then
+
+    echo
+    warn "Alguns pacotes não foram encontrados:"
+
+    printf '  %s\n' "${FAILED_PACKAGES[@]}"
+
+    echo
+    warn "Isso não interrompe o bootstrap."
+
 fi
 
-success "Pacotes oficiais instalados."
+# ============================================================
+# DMS
+# ============================================================
 
-# ------------------------------------------------------------
-# YAY
-# ------------------------------------------------------------
+info "Instalando DankMaterialShell..."
 
-if ! command -v yay >/dev/null 2>&1; then
-    info "yay não encontrado. Instalando..."
+if ! rpm -q dms >/dev/null 2>&1; then
 
-    tmpdir="$(mktemp -d)"
+    if ! "${DNF[@]}" install -y dms; then
+        warn "dms não pôde ser instalado pelo repositório atual."
+    fi
 
-    git clone https://aur.archlinux.org/yay.git "$tmpdir/yay"
-
-    (
-        cd "$tmpdir/yay"
-        makepkg -si --noconfirm
-    )
-
-    rm -rf "$tmpdir"
 fi
 
-success "yay disponível."
+# Componentes opcionais do DMS.
+for package in \
+    quickshell \
+    dankcalendar \
+    dgop \
+    matugen \
+    cava \
+    cliphist
+do
 
-# ------------------------------------------------------------
-# AUR
-# ------------------------------------------------------------
+    if rpm -q "$package" >/dev/null 2>&1; then
+        continue
+    fi
 
-info "Instalando pacotes AUR..."
+    "${DNF[@]}" install -y "$package" 2>/dev/null || \
+        warn "Opcional não disponível: $package"
 
-mapfile -t AUR_PACKAGES < <(
-    sed '/^[[:space:]]*#/d;/^[[:space:]]*$/d' packages-aur.txt
-)
+done
 
-if (( ${#AUR_PACKAGES[@]} > 0 )); then
-    yay -S --needed --noconfirm "${AUR_PACKAGES[@]}"
-fi
+# ============================================================
+# BACKUP
+# ============================================================
 
-success "Pacotes AUR instalados."
-
-# ------------------------------------------------------------
-# BACKUP DE CONFIGURAÇÕES EXISTENTES
-# ------------------------------------------------------------
-
-info "Preparando configurações..."
+info "Preparando backup das configurações existentes..."
 
 mkdir -p "$BACKUP_ROOT"
 
 backup_target() {
+
     local target="$1"
 
     [[ -e "$target" || -L "$target" ]] || return 0
 
-    # Já é um symlink apontando para nosso repositório.
     if [[ -L "$target" ]]; then
+
         local resolved
         resolved="$(readlink -f "$target" 2>/dev/null || true)"
 
         if [[ "$resolved" == "$DOTFILES_DIR/"* ]]; then
             return 0
         fi
+
     fi
 
     local relative="${target#"$HOME"/}"
@@ -214,21 +242,20 @@ backup_target() {
 
     mv "$target" "$destination"
 
-    warn "Backup: $target → $destination"
+    warn "Backup: $target"
+
 }
 
-# ------------------------------------------------------------
-# MAPEAR DOT-CONFIG
-# ------------------------------------------------------------
+# ============================================================
+# CONFIG
+# ============================================================
 
-info "Criando links das configurações..."
+info "Restaurando ~/.config..."
 
 while IFS= read -r -d '' source; do
 
-    relative="${source#"$DOTFILES_DIR"/dot-config/}"
+    relative="${source#"$DOTFILES_DIR/dot-config/"}"
     target="$HOME/.config/$relative"
-
-    mkdir -p "$(dirname "$target")"
 
     backup_target "$target"
 
@@ -238,16 +265,16 @@ done < <(
         -print0
 )
 
-# ------------------------------------------------------------
-# MAPEAR DOT-LOCAL
-# ------------------------------------------------------------
+# ============================================================
+# LOCAL
+# ============================================================
+
+info "Restaurando ~/.local..."
 
 while IFS= read -r -d '' source; do
 
-    relative="${source#"$DOTFILES_DIR"/dot-local/}"
+    relative="${source#"$DOTFILES_DIR/dot-local/"}"
     target="$HOME/.local/$relative"
-
-    mkdir -p "$(dirname "$target")"
 
     backup_target "$target"
 
@@ -257,9 +284,9 @@ done < <(
         -print0
 )
 
-# ------------------------------------------------------------
-# DOTFILES DA HOME
-# ------------------------------------------------------------
+# ============================================================
+# HOME
+# ============================================================
 
 for source in "$DOTFILES_DIR"/dot-*; do
 
@@ -274,138 +301,142 @@ for source in "$DOTFILES_DIR"/dot-*; do
 
 done
 
-# ------------------------------------------------------------
+# ============================================================
 # STOW
-# ------------------------------------------------------------
+# ============================================================
 
 info "Executando GNU Stow..."
 
+mkdir -p \
+    "$HOME/.config" \
+    "$HOME/.local/bin"
+
 cd "$DOTFILES_DIR"
 
-stow --restow --dotfiles \
+stow \
+    --restow \
+    --dotfiles \
     --target="$HOME" \
     .
 
-success "Symlinks restaurados."
+success "Dotfiles vinculados."
 
-# ------------------------------------------------------------
+# ============================================================
+# LIMPEZA DE ARQUIVOS GERADOS
+# ============================================================
+
+rm -f \
+    "$HOME/.config/DankMaterialShell/.firstlaunch"
+
+rm -rf \
+    "$HOME/.config/qt5ct/colors" \
+    "$HOME/.config/qt6ct/colors"
+
+# ============================================================
 # PERMISSÕES
-# ------------------------------------------------------------
+# ============================================================
 
-info "Restaurando permissões..."
+if [[ -d "$DOTFILES_DIR/dot-local/bin" ]]; then
 
-find "$DOTFILES_DIR/dot-local/bin" \
-    -type f \
-    -exec chmod +x {} \; \
-    2>/dev/null || true
+    find "$DOTFILES_DIR/dot-local/bin" \
+        -type f \
+        -exec chmod +x {} +
 
-[[ -f "$DOTFILES_DIR/bootstrap.sh" ]] &&
-    chmod +x "$DOTFILES_DIR/bootstrap.sh"
+fi
 
-[[ -f "$DOTFILES_DIR/init-github.sh" ]] &&
-    chmod +x "$DOTFILES_DIR/init-github.sh"
+chmod +x "$DOTFILES_DIR/bootstrap.sh" 2>/dev/null || true
 
-success "Permissões restauradas."
-
-# ------------------------------------------------------------
+# ============================================================
 # SYSTEMD USER
-# ------------------------------------------------------------
-
-info "Recarregando serviços do usuário..."
+# ============================================================
 
 systemctl --user daemon-reload 2>/dev/null || true
-
-# ------------------------------------------------------------
-# SERVIÇOS IMPORTANTES
-# ------------------------------------------------------------
-
-info "Verificando serviços..."
 
 for service in \
     pipewire.service \
     pipewire-pulse.service \
     wireplumber.service
 do
-    if systemctl --user list-unit-files "$service" \
-        >/dev/null 2>&1; then
 
-        systemctl --user enable --now "$service" \
-            2>/dev/null || true
-    fi
+    systemctl --user enable --now "$service" \
+        2>/dev/null || true
+
 done
 
-# ------------------------------------------------------------
-# CACHE / DIRETÓRIOS
-# ------------------------------------------------------------
+# ============================================================
+# SHELL
+# ============================================================
 
-mkdir -p \
-    "$HOME/.config" \
-    "$HOME/.local/bin" \
-    "$HOME/.cache"
+if command -v zsh >/dev/null 2>&1; then
 
-# ------------------------------------------------------------
+    ZSH_PATH="$(command -v zsh)"
+
+    CURRENT_SHELL="$(getent passwd "$USER" | cut -d: -f7)"
+
+    if [[ "$CURRENT_SHELL" != "$ZSH_PATH" ]]; then
+
+        info "Configurando Zsh como shell padrão..."
+
+        chsh -s "$ZSH_PATH" "$USER" || \
+            warn "Não foi possível alterar o shell padrão."
+
+    fi
+
+fi
+
+# ============================================================
 # VERIFICAÇÃO
-# ------------------------------------------------------------
+# ============================================================
 
-echo
 info "Executando verificação final..."
 
 ERRORS=0
 
-check_link() {
-    local target="$1"
+check_path() {
 
-    if [[ ! -e "$target" && ! -L "$target" ]]; then
-        printf "${RED}✗${RESET} Ausente: %s\n" "$target"
+    if [[ ! -e "$1" && ! -L "$1" ]]; then
+
+        printf "${RED}✗${RESET} Ausente: %s\n" "$1"
+
         ERRORS=$((ERRORS + 1))
+
     fi
+
 }
 
-check_link "$HOME/.config/hypr/hyprland.lua"
-check_link "$HOME/.config/kitty/kitty.conf"
-check_link "$HOME/.config/nvim/init.lua"
-check_link "$HOME/.config/yazi/yazi.toml"
-check_link "$HOME/.config/sioyek/prefs_user.config"
-check_link "$HOME/.config/DankMaterialShell/settings.json"
-check_link "$HOME/.zshrc"
+check_path "$HOME/.config/hypr/hyprland.lua"
+check_path "$HOME/.config/kitty/kitty.conf"
+check_path "$HOME/.config/nvim/init.lua"
+check_path "$HOME/.config/yazi/yazi.toml"
+check_path "$HOME/.config/sioyek/prefs_user.config"
+check_path "$HOME/.config/DankMaterialShell/settings.json"
+check_path "$HOME/.zshrc"
 
 echo
 
-# ------------------------------------------------------------
-# RESULTADO
-# ------------------------------------------------------------
-
 if (( ERRORS > 0 )); then
 
-    warn "$ERRORS configurações importantes não foram encontradas."
-
-    echo
-    echo "Backup das configurações antigas:"
+    warn "$ERRORS configurações importantes estão ausentes."
+    warn "Backup disponível em:"
     echo "  $BACKUP_ROOT"
 
-    echo
-    warn "A restauração terminou, mas requer revisão."
+    exit 2
 
-else
-
-    success "RESTORE COMPLETO."
-
-    echo
-    echo "╭────────────────────────────────────────────╮"
-    echo "│                                            │"
-    echo "│       DOTFILESV1 RESTORE CONCLUÍDO         │"
-    echo "│                                            │"
-    echo "╰────────────────────────────────────────────╯"
-
-    echo
-    echo "Repositório:"
-    echo "  $DOTFILES_DIR"
-
-    echo
-    echo "Backup:"
-    echo "  $BACKUP_ROOT"
-
-    echo
-    echo "Próximo passo:"
-    echo "  reinicie o computador."
 fi
+
+success "RESTORE COMPLETO."
+
+echo
+echo "╭────────────────────────────────────────────╮"
+echo "│                                            │"
+echo "│       DOTFILESV1 FEDORA RESTORE            │"
+echo "│                                            │"
+echo "╰────────────────────────────────────────────╯"
+echo
+echo "Repositório:"
+echo "  $DOTFILES_DIR"
+echo
+echo "Backup:"
+echo "  $BACKUP_ROOT"
+echo
+echo "Reinicie a sessão para carregar completamente o ambiente."

@@ -1,19 +1,29 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-DOTS_DIR="${DOTS_DIR:-$HOME/dotfiles}"
-cd "$DOTS_DIR"
+DOTFILES_DIR="${DOTFILES_DIR:-$HOME/dotfiles}"
 
-command -v gh >/dev/null 2>&1 || { echo 'gh is required.' >&2; exit 1; }
+cd "$DOTFILES_DIR"
 
-gh auth status >/dev/null 2>&1 || {
-  echo 'GitHub CLI is not authenticated.' >&2
-  echo 'Run: gh auth login'
-  exit 1
-}
+if ! command -v gh >/dev/null 2>&1; then
+    echo "GitHub CLI não está instalado." >&2
+    exit 1
+fi
+
+if ! gh auth status >/dev/null 2>&1; then
+    echo "GitHub CLI não está autenticado."
+    echo
+    echo "Execute:"
+    echo "  gh auth login"
+    exit 1
+fi
 
 if git remote get-url origin >/dev/null 2>&1; then
-  echo "origin already exists: $(git remote get-url origin)"
+    echo "origin: $(git remote get-url origin)"
 else
-  gh repo create --private --source="$DOTS_DIR" --remote=origin --push
+    git remote add origin git@github.com:VGViana/dotfilesv1.git
+    echo "origin configurado."
 fi
+
+echo
+echo "GitHub configurado."
