@@ -503,7 +503,7 @@ alias ~='cd ~'
 if (( $+commands[dnf5] )); then
 
     alias p='sudo dnf5 install'
-    alias pu='sudo dnf5 upgrade --refresh'
+    alias pu='sudo dnf5 upgrade'
     alias pr='sudo dnf5 remove'
     alias po='sudo dnf5 autoremove'
 
@@ -883,3 +883,6 @@ hash -d config="$HOME/.config"
 # ============================================================
 # END
 # ============================================================
+
+export PATH=$PATH:/home/viana/.spicetify
+export PATH="$HOME/.spicetify:$PATH"
