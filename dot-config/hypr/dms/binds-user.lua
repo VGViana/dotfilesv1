@@ -77,7 +77,7 @@ hl.bind("SUPER + SHIFT + E", hl.dsp.exec_cmd("firefox https://www.estrategiaconc
 hl.unbind("SUPER + SHIFT + G")
 hl.bind("SUPER + SHIFT + G", hl.dsp.exec_cmd("exec firefox https://portal.guruja.com.br/aluno/visao-geral"), { description = "guruja" })
 hl.unbind("SUPER + SHIFT + H")
-hl.bind("SUPER + SHIFT + H", hl.dsp.exec_cmd("helium --new-tab https://github.com"), { description = "Git" })
+hl.bind("SUPER + SHIFT + H", hl.dsp.exec_cmd("helium --new-tab https://github.com/VGViana/dotfilesv1"), { description = "Git" })
 hl.unbind("SUPER + SHIFT + L")
 hl.bind("SUPER + SHIFT + L", hl.dsp.exec_cmd("helium https://calendar.google.com/calendar/u/0/r?pli=1"), { repeating = true, description = "calendar" })
 hl.unbind("SUPER + SHIFT + M")
