@@ -6,8 +6,8 @@
     "gruvboxMaterial": "soft",
     "gruvboxMulti": {
       "light": {
-        "flavor": "classic-soft-light",
-        "accent": "blue"
+        "flavor": "material-soft-light",
+        "accent": "green"
       },
       "dark": {
         "flavor": "classic-soft-dark",
