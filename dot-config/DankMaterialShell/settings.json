@@ -1,17 +1,17 @@
 {
   "currentThemeName": "custom",
-  "currentThemeCategory": "registry",
+  "currentThemeCategory": "custom",
   "customThemeFile": "/home/viana/.config/DankMaterialShell/themes/gruvboxMulti/theme.json",
   "registryThemeVariants": {
     "gruvboxMaterial": "soft",
     "gruvboxMulti": {
       "light": {
-        "flavor": "material-soft-light",
+        "flavor": "material-soft-dark",
         "accent": "green"
       },
       "dark": {
-        "flavor": "classic-soft-dark",
-        "accent": "blue"
+        "flavor": "material-soft-dark",
+        "accent": "green"
       }
     }
   },
