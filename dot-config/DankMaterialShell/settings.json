@@ -7,7 +7,7 @@
     "gruvboxMulti": {
       "light": {
         "flavor": "classic-soft-light",
-        "accent": "green"
+        "accent": "blue"
       },
       "dark": {
         "flavor": "classic-soft-dark",
@@ -51,10 +51,10 @@
   "windSpeedUnit": "kmh",
   "nightModeEnabled": false,
   "animationSpeed": 4,
-  "customAnimationDuration": 0,
-  "syncComponentAnimationSpeeds": false,
-  "popoutAnimationSpeed": 0,
-  "popoutCustomAnimationDuration": 150,
+  "customAnimationDuration": 1,
+  "syncComponentAnimationSpeeds": true,
+  "popoutAnimationSpeed": 4,
+  "popoutCustomAnimationDuration": 1,
   "modalAnimationSpeed": 4,
   "modalCustomAnimationDuration": 0,
   "enableRippleEffects": false,
@@ -256,7 +256,8 @@
   "greeterPamExternallyManaged": false,
   "greeterSyncPending": true,
   "greeterSyncBaseline": {
-    "greeterWallpaperPath": "/home/viana/Imagens/Wallpapers/the-creation-of-adam-michelangelo-c-1512.jpg"
+    "greeterWallpaperPath": "/home/viana/Imagens/Wallpapers/the-creation-of-adam-michelangelo-c-1512.jpg",
+    "showSeconds": false
   },
   "mediaSize": 1,
   "appLauncherViewMode": "list",
@@ -315,7 +316,7 @@
   "iconThemeDark": "Gruvbox-Plus-Dark",
   "iconThemeLight": "Gruvbox-Plus-Light",
   "iconThemePerMode": true,
-  "lastAppliedIconTheme": "Gruvbox-Plus-Dark",
+  "lastAppliedIconTheme": "Gruvbox-Plus-Light",
   "cursorSettings": {
     "theme": "Simp1e-Gruvbox-Dark",
     "size": 30,
@@ -562,7 +563,7 @@
   "hyprlandOutputSettings": {},
   "displayProfiles": {},
   "activeDisplayProfile": {
-    "hyprland": "auto_eed335ba"
+    "hyprland": "auto_5af6115"
   },
   "displayProfileAutoSelect": true,
   "displayShowDisconnected": false,
