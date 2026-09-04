@@ -1,12 +1,12 @@
 {
   "currentThemeName": "custom",
-  "currentThemeCategory": "custom",
+  "currentThemeCategory": "registry",
   "customThemeFile": "/home/viana/.config/DankMaterialShell/themes/gruvboxMulti/theme.json",
   "registryThemeVariants": {
     "gruvboxMaterial": "soft",
     "gruvboxMulti": {
       "light": {
-        "flavor": "material-soft-dark",
+        "flavor": "material-soft-light",
         "accent": "green"
       },
       "dark": {
@@ -504,7 +504,7 @@
   "notificationTimeoutLow": 5000,
   "notificationTimeoutNormal": 5000,
   "notificationTimeoutCritical": 0,
-  "notificationCompactMode": false,
+  "notificationCompactMode": true,
   "notificationShowTimeoutBar": false,
   "notificationDedupeEnabled": true,
   "notificationPopupPosition": 3,
