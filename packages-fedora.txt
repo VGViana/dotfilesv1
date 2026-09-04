@@ -134,3 +134,6 @@ jq
 yq
 imagemagick
 poppler-utils
+
+# Apps
+helium-bin

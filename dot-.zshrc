@@ -886,3 +886,5 @@ hash -d config="$HOME/.config"
 
 export PATH=$PATH:/home/viana/.spicetify
 export PATH="$HOME/.spicetify:$PATH"
+export PATH="$HOME/.cargo/bin:$PATH"
+export PATH="$HOME/go/bin:$PATH"
