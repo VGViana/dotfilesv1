@@ -182,8 +182,14 @@
           "enabled": true,
           "minimumWidth": false
         },
-        "memUsage",
-        "controlCenterButton",
+        {
+          "id": "memUsage",
+          "enabled": false
+        },
+        {
+          "id": "controlCenterButton",
+          "enabled": false
+        },
         "battery",
         "notificationButton"
       ],
