@@ -23,14 +23,12 @@
   "calendarBackend": "dankcal",
   "clockFormat": "24h",
   "animationSpeed": 4,
-  "customAnimationDuration": 200,
+  "customAnimationDuration": 1,
   "popoutAnimationSpeed": 4,
   "modalAnimationSpeed": 4,
   "reduceMotion": true,
   "springBounce": 0,
   "enableRippleEffects": false,
-  "animationVariant": 1,
-  "motionEffect": 2,
   "m3ElevationColorMode": "primary",
   "blurForegroundLayers": false,
   "blurBorderEnabled": false,
@@ -45,6 +43,9 @@
   "greeterWallpaperPath": "/home/viana/Imagens/Wallpapers/campo.jpg",
   "greeterFontFamily": "Iosevka NF",
   "greeterWallpaperFillMode": "Fill",
+  "spotlightSectionViewModes": {
+    "apps": "tile"
+  },
   "dankLauncherV2ShowSourceBadges": false,
   "useAutoLocation": true,
   "dashTabs": [
@@ -87,9 +88,7 @@
     }
   },
   "monoFontFamily": "Iosevka Nerd Font",
-  "fontScale": 1.15,
-  "textRenderType": 1,
-  "textRenderQuality": 4,
+  "textRenderQuality": 2,
   "notepadShowLineNumbers": true,
   "notepadUseCompositorGap": true,
   "useSystemSoundTheme": true,
