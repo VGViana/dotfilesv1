@@ -29,7 +29,7 @@
     "sidebarWidth": 200,
     "snoozeMinutes": 5,
     "syncIntervalMinutes": 1,
-    "themeMode": "auto",
+    "themeMode": "dark",
     "timeFormat": "24h",
     "timeLocale": "",
     "use24HourClock": true,

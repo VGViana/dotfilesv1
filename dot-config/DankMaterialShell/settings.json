@@ -159,8 +159,7 @@
       ],
       "showOnLastDisplay": true,
       "leftWidgets": [
-        "workspaceSwitcher",
-        "focusedWindow"
+        "workspaceSwitcher"
       ],
       "centerWidgets": [
         "music",
@@ -172,6 +171,7 @@
         "weather"
       ],
       "rightWidgets": [
+        "focusedWindow",
         "systemTray",
         {
           "id": "cpuUsage",
@@ -179,7 +179,7 @@
         },
         {
           "id": "cpuTemp",
-          "enabled": true,
+          "enabled": false,
           "minimumWidth": false
         },
         {
