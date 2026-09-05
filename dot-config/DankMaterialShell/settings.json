@@ -16,8 +16,10 @@
     }
   },
   "dockTransparency": 0.85,
-  "cornerRadius": 12,
+  "floatingWindowSyncGlobal": false,
+  "cornerRadius": 10,
   "hyprlandLayoutGapsOutOverride": 0,
+  "hyprlandLayoutRadiusOverride": 10,
   "hyprlandLayoutBorderSize": 0,
   "firstDayOfWeek": 0,
   "calendarBackend": "dankcal",
@@ -44,7 +46,7 @@
   "greeterFontFamily": "Iosevka NF",
   "greeterWallpaperFillMode": "Fill",
   "spotlightSectionViewModes": {
-    "apps": "tile"
+    "apps": "list"
   },
   "dankLauncherV2ShowSourceBadges": false,
   "useAutoLocation": true,
@@ -111,6 +113,8 @@
   "dankIslandInteractionMode": "click",
   "dankIslandHoverOpenDelay": 0,
   "dankIslandHoverCloseDelay": 0,
+  "dankIslandPalette": "dim",
+  "dankIslandCornerRadius": 10,
   "dankIslandHighContrast": true,
   "dankIslandHomeLayout": [
     {

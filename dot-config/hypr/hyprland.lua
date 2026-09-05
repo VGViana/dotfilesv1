@@ -14,6 +14,7 @@ hl.config({
 		-- empty inherits XKB_DEFAULT_LAYOUT (libxkbcommon), falls back to "us"
 		kb_layout = "br",
 		kb_variant = "abnt2",
+		kb_options = "ctrl:swapcaps",
 		numlock_by_default = true,
 		follow_mouse = 1,
 		touchpad = {
