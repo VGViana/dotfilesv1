@@ -51,12 +51,12 @@ hl.config({
 	},
 })
 
-hl.animation({ leaf = "windowsIn", enabled = true, speed = 3, bezier = "default" })
-hl.animation({ leaf = "windowsOut", enabled = true, speed = 3, bezier = "default" })
-hl.animation({ leaf = "workspaces", enabled = true, speed = 5, bezier = "default" })
-hl.animation({ leaf = "windowsMove", enabled = true, speed = 4, bezier = "default" })
-hl.animation({ leaf = "fade", enabled = true, speed = 3, bezier = "default" })
-hl.animation({ leaf = "border", enabled = true, speed = 3, bezier = "default" })
+hl.animation({ leaf = "windowsIn", enabled = false, speed = 3, bezier = "default" })
+hl.animation({ leaf = "windowsOut", enabled = false, speed = 3, bezier = "default" })
+hl.animation({ leaf = "workspaces", enabled = false, speed = 5, bezier = "default" })
+hl.animation({ leaf = "windowsMove", enabled = false, speed = 4, bezier = "default" })
+hl.animation({ leaf = "fade", enabled = false, speed = 3, bezier = "default" })
+hl.animation({ leaf = "border", enabled = false, speed = 3, bezier = "default" })
 
 hl.window_rule({ match = { class = "^(org\\.wezfurlong\\.wezterm)$" }, tile = true })
 hl.window_rule({ match = { class = "^(org\\.gnome\\.)" }, rounding = 12 })
