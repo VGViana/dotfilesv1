@@ -44,7 +44,7 @@
   "appIdSubstitutions": [],
   "greeterWallpaperPath": "/home/viana/Imagens/Wallpapers/campo.jpg",
   "greeterFontFamily": "Iosevka NF",
-  "greeterWallpaperFillMode": "Fit",
+  "greeterWallpaperFillMode": "Fill",
   "dankLauncherV2ShowSourceBadges": false,
   "useAutoLocation": true,
   "dashTabs": [
@@ -70,9 +70,6 @@
     }
   ],
   "networkPreference": "wifi",
-  "iconThemeDark": "Simp1e-Gruvbox-Dark",
-  "iconThemeLight": "Simp1e-Gruvbox-Light",
-  "iconThemePerMode": true,
   "cursorSettings": {
     "theme": "Simp1e-Gruvbox-Dark",
     "size": 30,

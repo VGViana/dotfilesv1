@@ -1,33 +1,3 @@
-[Default Applications]
-application/json=nvim.desktop
-application/pdf=com.github.ahrm.sioyek.desktop
-application/vnd.comicbook+zip=com.github.ahrm.sioyek.desktop
-application/vnd.comicbook-rar=com.github.ahrm.sioyek.desktop
-application/x-bzpdf=com.github.ahrm.sioyek.desktop
-application/x-ext-pdf=com.github.ahrm.sioyek.desktop
-application/x-gzpdf=com.github.ahrm.sioyek.desktop
-application/x-zerosize=nvim.desktop
-application/xhtml+xml=helium.desktop
-image/avif=helium.desktop
-image/bmp=helium.desktop
-image/gif=helium.desktop
-image/jpeg=helium.desktop
-image/png=helium.desktop
-image/svg+xml=helium.desktop
-image/webp=helium.desktop
-inode/directory=org.kde.dolphin.desktop
-text/html=helium.desktop
-text/markdown=nvim.desktop
-text/plain=nvim.desktop
-text/x-c++src=nvim.desktop
-text/x-csrc=nvim.desktop
-text/x-python=nvim.desktop
-text/x-shellscript=nvim.desktop
-x-scheme-handler/calendar=dms-open.desktop
-x-scheme-handler/file=org.kde.dolphin.desktop
-x-scheme-handler/http=helium.desktop
-x-scheme-handler/https=helium.desktop
-
 [Added Associations]
 application/json=nvim.desktop;
 application/pdf=com.github.ahrm.sioyek.desktop;
@@ -46,6 +16,7 @@ image/png=helium.desktop;
 image/svg+xml=helium.desktop;
 image/webp=helium.desktop;
 inode/directory=org.kde.dolphin.desktop;
+text/calendar=com.danklinux.dankcalendar.desktop;
 text/html=helium.desktop;
 text/markdown=nvim.desktop;
 text/plain=nvim.desktop;
@@ -58,5 +29,33 @@ x-scheme-handler/file=org.kde.dolphin.desktop;
 x-scheme-handler/http=helium.desktop;
 x-scheme-handler/https=helium.desktop;
 
-[Removed Associations]
-
+[Default Applications]
+application/json=nvim.desktop
+application/pdf=com.github.ahrm.sioyek.desktop
+application/vnd.comicbook+zip=com.github.ahrm.sioyek.desktop
+application/vnd.comicbook-rar=com.github.ahrm.sioyek.desktop
+application/x-bzpdf=com.github.ahrm.sioyek.desktop
+application/x-ext-pdf=com.github.ahrm.sioyek.desktop
+application/x-gzpdf=com.github.ahrm.sioyek.desktop
+application/x-zerosize=nvim.desktop
+application/xhtml+xml=helium.desktop
+image/avif=helium.desktop
+image/bmp=helium.desktop
+image/gif=helium.desktop
+image/jpeg=helium.desktop
+image/png=helium.desktop
+image/svg+xml=helium.desktop
+image/webp=helium.desktop
+inode/directory=org.kde.dolphin.desktop
+text/calendar=com.danklinux.dankcalendar.desktop;
+text/html=helium.desktop
+text/markdown=nvim.desktop
+text/plain=nvim.desktop
+text/x-c++src=nvim.desktop
+text/x-csrc=nvim.desktop
+text/x-python=nvim.desktop
+text/x-shellscript=nvim.desktop
+x-scheme-handler/calendar=dms-open.desktop
+x-scheme-handler/file=org.kde.dolphin.desktop
+x-scheme-handler/http=helium.desktop
+x-scheme-handler/https=helium.desktop

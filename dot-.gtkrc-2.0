@@ -1,4 +1,4 @@
-gtk-enable-animations=1
+gtk-enable-animations=0
 gtk-theme-name="Gruvbox-B-MB-Dark-Soft"
 gtk-primary-button-warps-slider=1
 gtk-toolbar-style=3
@@ -10,5 +10,5 @@ gtk-cursor-theme-size=32
 gtk-cursor-theme-name="Simp1e-Gruvbox-Dark"
 gtk-sound-theme-name="ocean"
 gtk-icon-theme-name="Gruvbox-Plus-Dark"
-gtk-font-name="Iosevka Nerd Font,  10"
+gtk-font-name="Inter Variable,  12"
 
