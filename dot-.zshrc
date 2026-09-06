@@ -1,22 +1,6 @@
 # ============================================================
 # VINICIUS — ZSH
-# Fedora / Arch + Hyprland + Kitty + Neovim + Yazi + FZF
 # ============================================================
-
-
-# ============================================================
-# PROFILING
-# ============================================================
-#
-# Para diagnosticar startup:
-#
-#   zmodload zsh/zprof
-#   zprof
-#
-# Não deixe habilitado normalmente.
-#
-
-# zmodload zsh/zprof
 
 
 # ============================================================
@@ -27,8 +11,10 @@ typeset -U path
 
 path=(
     "$HOME/.local/bin"
-    "$HOME/go/bin"
     "$HOME/.local/lib/npm/bin"
+    "$HOME/.cargo/bin"
+    "$HOME/go/bin"
+    "$HOME/.spicetify"
     $path
 )
 
@@ -36,7 +22,7 @@ export PATH
 
 
 # ============================================================
-# EDITORES / TERMINAL
+# EDITOR / TERMINAL
 # ============================================================
 
 export EDITOR='nvim'
@@ -63,24 +49,16 @@ export _JAVA_AWT_WM_NONREPARENTING=1
 # ZSH — COMPORTAMENTO
 # ============================================================
 
-# cd sem precisar escrever "cd"
 setopt autocd
 
-# Histórico de diretórios
 setopt auto_pushd
 setopt pushd_ignore_dups
 setopt pushd_silent
 
-# Não gerar erro quando glob não encontrar nada
 setopt no_nomatch
 
-# Permitir substituições no prompt
 setopt prompt_subst
-
-# Comentários interativos
 setopt interactive_comments
-
-# Ctrl+D não encerra o shell acidentalmente
 setopt ignore_eof
 
 
@@ -90,48 +68,29 @@ setopt ignore_eof
 
 HISTFILE="$HOME/.zsh_history"
 
-# Quantidade em memória
 HISTSIZE=100000
-
-# Quantidade salva no arquivo
 SAVEHIST=50000
 
-# Compartilhar histórico entre shells
+# Compartilha histórico entre todas as sessões.
 setopt share_history
 
-# Salvar comandos imediatamente
-setopt inc_append_history
+# IMPORTANTE:
+# SHARE_HISTORY já cuida da gravação incremental.
+# Não usamos INC_APPEND_HISTORY junto dele.
 
-# Não salvar duplicados consecutivos
 setopt hist_ignore_dups
-
-# Remover duplicados antigos
 setopt hist_ignore_all_dups
-
-# Busca no histórico sem duplicação
 setopt hist_find_no_dups
-
-# Não salvar duplicados no arquivo
 setopt hist_save_no_dups
-
-# Expirar primeiro os duplicados
 setopt hist_expire_dups_first
-
-# Comandos precedidos por espaço não entram no histórico
 setopt hist_ignore_space
-
-# Reduzir espaços redundantes
 setopt hist_reduce_blanks
-
-# Mostrar comando expandido antes de executar
 setopt hist_verify
-
-# Lock seguro do arquivo de histórico
 setopt hist_fcntl_lock
 
 
 # ============================================================
-# COMPLETION — CACHE
+# COMPLETION
 # ============================================================
 
 ZCACHEDIR="$HOME/.cache/zsh"
@@ -140,10 +99,8 @@ ZCOMPDUMP="$ZCACHEDIR/.zcompdump"
 mkdir -p "$ZCACHEDIR"
 
 autoload -Uz compinit
-
 compinit -d "$ZCOMPDUMP"
 
-# Compilar o dump para acelerar carregamento
 if [[ -r "$ZCOMPDUMP" &&
       ( ! -r "${ZCOMPDUMP}.zwc" ||
         "$ZCOMPDUMP" -nt "${ZCOMPDUMP}.zwc" ) ]]; then
@@ -152,7 +109,7 @@ fi
 
 
 # ============================================================
-# COMPLETION — MÓDULO AVANÇADO
+# COMPLETION — MÓDULO
 # ============================================================
 
 zmodload -i zsh/complist
@@ -163,59 +120,160 @@ zmodload -i zsh/complist
 # ============================================================
 
 zstyle ':completion:*' menu select
-
 zstyle ':completion:*' group-name ''
 
 zstyle ':completion:*' use-cache on
 zstyle ':completion:*' cache-path "$ZCACHEDIR"
 
-# Case insensitive
-# Também trata . _ -
 zstyle ':completion:*' matcher-list \
     'm:{a-zA-Z}={A-Za-z}' \
     'r:|[._-]=* r:|=*'
 
-# Cores usando LS_COLORS
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 
-# Melhor comportamento com paths
 zstyle ':completion:*' squeeze-slashes true
-
-# Atualizar command hash quando necessário
 zstyle ':completion:*' rehash true
-
-# Diretórios primeiro
 zstyle ':completion:*' list-dirs-first true
 
-# Prompt ao navegar por uma lista grande
 zstyle ':completion:*' select-prompt '%SScrolling active: %p%s'
-
-
-# ============================================================
-# COMPLETION — MENU SELECTION
-# ============================================================
-
-bindkey -M menuselect '^[[A' up-line-or-history
-bindkey -M menuselect '^[[B' down-line-or-history
-bindkey -M menuselect '^[[C' forward-char
-bindkey -M menuselect '^[[D' backward-char
-
-bindkey -M menuselect '^P' up-line-or-history
-bindkey -M menuselect '^N' down-line-or-history
 
 
 # ============================================================
 # ZLE — MODO EMACS
 # ============================================================
+#
+# Usamos o modo Emacs porque ele é a melhor base para o
+# conjunto de atalhos Ctrl/Alt que estamos criando.
+#
 
 bindkey -e
 
 
 # ============================================================
-# ZLE — PALAVRAS
+# ZLE — DEFINIÇÃO DE PALAVRA
 # ============================================================
+#
+# "/" é considerado separador.
+#
+# Exemplo:
+#
+# ~/Documentos/projeto/teste.txt
+#
+# Ctrl+B / Ctrl+W conseguem navegar por cada componente.
+#
 
 WORDCHARS=${WORDCHARS//\/}
+
+
+# ============================================================
+# ZLE — NAVEGAÇÃO PRINCIPAL
+# ============================================================
+#
+# CTRL+B
+#   início da palavra anterior
+#
+# CTRL+W
+#   início da próxima palavra
+#
+# CTRL+E
+#   final da próxima palavra
+#
+# CTRL+A
+#   início absoluto do comando
+#
+# CTRL+I
+#   fim absoluto do comando
+#
+# CTRL+F
+#   um caractere para a direita
+#
+# ============================================================
+
+bindkey '^B' backward-word
+bindkey '^W' forward-word
+bindkey '^E' emacs-forward-word
+
+bindkey '^A' beginning-of-line
+bindkey '^I' end-of-line
+
+bindkey '^F' forward-char
+
+
+# ============================================================
+# ZLE — SETAS CTRL
+# ============================================================
+#
+# Ctrl+←
+#   início da palavra anterior
+#
+# Ctrl+→
+#   início da próxima palavra
+#
+
+bindkey '^[[1;5D' backward-word
+bindkey '^[[1;5C' forward-word
+
+bindkey '^[[1;5A' up-line-or-history
+bindkey '^[[1;5B' down-line-or-history
+
+
+# ============================================================
+# ZLE — BACKSPACE / DELETE
+# ============================================================
+#
+# BACKSPACE
+#   somente 1 caractere
+#
+# CTRL+BACKSPACE
+#   palavra anterior
+#
+# DELETE
+#   somente 1 caractere à frente
+#
+# CTRL+DELETE
+#   palavra seguinte
+#
+
+bindkey '^H' backward-delete-char
+bindkey '^?' backward-delete-char
+
+bindkey '^D' delete-char
+
+bindkey '^[[127;5u' backward-kill-word
+bindkey '^[[3;5~' kill-word
+
+
+# ============================================================
+# ZLE — APAGAR TRECHOS
+# ============================================================
+#
+# Ctrl+U
+#   apaga do cursor até o início
+#
+# Ctrl+K
+#   apaga do cursor até o fim
+#
+
+bindkey '^U' backward-kill-line
+bindkey '^K' kill-line
+
+
+# ============================================================
+# ZLE — OUTROS ATALHOS
+# ============================================================
+
+# Ctrl+Y
+# cola o último texto apagado
+bindkey '^Y' yank
+
+# Ctrl+T
+# troca os dois caracteres anteriores
+bindkey '^T' transpose-chars
+
+# Alt+Backspace
+# apaga palavra anterior
+bindkey '^[^?' backward-kill-word
+bindkey '^[^H' backward-kill-word
 
 
 # ============================================================
@@ -255,7 +313,6 @@ autoload -Uz history-incremental-pattern-search-backward
 
 zle -N history-incremental-pattern-search-backward
 
-# Fallback caso FZF não esteja disponível.
 bindkey '^R' history-incremental-pattern-search-backward
 
 
@@ -276,17 +333,19 @@ bindkey '^[l' zle_clear_screen
 
 
 # ============================================================
-# ZLE — OUTROS WIDGETS ÚTEIS
+# ZLE — OUTROS
 # ============================================================
 
 autoload -Uz expand-absolute-path
 zle -N expand-absolute-path
 
+bindkey '^[/ ' expand-absolute-path 2>/dev/null || true
 bindkey '^[/' expand-absolute-path
 
-bindkey '^[.' copy-prev-shell-word
+bindkey '^[[1;5D' backward-word
+bindkey '^[[1;5C' forward-word
 
-bindkey '^[_' insert-last-word
+bindkey '^[.' copy-prev-shell-word
 
 bindkey '^_' undo
 bindkey '^[u' undo
@@ -294,7 +353,7 @@ bindkey '^[U' redo
 
 
 # ============================================================
-# ZLE — BRACKETED PASTE
+# BRACKETED PASTE
 # ============================================================
 
 autoload -Uz bracketed-paste-magic
@@ -312,7 +371,6 @@ fi
 autoload -Uz run-help
 
 unalias run-help 2>/dev/null
-
 alias run-help=run-help
 
 
@@ -346,7 +404,6 @@ export FZF_DEFAULT_OPTS='
 
 # ============================================================
 # FZF — INTEGRAÇÃO ZSH
-# Compatível com layouts Fedora / Arch
 # ============================================================
 
 for fzf_bindings in \
@@ -381,7 +438,6 @@ fi
 
 # ============================================================
 # ZSH AUTOSUGGESTIONS
-# Compatível com layouts Fedora / Arch
 # ============================================================
 
 export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#665c54'
@@ -406,7 +462,6 @@ done
 
 # ============================================================
 # ZSH SYNTAX HIGHLIGHTING
-# Compatível com layouts Fedora / Arch
 # ============================================================
 
 export ZSH_HIGHLIGHT_HIGHLIGHTERS=(
@@ -447,7 +502,7 @@ fi
 
 
 # ============================================================
-# ALIASES — EDITORES
+# ALIASES — EDITOR
 # ============================================================
 
 alias v='nvim'
@@ -455,10 +510,29 @@ alias sv='sudo nvim'
 
 
 # ============================================================
+# ALIASES — PRODUTIVIDADE
+# ============================================================
+
+alias z='nvim ~/.zshrc'
+alias sz='source ~/.zshrc'
+alias q='exit'
+
+
+# ============================================================
 # ALIASES — SISTEMA
 # ============================================================
 
 alias restart='systemctl --user restart'
+
+alias psg='ps aux | grep -i'
+alias k='pkill'
+
+alias ip='ip -c'
+alias ports='ss -tulpen'
+
+alias ff='fastfetch'
+
+alias vs='vdirsyncer sync'
 
 
 # ============================================================
@@ -492,12 +566,10 @@ alias rg='rg --smart-case'
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
-alias ~='cd ~'
 
 
 # ============================================================
 # GERENCIADOR DE PACOTES
-# Fedora + Arch
 # ============================================================
 
 if (( $+commands[dnf5] )); then
@@ -519,14 +591,12 @@ elif (( $+commands[pacman] )); then
     alias p='sudo pacman -S'
     alias pu='sudo pacman -Syu'
     alias pr='sudo pacman -Rns'
-    alias po='pacman -Qtdq'
 
 fi
 
 
 # ============================================================
-# AUR
-# Arch somente — yay / paru
+# AUR — YAY / PARU
 # ============================================================
 
 if (( $+commands[yay] )); then
@@ -545,133 +615,7 @@ fi
 
 
 # ============================================================
-# ALIASES — SISTEMA
-# ============================================================
-
-alias psg='ps aux | grep -i'
-alias k='pkill'
-
-alias ip='ip -c'
-alias ports='ss -tulpen'
-
-alias ff='fastfetch'
-
-alias vs='vdirsyncer sync'
-alias ds='doom sync'
-
-
-# ============================================================
-# THEME TOGGLE — Alt+S
-# ============================================================
-
-toggle-theme() {
-
-    if [[ -f ~/.config/theme/current ]]; then
-
-        local current
-        current=$(<~/.config/theme/current)
-
-        if [[ "$current" == "dark" ]]; then
-            light
-        else
-            dark
-        fi
-
-    else
-
-        dark
-
-    fi
-}
-
-toggle-theme-widget() {
-    toggle-theme
-    zle reset-prompt
-}
-
-zle -N toggle-theme-widget
-bindkey '^[s' toggle-theme-widget
-
-
-# ============================================================
-# SISTEMA DE TEMAS — GRUVBOX MATERIAL
-# ============================================================
-
-theme_light() {
-
-    mkdir -p ~/.config/theme
-
-    # Estado global
-    echo "light" > ~/.config/theme/current
-
-    # Kitty — tema persistente
-    if [[ -f ~/.config/kitty/gruvbox-light.conf ]]; then
-        cp ~/.config/kitty/gruvbox-light.conf \
-           ~/.config/kitty/current-theme.conf
-    fi
-
-    # Kitty — aplicar imediatamente
-    if (( $+commands[kitty] )); then
-        kitty @ set-colors \
-            --all ~/.config/kitty/gruvbox-light.conf \
-            2>/dev/null || true
-    fi
-
-    # btop
-    if [[ -f ~/.config/btop/themes/gruvbox-material-light.theme ]]; then
-        cp ~/.config/btop/themes/gruvbox-material-light.theme \
-           ~/.config/btop/themes/current.theme
-    fi
-
-    echo "Tema LIGHT ativado."
-}
-
-
-theme_dark() {
-
-    mkdir -p ~/.config/theme
-
-    # Estado global
-    echo "dark" > ~/.config/theme/current
-
-    # Kitty — tema persistente
-    if [[ -f ~/.config/kitty/gruvbox-dark.conf ]]; then
-        cp ~/.config/kitty/gruvbox-dark.conf \
-           ~/.config/kitty/current-theme.conf
-    fi
-
-    # Kitty — aplicar imediatamente
-    if (( $+commands[kitty] )); then
-        kitty @ set-colors \
-            --all ~/.config/kitty/gruvbox-dark.conf \
-            2>/dev/null || true
-    fi
-
-    # btop
-    if [[ -f ~/.config/btop/themes/gruvbox-material-dark.theme ]]; then
-        cp ~/.config/btop/themes/gruvbox-material-dark.theme \
-           ~/.config/btop/themes/current.theme
-    fi
-
-    echo "Tema DARK ativado."
-}
-
-
-alias light='theme_light'
-alias dark='theme_dark'
-
-
-# ============================================================
-# ALIASES — PRODUTIVIDADE
-# ============================================================
-
-alias z='nvim ~/.zshrc'
-alias sz='source ~/.zshrc'
-alias q='exit'
-
-
-# ============================================================
-# FUNÇÃO — CRIAR DIRETÓRIO E ENTRAR
+# MKCD
 # ============================================================
 
 mkcd() {
@@ -684,7 +628,7 @@ mkcd() {
 
 
 # ============================================================
-# FUNÇÃO — EXTRAIR ARQUIVOS
+# EXTRACT
 # ============================================================
 
 extract() {
@@ -695,34 +639,28 @@ extract() {
     fi
 
     case "$1" in
-
         *.tar.bz2) tar xjf "$1" ;;
         *.tar.gz)  tar xzf "$1" ;;
         *.tar.xz)  tar xJf "$1" ;;
         *.tar.zst) tar --zstd -xf "$1" ;;
         *.tar)     tar xf "$1" ;;
-
         *.bz2)     bunzip2 "$1" ;;
         *.gz)      gunzip "$1" ;;
         *.xz)      xz -d "$1" ;;
         *.zst)     unzstd "$1" ;;
-
         *.zip)     unzip "$1" ;;
         *.7z)      7z x "$1" ;;
         *.rar)     unrar x "$1" ;;
-
         *)
             print -u2 "Formato não suportado: $1"
             return 1
             ;;
-
     esac
 }
 
 
 # ============================================================
-# FUNÇÃO — LIMPAR PACOTES NÃO UTILIZADOS
-# Fedora + Arch
+# CLEAN
 # ============================================================
 
 clean() {
@@ -742,13 +680,9 @@ clean() {
         pkgs=("${(@f)$(pacman -Qtdq 2>/dev/null)}")
 
         if (( ${#pkgs} )); then
-
             sudo pacman -Rns -- "${pkgs[@]}"
-
         else
-
             print "Nenhum pacote órfão encontrado."
-
         fi
 
     else
@@ -761,7 +695,7 @@ clean() {
 
 
 # ============================================================
-# FUNÇÃO — ZOXIDE + FZF
+# ZOXIDE + FZF
 # ============================================================
 
 j() {
@@ -784,26 +718,22 @@ j() {
 
 
 # ============================================================
-# FUNÇÃO — ENTRAR EM DIRETÓRIO E ABRIR YAZI
+# YAZI
 # ============================================================
 
 yazi-here() {
 
     if (( $+commands[yazi] )); then
-
         yazi
-
     else
-
         print -u2 "yazi não encontrado."
         return 127
-
     fi
 }
 
 
 # ============================================================
-# FUNÇÃO — EDITAR ZSHRC
+# EDITAR ZSHRC
 # ============================================================
 
 zsh-edit() {
@@ -812,7 +742,7 @@ zsh-edit() {
 
 
 # ============================================================
-# FUNÇÃO — RECARREGAR ZSH
+# RECARREGAR ZSH
 # ============================================================
 
 zsh-reload() {
@@ -821,7 +751,7 @@ zsh-reload() {
 
 
 # ============================================================
-# FUNÇÃO — VER PATH
+# MOSTRAR PATH
 # ============================================================
 
 path-show() {
@@ -830,7 +760,7 @@ path-show() {
 
 
 # ============================================================
-# FUNÇÃO — PORTAS EM ESCUTA
+# PORTAS
 # ============================================================
 
 ports-listen() {
@@ -839,7 +769,7 @@ ports-listen() {
 
 
 # ============================================================
-# FUNÇÃO — QUAL COMANDO ESTÁ SENDO EXECUTADO
+# WHERE
 # ============================================================
 
 where() {
@@ -851,21 +781,16 @@ where() {
         print -n "$cmd: "
 
         if (( $+commands[$cmd] )); then
-
             print -r -- "$commands[$cmd]"
 
         elif (( $+builtins[$cmd] )); then
-
             print -r -- "zsh builtin"
 
         elif (( $+functions[$cmd] )); then
-
             print -r -- "zsh function"
 
         else
-
             print -r -- "not found"
-
         fi
 
     done
@@ -876,16 +801,11 @@ where() {
 # DIRETÓRIOS NOMEADOS
 # ============================================================
 
-hash -d estudos="$HOME/Estudos"
+hash -d estudos="$HOME/Documentos/Estudos/"
 hash -d config="$HOME/.config"
+hash -d obsidian="$HOME/Obsidian/Auditor/"
 
 
 # ============================================================
-# END
+# FIM
 # ============================================================
-
-export PATH=$PATH:/home/viana/.spicetify
-export PATH="$HOME/.spicetify:$PATH"
-export PATH="$HOME/.cargo/bin:$PATH"
-export PATH="$HOME/go/bin:$PATH"
-export PATH="$HOME/.cargo/bin:$PATH"
