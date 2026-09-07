@@ -7,8 +7,8 @@ gtk-button-images=1
 gtk-cursor-blink-time=1000
 gtk-cursor-blink=1
 gtk-cursor-theme-size=32
-gtk-cursor-theme-name="Simp1e-Gruvbox-Dark"
+gtk-cursor-theme-name="breeze_cursors"
 gtk-sound-theme-name="ocean"
-gtk-icon-theme-name="Gruvbox-Plus-Dark"
+gtk-icon-theme-name="breeze"
 gtk-font-name="Inter Variable,  12"
 
