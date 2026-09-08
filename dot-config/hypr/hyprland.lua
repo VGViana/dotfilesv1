@@ -90,3 +90,27 @@ require("dms.cursor")
 require("dms.binds")
 require("dms.binds-user")
 require("dms.windowrules")
+
+-- ============================================================
+-- LAPTOP LID / EXTERNAL MONITOR
+-- ============================================================
+
+-- Tampa fechada:
+--   - desabilita a tela interna
+--   - coloca o LG sozinho em 1920x1080@100
+hl.bind(
+	"switch:on:Lid Switch",
+	hl.dsp.exec_cmd(
+		'hyprctl eval \'hl.monitor({ output = "eDP-1", disabled = true }); hl.monitor({ output = "HDMI-A-1", mode = "1920x1080@100", position = "0x0", scale = 1 })\''
+	)
+)
+
+-- Tampa aberta:
+--   - reativa a tela interna em 1920x1080@60
+--   - coloca o LG à direita em 1920x1080@100
+hl.bind(
+	"switch:off:Lid Switch",
+	hl.dsp.exec_cmd(
+		'sleep 1; hyprctl eval \'hl.monitor({ output = "eDP-1", mode = "1920x1080@60", position = "0x0", scale = 1 }); hl.monitor({ output = "HDMI-A-1", mode = "1920x1080@100", position = "1920x0", scale = 1 })\''
+	)
+)
