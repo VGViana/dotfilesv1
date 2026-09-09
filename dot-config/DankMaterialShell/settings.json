@@ -25,12 +25,14 @@
   "calendarBackend": "dankcal",
   "clockFormat": "24h",
   "animationSpeed": 4,
-  "customAnimationDuration": 1,
+  "customAnimationDuration": 200,
+  "syncComponentAnimationSpeeds": false,
   "popoutAnimationSpeed": 4,
   "modalAnimationSpeed": 4,
-  "reduceMotion": true,
   "springBounce": 0,
   "enableRippleEffects": false,
+  "animationVariant": 2,
+  "motionEffect": 2,
   "m3ElevationColorMode": "primary",
   "blurForegroundLayers": false,
   "blurBorderEnabled": false,
@@ -73,6 +75,9 @@
     }
   ],
   "networkPreference": "wifi",
+  "iconThemeDark": "Simp1e-Gruvbox-Dark",
+  "iconThemeLight": "Simp1e-Gruvbox-Dark",
+  "iconThemePerMode": true,
   "cursorSettings": {
     "theme": "Simp1e-Gruvbox-Dark",
     "size": 30,
@@ -109,46 +114,7 @@
   "lockScreenFontFamily": "JetBrainsMono Nerd Font Mono",
   "notificationCompactMode": true,
   "notificationPopupPosition": 3,
-  "dankIslandBarId": "default",
-  "dankIslandInteractionMode": "click",
-  "dankIslandHoverOpenDelay": 0,
-  "dankIslandHoverCloseDelay": 0,
-  "dankIslandPalette": "dim",
-  "dankIslandCornerRadius": 10,
-  "dankIslandHighContrast": true,
-  "dankIslandHomeLayout": [
-    {
-      "id": "media",
-      "enabled": true
-    },
-    {
-      "id": "clock",
-      "enabled": true
-    },
-    {
-      "id": "weather",
-      "enabled": false
-    },
-    {
-      "id": "status",
-      "enabled": false
-    },
-    {
-      "id": "volume",
-      "enabled": false
-    },
-    {
-      "id": "brightness",
-      "enabled": false
-    },
-    {
-      "id": "notifications",
-      "enabled": false
-    }
-  ],
-  "dankIslandBatteryStyle": "outline",
-  "dankIslandSatelliteSwoopRadius": 28,
-  "dankIslandReducedMotion": true,
+  "notificationAnimationSpeed": 4,
   "osdPowerProfileEnabled": true,
   "displayProfileAutoSelect": true,
   "barConfigs": [
@@ -242,7 +208,43 @@
       "hoverPopouts": false,
       "hoverPopoutDelay": 150,
       "attachToScreenEdge": false,
-      "batteryColorMode": "level"
+      "batteryColorMode": "level",
+      "island": true,
+      "islandPalette": "dim",
+      "islandCornerRadius": 10,
+      "islandHighContrast": true,
+      "islandHomeLayout": [
+        {
+          "id": "media",
+          "enabled": true
+        },
+        {
+          "id": "clock",
+          "enabled": true
+        },
+        {
+          "id": "weather",
+          "enabled": false
+        },
+        {
+          "id": "status",
+          "enabled": false
+        },
+        {
+          "id": "volume",
+          "enabled": false
+        },
+        {
+          "id": "brightness",
+          "enabled": false
+        },
+        {
+          "id": "notifications",
+          "enabled": false
+        }
+      ],
+      "islandBatteryStyle": "outline",
+      "islandSatelliteSwoopRadius": 28
     }
   ],
   "desktopClockCustomColor": {
@@ -286,5 +288,5 @@
     }
   },
   "barInsetPaddingSyncAll": true,
-  "configVersion": 17
+  "configVersion": 18
 }
