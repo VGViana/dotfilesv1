@@ -49,8 +49,6 @@ export _JAVA_AWT_WM_NONREPARENTING=1
 # ZSH — COMPORTAMENTO
 # ============================================================
 
-fastfetch
-
 setopt autocd
 
 setopt auto_pushd
