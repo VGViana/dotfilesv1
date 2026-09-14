@@ -2,7 +2,7 @@
     "allDayReminderDaysBefore": 0,
     "allDayReminderTime": "09:00",
     "allDayReminders": false,
-    "closeBehavior": "minimize",
+    "closeBehavior": "quit",
     "colorSource": "auto",
     "coreHoursEnabled": false,
     "coreHoursEnd": 17,
@@ -15,7 +15,7 @@
     ],
     "firstDayOfWeek": -1,
     "language": "",
-    "lastView": "day",
+    "lastView": "week",
     "monthEventTitleLines": 1,
     "monthShowAllEvents": false,
     "notificationSounds": true,
@@ -33,5 +33,5 @@
     "timeFormat": "24h",
     "timeLocale": "",
     "use24HourClock": true,
-    "weekEventTitleLines": 1
+    "weekEventTitleLines": 3
 }
