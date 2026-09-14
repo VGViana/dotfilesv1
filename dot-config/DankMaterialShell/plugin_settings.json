@@ -26,5 +26,8 @@
     "pomodoroShortBreakMinutes": 10,
     "pomodoroLongBreakMinutes": 20,
     "defaultTimerMinutes": 90
+  },
+  "homeAssistantMonitor": {
+    "enabled": true
   }
 }

@@ -24,12 +24,9 @@
   "firstDayOfWeek": 0,
   "calendarBackend": "dankcal",
   "clockFormat": "24h",
-  "animationSpeed": 0,
   "customAnimationDuration": 0,
   "syncComponentAnimationSpeeds": false,
-  "popoutAnimationSpeed": 0,
-  "modalAnimationSpeed": 0,
-  "springBounce": 0,
+  "springBounce": 2,
   "enableRippleEffects": false,
   "animationVariant": 2,
   "motionEffect": 2,
@@ -75,9 +72,6 @@
     }
   ],
   "networkPreference": "wifi",
-  "iconThemeDark": "Simp1e-Gruvbox-Dark",
-  "iconThemeLight": "Simp1e-Gruvbox-Dark",
-  "iconThemePerMode": true,
   "cursorSettings": {
     "theme": "Simp1e-Gruvbox-Dark",
     "size": 30,
