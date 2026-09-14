@@ -250,9 +250,10 @@
       "islandAlongOffset": 0,
       "islandMediaClockVisible": true,
       "islandSatelliteBackground": true,
-      "islandSatelliteGothCorners": true,
-      "islandInteractionMode": "click",
-      "islandReducedMotion": false
+      "islandSatelliteGothCorners": false,
+      "islandInteractionMode": "hybrid",
+      "islandReducedMotion": true,
+      "islandSatellitesEnabled": true
     }
   ],
   "desktopClockCustomColor": {
