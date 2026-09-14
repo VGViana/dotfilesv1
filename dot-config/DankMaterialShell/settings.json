@@ -24,12 +24,12 @@
   "firstDayOfWeek": 0,
   "calendarBackend": "dankcal",
   "clockFormat": "24h",
-  "customAnimationDuration": 0,
+  "animationSpeed": 4,
+  "customAnimationDuration": 200,
   "popoutAnimationSpeed": 0,
   "modalAnimationSpeed": 0,
   "enableRippleEffects": false,
   "animationVariant": 2,
-  "motionEffect": 1,
   "m3ElevationColorMode": "primary",
   "blurForegroundLayers": false,
   "blurBorderEnabled": false,
@@ -41,6 +41,7 @@
   "mediaUseAlbumArtAccent": true,
   "audioDeviceScrollVolumeEnabled": true,
   "appIdSubstitutions": [],
+  "clockDateFormat": "MMM d",
   "greeterWallpaperPath": "/home/viana/Imagens/Wallpapers/campo.jpg",
   "greeterFontFamily": "Iosevka NF",
   "greeterWallpaperFillMode": "Fill",
@@ -48,6 +49,7 @@
     "apps": "list"
   },
   "dankLauncherV2ShowSourceBadges": false,
+  "launcherStyle": "island",
   "useAutoLocation": true,
   "dashTabs": [
     {
@@ -88,7 +90,9 @@
       "cursorHideTimeout": 0
     }
   },
+  "launcherLogoMode": "os",
   "monoFontFamily": "Iosevka Nerd Font",
+  "textRenderType": 1,
   "textRenderQuality": 2,
   "notepadShowLineNumbers": true,
   "notepadUseCompositorGap": true,
@@ -163,8 +167,8 @@
       "widgetTransparency": 1,
       "squareCorners": false,
       "noBackground": false,
-      "maximizeWidgetIcons": false,
-      "maximizeWidgetText": false,
+      "maximizeWidgetIcons": true,
+      "maximizeWidgetText": true,
       "removeWidgetPadding": false,
       "widgetPadding": 8,
       "gothCornersEnabled": false,
@@ -203,8 +207,8 @@
       "attachToScreenEdge": false,
       "batteryColorMode": "level",
       "island": true,
-      "islandPalette": "dim",
-      "islandCornerRadius": 10,
+      "islandPalette": "default",
+      "islandCornerRadius": 8,
       "islandHighContrast": true,
       "islandHomeLayout": [
         {
@@ -237,7 +241,18 @@
         }
       ],
       "islandBatteryStyle": "outline",
-      "islandSatelliteSwoopRadius": 28
+      "islandSatelliteSwoopRadius": 24,
+      "islandFloating": false,
+      "islandUseOverlayLayer": false,
+      "islandReserveThickness": 24,
+      "islandCompactThickness": 30,
+      "islandOuterGap": 4,
+      "islandAlongOffset": 0,
+      "islandMediaClockVisible": true,
+      "islandSatelliteBackground": true,
+      "islandSatelliteGothCorners": true,
+      "islandInteractionMode": "click",
+      "islandReducedMotion": false
     }
   ],
   "desktopClockCustomColor": {
@@ -268,7 +283,8 @@
   },
   "builtInPluginSettings": {
     "dms_settings_search": {
-      "trigger": "?"
+      "trigger": "?",
+      "enabled": true
     },
     "dms_clipboard_search": {
       "trigger": "cb"
@@ -278,6 +294,11 @@
     },
     "dms_qr_generator": {
       "trigger": "qrg"
+    }
+  },
+  "launcherPluginVisibility": {
+    "dms_settings_search": {
+      "allowWithoutTrigger": true
     }
   },
   "barInsetPaddingSyncAll": true,

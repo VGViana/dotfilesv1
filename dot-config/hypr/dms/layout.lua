@@ -13,11 +13,8 @@ hl.config({
 })
 
 hl.layer_rule({
-	match = { namespace = "^dms:bar$" },
+	match = { namespace = "^dms:.*$" },
 	xray = true,
 })
 
-hl.layer_rule({
-	match = { namespace = "^dms:dankisland$" },
-	xray = true,
-})
+-- bar-xray off
