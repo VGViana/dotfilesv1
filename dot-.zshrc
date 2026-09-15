@@ -808,3 +808,6 @@ hash -d obsidian="$HOME/Obsidian/Auditor/"
 # ============================================================
 # FIM
 # ============================================================
+
+# OpenSSH agent
+export SSH_AUTH_SOCK=/run/user/1000/ssh-agent.socket
