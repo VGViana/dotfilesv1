@@ -13,7 +13,8 @@
         "flavor": "material-soft-dark",
         "accent": "green"
       }
-    }
+    },
+    "flexoki": "green"
   },
   "dockTransparency": 0.85,
   "floatingWindowSyncGlobal": false,
