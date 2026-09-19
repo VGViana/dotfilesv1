@@ -1,7 +1,7 @@
 {
   "currentThemeName": "custom",
-  "currentThemeCategory": "registry",
-  "customThemeFile": "/home/viana/.config/DankMaterialShell/themes/gruvboxMulti/theme.json",
+  "currentThemeCategory": "custom",
+  "customThemeFile": "/home/viana/.config/DankMaterialShell/themes/gruvbox.json",
   "registryThemeVariants": {
     "gruvboxMaterial": "soft",
     "gruvboxMulti": {
@@ -20,7 +20,7 @@
   "floatingWindowSyncGlobal": false,
   "cornerRadius": 12,
   "hyprlandLayoutGapsOutOverride": 0,
-  "hyprlandLayoutRadiusOverride": 0,
+  "hyprlandLayoutRadiusOverride": 10,
   "hyprlandLayoutBorderSize": 0,
   "firstDayOfWeek": 0,
   "calendarBackend": "dankcal",
@@ -209,7 +209,7 @@
       "batteryColorMode": "level",
       "island": true,
       "islandPalette": "default",
-      "islandCornerRadius": 8,
+      "islandCornerRadius": 10,
       "islandHighContrast": true,
       "islandHomeLayout": [
         {

@@ -1,0 +1,139 @@
+{
+  "id": "gruvboxMulti",
+  "name": "Gruvbox Material Soft",
+  "version": "1.0.0",
+  "author": "Useekaw",
+  "description": "Sainnhe Gruvbox Material Soft palette for DMS — dark and light",
+  "dark": {},
+  "light": {},
+  "variants": {
+    "type": "multi",
+    "defaults": {
+      "dark": {
+        "accent": "green",
+        "flavor": "material-soft-dark"
+      },
+      "light": {
+        "accent": "green",
+        "flavor": "material-soft-light"
+      }
+    },
+    "flavors": [
+      {
+        "id": "material-soft-dark",
+        "name": "Mat. S",
+        "dark": {
+          "surface": "#252423",
+          "surfaceText": "#d4be98",
+          "surfaceVariant": "#3c3836",
+          "surfaceVariantText": "#ddc7a1",
+          "background": "#32302f",
+          "backgroundText": "#d4be98",
+          "outline": "#a89984",
+          "surfaceContainer": "#3c3836",
+          "surfaceContainerHigh": "#504945",
+          "surfaceContainerHighest": "#665c54",
+          "error": "#ea6962",
+          "warning": "#d8a657",
+          "info": "#7daea3"
+        },
+        "light": {}
+      },
+      {
+        "id": "material-soft-light",
+        "name": "Mat. S",
+        "dark": {},
+        "light": {
+          "surface": "#ebdbb2",
+          "surfaceText": "#654735",
+          "surfaceVariant": "#eddeb5",
+          "surfaceVariantText": "#4f3829",
+          "background": "#f2e5bc",
+          "backgroundText": "#654735",
+          "outline": "#a89984",
+          "surfaceContainer": "#eddeb5",
+          "surfaceContainerHigh": "#e6d5ae",
+          "surfaceContainerHighest": "#d5c4a1",
+          "error": "#c14a4a",
+          "warning": "#b47109",
+          "info": "#45707a"
+        }
+      }
+    ],
+    "accents": [
+      {
+        "id": "green",
+        "material-soft-dark": {
+          "primary": "#a9b665",
+          "primaryText": "#252423",
+          "primaryContainer": "#555c34",
+          "secondary": "#e78a4e",
+          "surfaceTint": "#424a3e"
+        },
+        "material-soft-light": {
+          "primary": "#6c782e",
+          "primaryText": "#ebdbb2",
+          "primaryContainer": "#6f8352",
+          "secondary": "#c35e0a",
+          "surfaceTint": "#d7d9ae"
+        },
+        "name": "Green"
+      },
+      {
+        "id": "blue",
+        "material-soft-dark": {
+          "primary": "#7daea3",
+          "primaryText": "#252423",
+          "primaryContainer": "#355a58",
+          "secondary": "#e78a4e",
+          "surfaceTint": "#404946"
+        },
+        "material-soft-light": {
+          "primary": "#45707a",
+          "primaryText": "#ebdbb2",
+          "primaryContainer": "#4f7f8d",
+          "secondary": "#c35e0a",
+          "surfaceTint": "#d3d5b8"
+        },
+        "name": "Blue"
+      },
+      {
+        "id": "yellow",
+        "material-soft-dark": {
+          "primary": "#d8a657",
+          "primaryText": "#252423",
+          "primaryContainer": "#6a4f2d",
+          "secondary": "#e78a4e",
+          "surfaceTint": "#574833"
+        },
+        "material-soft-light": {
+          "primary": "#b47109",
+          "primaryText": "#ebdbb2",
+          "primaryContainer": "#a96b2c",
+          "secondary": "#c35e0a",
+          "surfaceTint": "#f3deaa"
+        },
+        "name": "Yellow"
+      },
+      {
+        "id": "purple",
+        "material-soft-dark": {
+          "primary": "#d3869b",
+          "primaryText": "#252423",
+          "primaryContainer": "#6a4d5d",
+          "secondary": "#e78a4e",
+          "surfaceTint": "#4b3e45"
+        },
+        "material-soft-light": {
+          "primary": "#945e80",
+          "primaryText": "#ebdbb2",
+          "primaryContainer": "#8b6781",
+          "secondary": "#c35e0a",
+          "surfaceTint": "#e8d4ba"
+        },
+        "name": "Purple"
+      }
+    ]
+  },
+  "sourceDir": "gruvbox-material-soft"
+}

@@ -5,9 +5,9 @@
     "header_background": "#6c782e",
     "header_text": "#ebdbb2",
     "footer_background": "#ebdbb2",
-    "footer_text": "#654735",
-    "text_primary": "#4f3829",
-    "text_secondary": "#654735",
+    "footer_text": "#4f3829",
+    "text_primary": "#654735",
+    "text_secondary": "#4f3829",
     "text_accent": "#6c782e",
     "selection_background": "#6c782e",
     "selection_text": "#ebdbb2"
