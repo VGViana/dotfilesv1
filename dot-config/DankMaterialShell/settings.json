@@ -142,6 +142,8 @@
   "notepadUseCompositorGap": true,
   "useSystemSoundTheme": true,
   "soundLogin": true,
+  "acProfileName": "1",
+  "batteryProfileName": "0",
   "batteryChargeLimit": 80,
   "batteryNotifyLow": true,
   "batteryAutoPowerSaver": true,
