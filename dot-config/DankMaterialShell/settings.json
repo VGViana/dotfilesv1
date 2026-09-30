@@ -165,7 +165,7 @@
       "id": "default",
       "name": "Main Bar",
       "enabled": true,
-      "position": 1,
+      "position": 0,
       "screenPreferences": [
         "all"
       ],
@@ -253,7 +253,7 @@
       "attachToScreenEdge": false,
       "batteryColorMode": "level",
       "island": true,
-      "islandPalette": "default",
+      "islandPalette": "bright",
       "islandCornerRadius": 10,
       "islandHighContrast": true,
       "islandHomeLayout": [
@@ -296,10 +296,13 @@
       "islandAlongOffset": 0,
       "islandMediaClockVisible": true,
       "islandSatelliteBackground": true,
-      "islandSatelliteGothCorners": true,
-      "islandInteractionMode": "hybrid",
-      "islandReducedMotion": true,
-      "islandSatellitesEnabled": true
+      "islandSatelliteGothCorners": false,
+      "islandInteractionMode": "click",
+      "islandReducedMotion": false,
+      "islandSatellitesEnabled": false,
+      "islandSpringStiffness": 1200,
+      "islandSpringDamping": 90,
+      "islandSpringMass": 0.25
     }
   ],
   "desktopClockCustomColor": {
