@@ -203,7 +203,10 @@
           "enabled": false
         },
         "battery",
-        "notificationButton"
+        {
+          "id": "notificationButton",
+          "enabled": false
+        }
       ],
       "spacing": 4,
       "innerPadding": 4,
@@ -253,7 +256,7 @@
       "attachToScreenEdge": false,
       "batteryColorMode": "level",
       "island": true,
-      "islandPalette": "bright",
+      "islandPalette": "default",
       "islandCornerRadius": 10,
       "islandHighContrast": true,
       "islandHomeLayout": [
@@ -295,14 +298,16 @@
       "islandOuterGap": 4,
       "islandAlongOffset": 0,
       "islandMediaClockVisible": true,
-      "islandSatelliteBackground": true,
+      "islandSatelliteBackground": false,
       "islandSatelliteGothCorners": false,
       "islandInteractionMode": "click",
       "islandReducedMotion": false,
-      "islandSatellitesEnabled": false,
+      "islandSatellitesEnabled": true,
       "islandSpringStiffness": 1200,
       "islandSpringDamping": 90,
-      "islandSpringMass": 0.25
+      "islandSpringMass": 0.25,
+      "islandSatellitePosition": "edges",
+      "islandSatelliteGap": 19
     }
   ],
   "desktopClockCustomColor": {
