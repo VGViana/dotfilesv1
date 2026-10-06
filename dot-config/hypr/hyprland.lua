@@ -33,7 +33,7 @@ hl.config({
 		active_opacity = 1.0,
 		inactive_opacity = 1.0,
 		shadow = {
-			enabled = false,
+			enabled = true,
 			range = 30,
 			render_power = 5,
 			offset = "0 5",
@@ -52,12 +52,12 @@ hl.config({
 	},
 })
 
-hl.animation({ leaf = "windowsIn", enabled = false, speed = 3, bezier = "default" })
-hl.animation({ leaf = "windowsOut", enabled = false, speed = 3, bezier = "default" })
-hl.animation({ leaf = "workspaces", enabled = false, speed = 5, bezier = "default" })
-hl.animation({ leaf = "windowsMove", enabled = false, speed = 4, bezier = "default" })
-hl.animation({ leaf = "fade", enabled = false, speed = 3, bezier = "default" })
-hl.animation({ leaf = "border", enabled = false, speed = 3, bezier = "default" })
+hl.animation({ leaf = "windowsIn", enabled = true, speed = 3, bezier = "default" })
+hl.animation({ leaf = "windowsOut", enabled = true, speed = 3, bezier = "default" })
+hl.animation({ leaf = "workspaces", enabled = true, speed = 5, bezier = "default" })
+hl.animation({ leaf = "windowsMove", enabled = true, speed = 4, bezier = "default" })
+hl.animation({ leaf = "fade", enabled = true, speed = 3, bezier = "default" })
+hl.animation({ leaf = "border", enabled = true, speed = 3, bezier = "default" })
 
 hl.window_rule({ match = { class = "^(org\\.wezfurlong\\.wezterm)$" }, tile = true })
 hl.window_rule({ match = { class = "^(org\\.gnome\\.)" }, rounding = 12 })
@@ -79,6 +79,7 @@ hl.window_rule({
 	match = { class = "^(firefox)$", title = "^(Picture-in-Picture)$" },
 	float = true,
 })
+
 hl.window_rule({ match = { class = "^(zoom)$" }, float = true })
 hl.layer_rule({ match = { namespace = "^(quickshell)$" }, no_anim = true })
 hl.layer_rule({ match = { namespace = "^dms:.*" }, no_anim = true })
