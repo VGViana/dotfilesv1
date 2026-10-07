@@ -34,7 +34,6 @@
   "blurEnabled": true,
   "blurForegroundLayers": false,
   "blurBorderEnabled": false,
-  "wallpaperFillMode": "Fit",
   "controlCenterShowMicPercent": true,
   "controlCenterWidgets": [
     {
