@@ -22,7 +22,7 @@
     "fontScale": 1.2,
     "fontWeight": 600,
     "language": "",
-    "lastView": "month",
+    "lastView": "day",
     "monthEventTitleLines": 1,
     "monthShowAllEvents": false,
     "notificationSounds": true,
@@ -43,5 +43,6 @@
     "timeFormat": "24h",
     "timeLocale": "",
     "use24HourClock": true,
-    "weekEventTitleLines": 3
+    "weekEventTitleLines": 3,
+    "windowTitleBars": true
 }
