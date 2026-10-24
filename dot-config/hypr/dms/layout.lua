@@ -9,6 +9,9 @@ hl.config({
 	},
 	decoration = {
 		rounding = 10,
+		blur = {
+			passes = 2,
+		},
 	},
 })
 

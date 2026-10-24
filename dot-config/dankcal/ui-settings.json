@@ -2,7 +2,7 @@
     "allDayReminderDaysBefore": 0,
     "allDayReminderTime": "09:00",
     "allDayReminders": false,
-    "animationDuration": 258,
+    "animationDuration": 129,
     "closeBehavior": "minimize",
     "colorSource": "auto",
     "coreHoursEnabled": false,
@@ -20,7 +20,7 @@
     "focusRingEnabled": true,
     "focusRingWidth": 2,
     "fontScale": 1.2,
-    "fontWeight": 600,
+    "fontWeight": 700,
     "language": "",
     "lastView": "week",
     "monthEventTitleLines": 1,
@@ -28,7 +28,7 @@
     "notificationSounds": true,
     "presetTheme": "green",
     "radiusStrength": 10,
-    "reduceMotion": true,
+    "reduceMotion": false,
     "reminderPersist": true,
     "remindersEnabled": true,
     "showTasks": true,
@@ -44,5 +44,5 @@
     "timeLocale": "",
     "use24HourClock": true,
     "weekEventTitleLines": 3,
-    "windowTitleBars": true
+    "windowTitleBars": false
 }
