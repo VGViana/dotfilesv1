@@ -1,4 +1,6 @@
--- DMS user keybind overrides (edit via Control Center or dms; do not remove this header)
+-- Your keybinds. dms setup never overwrites this file.
+-- Loaded after binds.lua: binding a stock key here replaces it, hl.unbind("SUPER + X") frees it.
+-- Saving in the DMS keybind editor rewrites this file and keeps only hl.bind/hl.unbind lines.
 
 hl.unbind("SUPER + C")
 hl.bind("SUPER + C", hl.dsp.exec_cmd("exec dms ipc call dash toggle \"\""))
@@ -112,8 +114,6 @@ hl.unbind("SUPER + CTRL + C")
 hl.unbind("SUPER + CTRL + F")
 hl.bind("SUPER + CTRL + F", hl.dsp.window.fullscreen({ mode = "maximized", action = "toggle" }), { description = "Toggle maximization" })
 hl.unbind("SUPER + CTRL + I")
-hl.unbind("SUPER + CTRL + M")
-hl.bind("SUPER + CTRL + M", hl.dsp.exec_cmd("dms ipc call island toggle media"), { description = "DankIsland: Toggle Media" })
 hl.unbind("SUPER + CTRL + R")
 hl.unbind("SUPER + CTRL + S")
 hl.unbind("SUPER + CTRL + SHIFT + H")
@@ -138,3 +138,5 @@ hl.unbind("SUPER + code:21")
 hl.unbind("SUPER + comma")
 hl.unbind("SUPER + equal")
 hl.unbind("SUPER + minus")
+hl.unbind("SUPER + CTRL + M")
+hl.bind("SUPER + CTRL + M", hl.dsp.exec_cmd("easyeffects"))
