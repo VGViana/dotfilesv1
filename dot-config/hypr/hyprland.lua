@@ -26,14 +26,14 @@ hl.config({
 		gaps_in = 5,
 		gaps_out = 5,
 		border_size = 2,
-		layout = "dwindle",
+		layout = "master",
 	},
 	decoration = {
 		rounding = 12,
 		active_opacity = 1.0,
 		inactive_opacity = 1.0,
 		shadow = {
-			enabled = false,
+			enabled = true,
 			range = 30,
 			render_power = 4,
 			offset = "0 5",
@@ -52,12 +52,12 @@ hl.config({
 	},
 })
 
-hl.animation({ leaf = "windowsIn", enabled = false, speed = 3, bezier = "default" })
-hl.animation({ leaf = "windowsOut", enabled = false, speed = 3, bezier = "default" })
-hl.animation({ leaf = "workspaces", enabled = false, speed = 5, bezier = "default" })
-hl.animation({ leaf = "windowsMove", enabled = false, speed = 4, bezier = "default" })
-hl.animation({ leaf = "fade", enabled = false, speed = 3, bezier = "default" })
-hl.animation({ leaf = "border", enabled = false, speed = 3, bezier = "default" })
+hl.animation({ leaf = "windowsIn", enabled = true, speed = 3, bezier = "default" })
+hl.animation({ leaf = "windowsOut", enabled = true, speed = 3, bezier = "default" })
+hl.animation({ leaf = "workspaces", enabled = true, speed = 5, bezier = "default" })
+hl.animation({ leaf = "windowsMove", enabled = true, speed = 4, bezier = "default" })
+hl.animation({ leaf = "fade", enabled = true, speed = 3, bezier = "default" })
+hl.animation({ leaf = "border", enabled = true, speed = 3, bezier = "default" })
 
 hl.window_rule({ match = { class = "^(org\\.wezfurlong\\.wezterm)$" }, tile = true })
 hl.window_rule({ match = { class = "^(org\\.gnome\\.)" }, rounding = 12 })
@@ -79,7 +79,6 @@ hl.window_rule({
 	match = { class = "^(firefox)$", title = "^(Picture-in-Picture)$" },
 	float = true,
 })
-
 hl.window_rule({ match = { class = "^(zoom)$" }, float = true })
 hl.layer_rule({ match = { namespace = "^(quickshell)$" }, no_anim = true })
 hl.layer_rule({ match = { namespace = "^dms:.*" }, no_anim = true })
@@ -91,3 +90,21 @@ require("dms.cursor")
 require("dms.binds")
 require("dms.binds-user")
 require("dms.windowrules")
+
+-- ============================================================
+-- LAPTOP LID / EXTERNAL MONITOR
+-- ============================================================
+
+-- Tampa fechada:
+--   - desabilita a tela interna
+--   - coloca o LG sozinho em 1920x1080@100
+hl.bind(
+	"switch:on:Lid Switch",
+	hl.dsp.exec_cmd(
+		'hyprctl eval \'hl.monitor({ output = "eDP-1", disabled = true }); hl.monitor({ output = "HDMI-A-1", mode = "1920x1080@100", position = "0x0", scale = 1 })\''
+	)
+)
+
+-- Tampa aberta:
+--   - reativa a tela interna em 1920x1080@60
+--   - coloca o LG à direita em 1920x1080@100
